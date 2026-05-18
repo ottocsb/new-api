@@ -138,7 +138,7 @@ export function Footer(props: FooterProps) {
           props.className
         )}
       >
-        <div className='mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-2.5 sm:flex-row sm:px-6'>
+        <div className='mx-auto flex w-full max-w-6xl items-center justify-center gap-2 px-4 py-2.5 sm:px-6'>
           <div className='text-muted-foreground/70 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs'>
             {hasPrivacyPolicy && (
               <Link

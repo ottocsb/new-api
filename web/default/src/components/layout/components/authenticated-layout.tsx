@@ -36,7 +36,7 @@ export function AuthenticatedLayout(props: AuthenticatedLayoutProps) {
                 <div className='flex min-h-0 flex-1 flex-col'>
                   {props.children ?? <AnimatedOutlet />}
                 </div>
-                <Footer variant='compact' />
+                <Footer />
               </SidebarInset>
             </div>
           </SidebarProvider>
