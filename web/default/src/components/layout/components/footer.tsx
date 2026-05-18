@@ -21,6 +21,7 @@ interface FooterProps {
   columns?: FooterColumnProps[]
   copyright?: string
   className?: string
+  variant?: 'default' | 'compact'
 }
 
 const NEW_API_FOOTER_ATTRIBUTION_KEY = [
@@ -154,6 +155,43 @@ export function Footer(props: FooterProps) {
   )
 
   const displayColumns = props.columns ?? fallbackColumns
+  const isCompact = props.variant === 'compact'
+
+  if (isCompact) {
+    return (
+      <footer
+        className={cn(
+          'border-border/40 bg-background relative z-10 border-t',
+          props.className
+        )}
+      >
+        <div className='mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-2.5 sm:flex-row sm:px-6'>
+          <div className='text-muted-foreground/70 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs'>
+            {hasPrivacyPolicy && (
+              <Link
+                to='/privacy-policy'
+                className='hover:text-foreground transition-colors'
+              >
+                {t('Privacy Policy')}
+              </Link>
+            )}
+            {hasUserAgreement && (
+              <Link
+                to='/user-agreement'
+                className='hover:text-foreground transition-colors'
+              >
+                {t('User Agreement')}
+              </Link>
+            )}
+            <span className='text-muted-foreground/50'>
+              &copy; {currentYear} {displayName}
+            </span>
+          </div>
+          <ProjectAttribution currentYear={currentYear} />
+        </div>
+      </footer>
+    )
+  }
 
   if (footerHtml) {
     return (
@@ -226,7 +264,6 @@ export function Footer(props: FooterProps) {
         <div className='border-border/30 mt-12 border-t pt-6'>
           {/* Legal links and contact */}
           <div className='mb-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs'>
-            <span className='text-red-500 font-bold'>【页脚链接区域】</span>
             {hasPrivacyPolicy && (
               <Link
                 to='/privacy-policy'

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/setting/system_setting"
+	"newapi/common"
+	"newapi/setting/system_setting"
 )
 
 // WorkerRequest Worker请求的数据结构

@@ -11,9 +11,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/logger"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/logger"
+	"newapi/types"
 
 	"github.com/gin-gonic/gin"
 )

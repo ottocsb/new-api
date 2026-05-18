@@ -11,11 +11,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/constant"
-	"github.com/QuantumNous/new-api/dto"
-	"github.com/QuantumNous/new-api/relay/helper"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/constant"
+	"newapi/dto"
+	"newapi/relay/helper"
+	"newapi/types"
 	"github.com/samber/lo"
 
 	"github.com/gin-gonic/gin"

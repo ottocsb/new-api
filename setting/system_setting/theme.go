@@ -1,8 +1,8 @@
 package system_setting
 
 import (
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/setting/config"
+	"newapi/common"
+	"newapi/setting/config"
 )
 
 type ThemeSettings struct {

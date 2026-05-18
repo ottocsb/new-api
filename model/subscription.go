@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/pkg/cachex"
+	"newapi/common"
+	"newapi/pkg/cachex"
 	"github.com/samber/hot"
 	"gorm.io/gorm"
 )

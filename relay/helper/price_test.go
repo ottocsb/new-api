@@ -5,12 +5,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/pkg/billingexpr"
-	relaycommon "github.com/QuantumNous/new-api/relay/common"
-	"github.com/QuantumNous/new-api/setting/billing_setting"
-	"github.com/QuantumNous/new-api/setting/config"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/pkg/billingexpr"
+	relaycommon "newapi/relay/common"
+	"newapi/setting/billing_setting"
+	"newapi/setting/config"
+	"newapi/types"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )

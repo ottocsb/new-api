@@ -3,8 +3,8 @@ package zhipu_4v
 import (
 	"time"
 
-	"github.com/QuantumNous/new-api/dto"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/dto"
+	"newapi/types"
 )
 
 //	type ZhipuMessage struct {

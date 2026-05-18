@@ -6,14 +6,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/i18n"
-	"github.com/QuantumNous/new-api/model"
-	"github.com/QuantumNous/new-api/setting"
-	"github.com/QuantumNous/new-api/setting/console_setting"
-	"github.com/QuantumNous/new-api/setting/operation_setting"
-	"github.com/QuantumNous/new-api/setting/ratio_setting"
-	"github.com/QuantumNous/new-api/setting/system_setting"
+	"newapi/common"
+	"newapi/i18n"
+	"newapi/model"
+	"newapi/setting"
+	"newapi/setting/console_setting"
+	"newapi/setting/operation_setting"
+	"newapi/setting/ratio_setting"
+	"newapi/setting/system_setting"
 
 	"github.com/gin-gonic/gin"
 )

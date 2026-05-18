@@ -9,10 +9,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/constant"
-	"github.com/QuantumNous/new-api/dto"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/constant"
+	"newapi/dto"
+	"newapi/types"
 
 	"github.com/samber/lo"
 	"gorm.io/gorm"

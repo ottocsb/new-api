@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/model"
-	"github.com/QuantumNous/new-api/oauth"
+	"newapi/common"
+	"newapi/model"
+	"newapi/oauth"
 	"github.com/gin-gonic/gin"
 )
 

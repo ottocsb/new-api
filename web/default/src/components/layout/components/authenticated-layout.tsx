@@ -8,6 +8,7 @@ import { SkipToMain } from '@/components/skip-to-main'
 import { WorkspaceProvider } from '../context/workspace-context'
 import { AppHeader } from './app-header'
 import { AppSidebar } from './app-sidebar'
+import { Footer } from './footer'
 
 type AuthenticatedLayoutProps = {
   children?: React.ReactNode
@@ -32,7 +33,10 @@ export function AuthenticatedLayout(props: AuthenticatedLayoutProps) {
                   'peer-data-[variant=inset]:h-[calc(100svh-var(--app-header-height,0px)-(var(--spacing)*4))]'
                 )}
               >
-                {props.children ?? <AnimatedOutlet />}
+                <div className='flex min-h-0 flex-1 flex-col'>
+                  {props.children ?? <AnimatedOutlet />}
+                </div>
+                <Footer variant='compact' />
               </SidebarInset>
             </div>
           </SidebarProvider>

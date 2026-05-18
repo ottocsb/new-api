@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/QuantumNous/new-api/setting/config"
+	"newapi/setting/config"
 )
 
 // ---------------------------------------------------------------------------

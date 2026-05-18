@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/QuantumNous/new-api/types"
+	"newapi/types"
 	"github.com/stretchr/testify/require"
 )
 

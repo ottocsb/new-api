@@ -4,12 +4,12 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/constant"
-	"github.com/QuantumNous/new-api/dto"
-	"github.com/QuantumNous/new-api/pkg/billingexpr"
-	relaycommon "github.com/QuantumNous/new-api/relay/common"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/constant"
+	"newapi/dto"
+	"newapi/pkg/billingexpr"
+	relaycommon "newapi/relay/common"
+	"newapi/types"
 
 	"github.com/gin-gonic/gin"
 )

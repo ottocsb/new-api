@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"runtime/debug"
 
-	"github.com/QuantumNous/new-api/common"
+	"newapi/common"
 	"github.com/gin-gonic/gin"
 )
 

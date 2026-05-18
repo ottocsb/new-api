@@ -14,19 +14,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/model"
+	"newapi/common"
+	"newapi/model"
 	"github.com/samber/lo"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 
-	"github.com/QuantumNous/new-api/constant"
-	"github.com/QuantumNous/new-api/dto"
-	"github.com/QuantumNous/new-api/relay/channel"
-	taskcommon "github.com/QuantumNous/new-api/relay/channel/task/taskcommon"
-	relaycommon "github.com/QuantumNous/new-api/relay/common"
-	"github.com/QuantumNous/new-api/service"
+	"newapi/constant"
+	"newapi/dto"
+	"newapi/relay/channel"
+	taskcommon "newapi/relay/channel/task/taskcommon"
+	relaycommon "newapi/relay/common"
+	"newapi/service"
 )
 
 // ============================

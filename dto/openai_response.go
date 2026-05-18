@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/QuantumNous/new-api/common"
-	"github.com/QuantumNous/new-api/types"
+	"newapi/common"
+	"newapi/types"
 )
 
 const (

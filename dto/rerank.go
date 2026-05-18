@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/QuantumNous/new-api/types"
+	"newapi/types"
 	"github.com/gin-gonic/gin"
 )
 

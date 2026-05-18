@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/QuantumNous/new-api/common"
+	"newapi/common"
 )
 
 type accessPolicyPayload struct {
