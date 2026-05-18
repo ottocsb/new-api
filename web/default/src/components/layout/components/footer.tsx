@@ -21,6 +21,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { useStatus } from '@/hooks/use-status'
 
 interface FooterLink {
   text: string
@@ -103,11 +104,15 @@ export function Footer(props: FooterProps) {
     footerHtml,
     demoSiteEnabled,
   } = useSystemConfig()
+  const { status } = useStatus()
 
   const displayLogo = systemLogo || props.logo || '/logo.png'
   const displayName = systemName || props.name || 'New API'
   const isDemoSiteMode = Boolean(demoSiteEnabled)
   const currentYear = new Date().getFullYear()
+
+  const hasUserAgreement = Boolean(status?.user_agreement_enabled)
+  const hasPrivacyPolicy = Boolean(status?.privacy_policy_enabled)
 
   const fallbackColumns = useMemo<FooterColumnProps[]>(
     () => [
@@ -236,12 +241,41 @@ export function Footer(props: FooterProps) {
         </div>
 
         {/* Bottom section */}
-        <div className='border-border/30 mt-12 flex flex-col items-center justify-between gap-3 border-t pt-6 sm:flex-row'>
-          <p className='text-muted-foreground/40 text-xs'>
-            &copy; {currentYear} {displayName}.{' '}
-            {props.copyright ?? t('footer.defaultCopyright')}
-          </p>
-          <ProjectAttribution currentYear={currentYear} />
+        <div className='border-border/30 mt-12 border-t pt-6'>
+          {/* Legal links and contact */}
+          <div className='mb-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs'>
+            <span className='text-red-500 font-bold'>【页脚链接区域】</span>
+            {hasPrivacyPolicy && (
+              <Link
+                to='/privacy-policy'
+                className='text-muted-foreground hover:text-foreground transition-colors'
+              >
+                {t('Privacy Policy')}
+              </Link>
+            )}
+            {hasUserAgreement && (
+              <Link
+                to='/user-agreement'
+                className='text-muted-foreground hover:text-foreground transition-colors'
+              >
+                {t('User Agreement')}
+              </Link>
+            )}
+            <a
+              href='mailto:support@apiwarrior.xyz'
+              className='text-muted-foreground hover:text-foreground transition-colors'
+            >
+              support@apiwarrior.xyz
+            </a>
+          </div>
+          {/* Copyright */}
+          <div className='flex flex-col items-center justify-between gap-3 sm:flex-row'>
+            <p className='text-muted-foreground/40 text-xs'>
+              &copy; {currentYear} {displayName}.{' '}
+              {props.copyright ?? t('footer.defaultCopyright')}
+            </p>
+            <ProjectAttribution currentYear={currentYear} />
+          </div>
         </div>
       </div>
     </footer>
