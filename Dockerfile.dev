@@ -1,5 +1,11 @@
 # Backend-only build for frontend development
 # Skips frontend build, uses a placeholder for //go:embed web/dist
+#
+# NOTE: This is a customized local fork. Images are built locally only —
+# upstream github.com/QuantumNous images are no longer pulled or referenced.
+# The "github.com/QuantumNous/new-api" string in the ldflags below is the
+# Go module path declared in go.mod (required for -ldflags -X version injection),
+# not a container image reference.
 
 FROM golang:1.26.1-alpine AS builder
 
@@ -16,9 +22,8 @@ RUN go mod download
 
 COPY . .
 
-RUN mkdir -p web/default/dist web/classic/dist && \
-    echo '<!doctype html><html><head><title>dev</title></head><body>use frontend dev server</body></html>' > web/default/dist/index.html && \
-    echo '<!doctype html><html><head><title>dev</title></head><body>use frontend dev server</body></html>' > web/classic/dist/index.html
+RUN mkdir -p web/default/dist && \
+    echo '<!doctype html><html><head><title>dev</title></head><body>use frontend dev server</body></html>' > web/default/dist/index.html
 
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 
