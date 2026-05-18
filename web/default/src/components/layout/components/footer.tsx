@@ -156,6 +156,12 @@ export function Footer(props: FooterProps) {
                 {t('User Agreement')}
               </Link>
             )}
+            <a
+              href='mailto:support@apiwarrior.xyz'
+              className='hover:text-foreground transition-colors'
+            >
+              support@apiwarrior.xyz
+            </a>
             <span className='text-muted-foreground/50'>
               &copy; {currentYear} {displayName}
             </span>
