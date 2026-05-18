@@ -22,9 +22,9 @@ build-image:
 	@echo "==> Building docker image $(IMAGE) ($(VERSION))"
 	@docker build --build-arg VERSION=$(VERSION) -t $(IMAGE) -f Dockerfile .
 
-# 启动 / 停止整套服务（compose 会按 Dockerfile 重新构建）
+# 启动 / 停止整套服务（直接复用 make build 产出的镜像，不再重新构建）
 up:
-	@docker compose -f $(COMPOSE_FILE) up -d --build
+	@docker compose -f $(COMPOSE_FILE) up -d
 
 down:
 	@docker compose -f $(COMPOSE_FILE) down
