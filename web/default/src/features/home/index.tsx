@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/auth-store'
 import { Markdown } from '@/components/ui/markdown'
 import { PublicLayout } from '@/components/layout'
-import { CTA, Features, Hero, HowItWorks, Stats } from './components'
+import { CTA, Features, Hero, HowItWorks } from './components'
 import { useHomePageContent } from './hooks'
 
 export function Home() {
@@ -44,7 +44,6 @@ export function Home() {
   return (
     <PublicLayout showMainContainer={false}>
       <Hero isAuthenticated={isAuthenticated} />
-      <Stats />
       <Features />
       <HowItWorks />
       <CTA isAuthenticated={isAuthenticated} />
