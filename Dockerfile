@@ -19,7 +19,23 @@ ADD go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
-COPY . .
+COPY main.go ./
+COPY common ./common
+COPY constant ./constant
+COPY controller ./controller
+COPY dto ./dto
+COPY i18n ./i18n
+COPY logger ./logger
+COPY middleware ./middleware
+COPY model ./model
+COPY oauth ./oauth
+COPY pkg ./pkg
+COPY relay ./relay
+COPY router ./router
+COPY service ./service
+COPY setting ./setting
+COPY types ./types
+COPY web/default/dist ./web/default/dist
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     go build -ldflags "-s -w -X 'newapi/common.Version=${VERSION}'" -o new-api

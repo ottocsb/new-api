@@ -2,11 +2,17 @@
 .git
 *.md
 .vscode
+.idea
+.agents
 .gitignore
 Makefile
 docs
+electron
 .eslintcache
 .gocache
 /web/node_modules
+/web/default/*
+!/web/default/dist
+!/web/default/dist/**
 /web/default/node_modules
 !THIRD-PARTY-LICENSES.md
