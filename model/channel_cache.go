@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"new-api/logger"
 	"newapi/common"
 	"newapi/constant"
+	"newapi/logger"
 	"newapi/setting/ratio_setting"
 )
 
