@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	"new-api/logger"
 	"newapi/common"
 	"newapi/constant"
 	"newapi/dto"
@@ -250,10 +251,9 @@ func (channel *Channel) GetNextEnabledKey() (string, int, *types.NewAPIError) {
 		if err != nil {
 			return "", 0, types.NewError(err, types.ErrorCodeGetChannelFailed, types.ErrOptionWithSkipRetry())
 		}
-		//println("before polling index:", channel.ChannelInfo.MultiKeyPollingIndex)
 		defer func() {
 			if common.DebugEnabled {
-				println(fmt.Sprintf("channel %d polling index: %d", channel.Id, channel.ChannelInfo.MultiKeyPollingIndex))
+				logger.LogDebug(nil, "channel %d polling index: %d", channel.Id, channel.ChannelInfo.MultiKeyPollingIndex)
 			}
 			if !common.MemoryCacheEnabled {
 				_ = channel.SaveChannelInfo()

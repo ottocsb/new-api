@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	"newapi/logger"
 	"newapi/common"
 	"newapi/dto"
 	relaycommon "newapi/relay/common"
@@ -67,9 +68,7 @@ func RerankHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 			}
 		}
 
-		if common.DebugEnabled {
-			println(fmt.Sprintf("Rerank request body: %s", string(jsonData)))
-		}
+		logger.LogDebug(c, "Rerank request body: %s", jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 

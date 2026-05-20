@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 
+	"newapi/logger"
 	"newapi/common"
 	"newapi/constant"
 	"newapi/dto"
@@ -21,9 +22,7 @@ func RerankHandler(c *gin.Context, info *relaycommon.RelayInfo, resp *http.Respo
 		return nil, types.NewOpenAIError(err, types.ErrorCodeReadResponseBodyFailed, http.StatusInternalServerError)
 	}
 	service.CloseResponseBodyGracefully(resp)
-	if common.DebugEnabled {
-		println("reranker response body: ", string(responseBody))
-	}
+	logger.LogDebug(c, "reranker response body: %s", responseBody)
 	var jinaResp dto.RerankResponse
 	if info.ChannelType == constant.ChannelTypeXinference {
 		var xinRerankResponse xinference.XinRerankResponse

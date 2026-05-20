@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	"newapi/logger"
 	"newapi/common"
 	appconstant "newapi/constant"
 	"newapi/dto"
@@ -102,9 +103,7 @@ func ResponsesHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *
 			}
 		}
 
-		if common.DebugEnabled {
-			println("requestBody: ", string(jsonData))
-		}
+		logger.LogDebug(c, "requestBody: %s", jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 

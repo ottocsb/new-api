@@ -17,6 +17,8 @@ import (
 	"newapi/setting/model_setting"
 	"newapi/setting/reasoning"
 	"newapi/types"
+	"newapi/logger"
+
 
 	"github.com/gin-gonic/gin"
 )
@@ -177,9 +179,7 @@ func ClaudeHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 			}
 		}
 
-		if common.DebugEnabled {
-			println("requestBody: ", string(jsonData))
-		}
+		logger.LogDebug(c, "requestBody: %s", jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 
@@ -202,7 +202,6 @@ func ClaudeHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 	}
 
 	usage, newAPIError := adaptor.DoResponse(c, httpResp, info)
-	//log.Printf("usage: %v", usage)
 	if newAPIError != nil {
 		// reset status code 重置状态码
 		service.ResetStatusCode(newAPIError, statusCodeMappingStr)
