@@ -9,7 +9,13 @@ IMAGE = new-api:local
 VERSION = v1.0.0
 DEV_SQLITE_PATH ?= one-api.db
 
-.PHONY: build build-frontend build-image up down dev-web reset-setup
+# Docker Hub 推送配置：使用前先 `docker login`
+# 可通过命令行覆盖，例如：make push DOCKER_USER=youruser VERSION=v1.0.1
+DOCKER_USER ?=
+DOCKER_IMAGE_NAME ?= new-api
+REMOTE_IMAGE = $(DOCKER_USER)/$(DOCKER_IMAGE_NAME)
+
+.PHONY: build build-frontend build-image up down dev-web reset-setup push
 
 # 一键构建：先打包前端，再构建 docker 镜像
 build: build-frontend build-image
@@ -21,6 +27,20 @@ build-frontend:
 build-image:
 	@echo "==> Building docker image $(IMAGE) ($(VERSION))"
 	@docker build --build-arg VERSION=$(VERSION) -t $(IMAGE) -f Dockerfile .
+
+# 推送到 Docker Hub：先 `docker login`，然后 `make push DOCKER_USER=youruser`
+push:
+	@if [ -z "$(DOCKER_USER)" ]; then \
+		echo "ERROR: DOCKER_USER 未设置，请使用 'make push DOCKER_USER=youruser'"; \
+		exit 1; \
+	fi
+	@echo "==> Tagging $(IMAGE) -> $(REMOTE_IMAGE):$(VERSION) and :latest"
+	@docker tag $(IMAGE) $(REMOTE_IMAGE):$(VERSION)
+	@docker tag $(IMAGE) $(REMOTE_IMAGE):latest
+	@echo "==> Pushing $(REMOTE_IMAGE):$(VERSION)"
+	@docker push $(REMOTE_IMAGE):$(VERSION)
+	@echo "==> Pushing $(REMOTE_IMAGE):latest"
+	@docker push $(REMOTE_IMAGE):latest
 
 # 启动 / 停止整套服务（直接复用 make build 产出的镜像，不再重新构建）
 up:
