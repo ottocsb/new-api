@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 New API is an AI API gateway/proxy written in Go. It aggregates upstream AI providers (OpenAI-compatible, Claude, Gemini, Azure, AWS Bedrock, etc.) behind unified APIs, with user management, billing, rate limiting, setup/admin flows, and a React dashboard.
 
+本仓库为 QuantumNous/new-api 的本地 fork：**已彻底移除 classic 前端，只维护 `web/default/`**。所有 classic 主题相关的代码（`web/classic/` 下文件、`web/default/` 中的 `theme.frontend` 切换、`'classic'` 选项、Legacy Frontend 文案等）一律不引入；合并上游时遇到 classic 相关变更直接丢弃。
+
 ## Common Commands
 
 ### Backend / full project
