@@ -17,8 +17,7 @@ import {
   formatQuota as formatQuotaValue,
 } from '@/lib/format'
 import { getLobeIcon } from '@/lib/lobe-icon'
-import { cn, truncateText } from '@/lib/utils'
-import { TruncatedText } from '@/components/truncated-text'
+import { truncateText } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -30,11 +29,9 @@ import {
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTableColumnHeader } from '@/components/data-table/column-header'
 import { GroupBadge } from '@/components/group-badge'
-import {
-  StatusBadge,
-  dotColorMap,
-  textColorMap,
-} from '@/components/status-badge'
+import { StatusBadge, StatusBadgeList } from '@/components/status-badge'
+import { TableId } from '@/components/table-id'
+import { TruncatedText } from '@/components/truncated-text'
 import { getCodexUsage } from '../api'
 import { CHANNEL_STATUS_CONFIG, MODEL_FETCHABLE_TYPES } from '../constants'
 import {
@@ -89,25 +86,12 @@ function renderLimitedItems(
   items: React.ReactNode[],
   maxDisplay: number = 2
 ): React.ReactNode {
-  if (items.length === 0)
-    return <span className='text-muted-foreground text-xs'>-</span>
-
-  const displayed = items.slice(0, maxDisplay)
-  const remaining = items.length - maxDisplay
-
   return (
-    <div className='flex max-w-full items-center gap-1 overflow-hidden'>
-      {displayed}
-      {remaining > 0 && (
-        <StatusBadge
-          label={`+${remaining}`}
-          variant='neutral'
-          size='sm'
-          copyable={false}
-          className='flex-shrink-0'
-        />
-      )}
-    </div>
+    <StatusBadgeList
+      items={items}
+      max={maxDisplay}
+      renderItem={(item) => item}
+    />
   )
 }
 
@@ -343,47 +327,50 @@ function BalanceCell({ channel }: { channel: Channel }) {
 
   return (
     <TooltipProvider>
-      <div className='flex items-center gap-1.5 text-xs font-medium'>
-        <span
-          className={cn(
-            'size-1.5 shrink-0 rounded-full',
-            dotColorMap[isUpdating ? 'neutral' : variant]
-          )}
-          aria-hidden='true'
-        />
+      <div className='flex items-center gap-1'>
         <Tooltip>
           <TooltipTrigger
-            render={<span className='text-muted-foreground cursor-help' />}
-          >
-            {usedDisplay}
-          </TooltipTrigger>
+            render={
+              <StatusBadge
+                label={usedDisplay}
+                variant='neutral'
+                size='sm'
+                copyable={false}
+                className='cursor-help'
+              />
+            }
+          />
           <TooltipContent>
             <p>
               {t('Used:')} {usedDisplay}
             </p>
           </TooltipContent>
         </Tooltip>
-        <span className='text-muted-foreground/30'>·</span>
         <Tooltip>
           <TooltipTrigger
             render={
-              <span
-                className={cn(
-                  'cursor-pointer transition-opacity hover:opacity-70',
+              <StatusBadge
+                label={
+                  isUpdating
+                    ? t('Updating...')
+                    : channel.type === 57
+                      ? t('Account Info')
+                      : remainingDisplay
+                }
+                variant={
                   channel.type === 57
-                    ? 'text-primary'
-                    : textColorMap[isUpdating ? 'neutral' : variant]
-                )}
+                    ? 'info'
+                    : isUpdating
+                      ? 'neutral'
+                      : variant
+                }
+                size='sm'
+                copyable={false}
+                className='cursor-pointer'
                 onClick={handleClickUpdate}
               />
             }
-          >
-            {isUpdating
-              ? 'Updating...'
-              : channel.type === 57
-                ? t('Account Info')
-                : remainingDisplay}
-          </TooltipTrigger>
+          />
           <TooltipContent>
             <p>
               {channel.type === 57
@@ -473,15 +460,7 @@ export function useChannelsColumns(): ColumnDef<Channel>[] {
       ),
       cell: ({ row }) => {
         const id = row.getValue('id') as number
-        return (
-          <StatusBadge
-            label={String(id)}
-            variant='neutral'
-            copyText={String(id)}
-            size='sm'
-            className='font-mono'
-          />
-        )
+        return <TableId value={id} />
       },
       size: 80,
     },
@@ -677,8 +656,13 @@ export function useChannelsColumns(): ColumnDef<Channel>[] {
                       />
                     }
                   >
-                    <span className='text-muted-foreground/30'>·</span>
-                    <span className={cn(textColorMap.purple)}>IO.NET</span>
+                    <StatusBadge
+                      label='IO.NET'
+                      variant='purple'
+                      size='sm'
+                      copyable={false}
+                      className='cursor-pointer'
+                    />
                   </TooltipTrigger>
                   <TooltipContent side='top'>
                     <div className='max-w-xs space-y-1'>
@@ -729,7 +713,6 @@ export function useChannelsColumns(): ColumnDef<Channel>[] {
               <StatusBadge
                 label={`Active (${childrenCount})`}
                 variant='success'
-                showDot
                 size='sm'
                 copyable={false}
               />
@@ -788,7 +771,6 @@ export function useChannelsColumns(): ColumnDef<Channel>[] {
                     <StatusBadge
                       label={label}
                       variant={config.variant}
-                      showDot={config.showDot}
                       size='sm'
                       copyable={false}
                     />
@@ -817,7 +799,6 @@ export function useChannelsColumns(): ColumnDef<Channel>[] {
           <StatusBadge
             label={label}
             variant={config.variant}
-            showDot={config.showDot}
             size='sm'
             copyable={false}
           />

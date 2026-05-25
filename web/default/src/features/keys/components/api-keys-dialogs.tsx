@@ -6,19 +6,6 @@ import { CCSwitchDialog } from './dialogs/cc-switch-dialog'
 
 export function ApiKeysDialogs() {
   const { open, setOpen, currentRow, resolvedKey } = useApiKeys()
-  const [lastMutateSide, setLastMutateSide] = useState<'left' | 'right'>(
-    'right'
-  )
-  const mutateSide =
-    open === 'create' ? 'left' : open === 'update' ? 'right' : lastMutateSide
-
-  useEffect(() => {
-    if (open === 'create') {
-      setLastMutateSide('left')
-    } else if (open === 'update') {
-      setLastMutateSide('right')
-    }
-  }, [open])
 
   return (
     <>
@@ -26,7 +13,6 @@ export function ApiKeysDialogs() {
         open={open === 'create' || open === 'update'}
         onOpenChange={(isOpen) => !isOpen && setOpen(null)}
         currentRow={open === 'update' ? currentRow || undefined : undefined}
-        side={mutateSide}
       />
       <ApiKeysDeleteDialog />
       <CCSwitchDialog

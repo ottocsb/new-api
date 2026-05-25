@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-table'
 import { Check, Copy, Info, Loader2, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Button } from '@/components/ui/button'
@@ -56,6 +57,12 @@ import {
 } from '@/components/ui/tooltip'
 import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-table'
 import { DataTablePagination } from '@/components/data-table/pagination'
+import {
+  sideDrawerContentClassName,
+  sideDrawerFooterClassName,
+  sideDrawerFormClassName,
+  sideDrawerHeaderClassName,
+} from '@/components/drawer-layout'
 import { StatusBadge } from '@/components/status-badge'
 import { formatResponseTime, handleTestChannel } from '../../lib'
 import { useChannels } from '../channels-provider'
@@ -284,11 +291,12 @@ export function ChannelTestDialog({
   }, [])
 
   const testSingleModel = useCallback(
-    async (model: string) => {
+    async (model: string, silent = false): Promise<TestResult | undefined> => {
       if (!currentRow) return
 
       markModelTesting(model, true)
       updateTestResult(model, { status: 'testing' })
+      let finalResult: TestResult | undefined
 
       try {
         await handleTestChannel(
@@ -297,24 +305,28 @@ export function ChannelTestDialog({
             testModel: model,
             endpointType: endpointType === 'auto' ? undefined : endpointType,
             stream: isStreamTest || undefined,
+            silent,
           },
           (success, responseTime, error, errorCode) => {
-            updateTestResult(model, {
+            finalResult = {
               status: success ? 'success' : 'error',
               responseTime,
               error,
               errorCode,
-            })
+            }
+            updateTestResult(model, finalResult)
           }
         )
       } catch (error: unknown) {
-        updateTestResult(model, {
+        finalResult = {
           status: 'error',
           error: error instanceof Error ? error.message : t('Test failed'),
-        })
+        }
+        updateTestResult(model, finalResult)
       } finally {
         markModelTesting(model, false)
       }
+      return finalResult
     },
     [
       currentRow,
@@ -332,15 +344,41 @@ export function ChannelTestDialog({
 
       setIsBatchTesting(true)
       try {
-        await Promise.allSettled(
-          modelsToTest.map((modelName) => testSingleModel(modelName))
+        const settled = await Promise.allSettled(
+          modelsToTest.map((modelName) => testSingleModel(modelName, true))
         )
+        const results = settled
+          .map((result) =>
+            result.status === 'fulfilled' ? result.value : undefined
+          )
+          .filter((result): result is TestResult => Boolean(result))
+        const successCount = results.filter(
+          (result) => result.status === 'success'
+        ).length
+        const failedCount = modelsToTest.length - successCount
+        if (failedCount > 0) {
+          toast.error(
+            t(
+              'Batch test completed: {{success}} succeeded, {{failed}} failed',
+              {
+                success: successCount,
+                failed: failedCount,
+              }
+            )
+          )
+        } else {
+          toast.success(
+            t('Batch test completed: {{count}} succeeded', {
+              count: successCount,
+            })
+          )
+        }
       } finally {
         setIsBatchTesting(false)
         setRowSelection({})
       }
     },
-    [testSingleModel]
+    [t, testSingleModel]
   )
 
   const handleClose = () => {
@@ -783,19 +821,19 @@ function FailureDetailsSheet({
         side={isMobile ? 'bottom' : 'right'}
         className={
           isMobile
-            ? 'max-h-[85dvh] gap-0 overflow-hidden rounded-t-xl p-0'
-            : 'h-dvh w-full gap-0 overflow-hidden p-0 sm:max-w-lg'
+            ? sideDrawerContentClassName('h-auto max-h-[85dvh] rounded-t-xl')
+            : sideDrawerContentClassName('sm:max-w-lg')
         }
       >
         {details && (
           <>
-            <SheetHeader className='border-b px-4 py-3 text-start sm:px-5 sm:py-4'>
+            <SheetHeader className={sideDrawerHeaderClassName('sm:px-5')}>
               <SheetTitle className='pr-10'>{t('Details')}</SheetTitle>
               <SheetDescription className='pr-10 wrap-break-word'>
                 {details.model}
               </SheetDescription>
             </SheetHeader>
-            <div className='min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-3 sm:px-5 sm:py-4'>
+            <div className={sideDrawerFormClassName('gap-4 sm:px-5')}>
               <section className='space-y-1'>
                 <div className='text-muted-foreground text-xs font-medium'>
                   {t('Model')}
@@ -819,7 +857,7 @@ function FailureDetailsSheet({
                 </pre>
               </section>
             </div>
-            <SheetFooter className='border-t px-4 py-3 sm:flex-row sm:justify-end sm:px-5'>
+            <SheetFooter className={sideDrawerFooterClassName('sm:px-5')}>
               <Button
                 variant='outline'
                 className='w-full sm:w-auto'

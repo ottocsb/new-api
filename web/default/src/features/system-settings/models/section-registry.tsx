@@ -21,7 +21,6 @@ const MODELS_SECTIONS = [
   {
     id: 'global',
     titleKey: 'Global Model Configuration',
-    descriptionKey: 'Configure global model settings',
     build: (settings: ModelSettings) => (
       <GlobalSettingsCard
         defaultValues={{
@@ -50,7 +49,6 @@ const MODELS_SECTIONS = [
   {
     id: 'gemini',
     titleKey: 'Gemini',
-    descriptionKey: 'Configure Gemini model settings',
     build: (settings: ModelSettings) => (
       <GeminiSettingsCard
         defaultValues={{
@@ -75,7 +73,6 @@ const MODELS_SECTIONS = [
   {
     id: 'claude',
     titleKey: 'Claude',
-    descriptionKey: 'Configure Claude model settings',
     build: (settings: ModelSettings) => (
       <ClaudeSettingsCard
         defaultValues={{
@@ -94,7 +91,6 @@ const MODELS_SECTIONS = [
   {
     id: 'grok',
     titleKey: 'Grok',
-    descriptionKey: 'Configure xAI Grok model settings',
     build: (settings: ModelSettings) => (
       <GrokSettingsCard
         defaultValues={{
@@ -109,7 +105,6 @@ const MODELS_SECTIONS = [
   {
     id: 'channel-affinity',
     titleKey: 'Channel Affinity',
-    descriptionKey: 'Configure channel affinity (sticky routing) rules',
     build: (settings: ModelSettings) => (
       <ChannelAffinitySection
         defaultValues={{
@@ -130,7 +125,6 @@ const MODELS_SECTIONS = [
   {
     id: 'model-deployment',
     titleKey: 'Model Deployment',
-    descriptionKey: 'Configure model deployment provider settings',
     build: (settings: ModelSettings) => (
       <IoNetDeploymentSettingsSection
         defaultValues={{
@@ -155,3 +149,4 @@ export const MODELS_SECTION_IDS = modelsRegistry.sectionIds
 export const MODELS_DEFAULT_SECTION = modelsRegistry.defaultSection
 export const getModelsSectionNavItems = modelsRegistry.getSectionNavItems
 export const getModelsSectionContent = modelsRegistry.getSectionContent
+export const getModelsSectionMeta = modelsRegistry.getSectionMeta

@@ -24,17 +24,12 @@ import {
 
 const route = getRouteApi('/_authenticated/models/$section')
 
-const SECTION_META: Record<
-  ModelsSectionId,
-  { titleKey: string; descriptionKey: string }
-> = {
+const SECTION_META: Record<ModelsSectionId, { titleKey: string }> = {
   metadata: {
     titleKey: 'Metadata',
-    descriptionKey: 'Manage model metadata and configuration',
   },
   deployments: {
     titleKey: 'Deployments',
-    descriptionKey: 'Manage model deployments',
   },
 }
 
@@ -108,9 +103,6 @@ function ModelsContent() {
     <>
       <SectionPageLayout>
         <SectionPageLayout.Title>{t(meta.titleKey)}</SectionPageLayout.Title>
-        <SectionPageLayout.Description>
-          {t(meta.descriptionKey)}
-        </SectionPageLayout.Description>
         <SectionPageLayout.Actions>
           {activeSection === 'metadata' ? (
             <ModelsPrimaryButtons />
@@ -124,7 +116,7 @@ function ModelsContent() {
         <SectionPageLayout.Content>
           <div className='space-y-4'>
             <Tabs value={activeSection} onValueChange={handleSectionChange}>
-              <TabsList className='group-data-horizontal/tabs:h-auto max-w-full flex-wrap justify-start'>
+              <TabsList className='max-w-full flex-wrap justify-start group-data-horizontal/tabs:h-auto'>
                 {MODELS_SECTION_IDS.map((section) => (
                   <TabsTrigger key={section} value={section}>
                     {t(SECTION_META[section].titleKey)}
