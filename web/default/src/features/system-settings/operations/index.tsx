@@ -1,6 +1,3 @@
-import { useMemo } from 'react'
-import { useParams } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
 import { useStatus } from '@/hooks/use-status'
 import { SettingsPage } from '../components/settings-page'
 import type { OperationsSettings } from '../types'
