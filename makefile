@@ -6,7 +6,7 @@ BACKEND_SERVICE = new-api
 POSTGRES_DB = new-api
 POSTGRES_USER = root
 IMAGE = new-api:local
-VERSION = v1.0.1
+VERSION = v1.0.2
 DEV_SQLITE_PATH ?= one-api.db
 
 # Docker Hub 推送配置：使用前先 `docker login`
