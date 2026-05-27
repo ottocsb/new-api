@@ -297,6 +297,7 @@ export const STATIC_I18N_KEYS = [
   'Regex Replace',
   'Return Error',
   'Param Override',
+  'Override request parameters',
 
   // Profile / 2FA
   'Backed up',
