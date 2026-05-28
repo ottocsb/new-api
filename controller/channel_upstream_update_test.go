@@ -157,9 +157,13 @@ func TestBuildUpstreamModelUpdateTaskNotificationContent_OmitOverflowDetails(t *
 	)
 
 	require.Contains(t, content, "其余 4 个渠道已省略")
+	require.Contains(t, content, "4 more channels omitted")
 	require.Contains(t, content, "其余 1 个已省略")
-	require.Contains(t, content, "失败渠道 ID（展示 10/12）")
+	require.Contains(t, content, "1 more omitted")
+	require.Contains(t, content, "失败渠道 ID / Failed channel IDs（展示 / showing 10/12）")
 	require.Contains(t, content, "其余 2 个已省略")
+	require.Contains(t, content, "2 more omitted")
+	require.Contains(t, content, "Upstream model check summary")
 }
 
 func TestShouldSendUpstreamModelUpdateNotification(t *testing.T) {

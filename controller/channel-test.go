@@ -963,7 +963,7 @@ func testAllChannels(notify bool) error {
 		}
 
 		if notify {
-			service.NotifyRootUser(dto.NotifyTypeChannelTest, "通道测试完成", "所有通道测试已完成")
+			service.NotifyRootUser(dto.NotifyTypeChannelTest, "通道测试完成 / Channel Test Completed", "所有通道测试已完成 / All channel tests have been completed")
 		}
 	})
 	return nil

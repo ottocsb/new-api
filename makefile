@@ -6,8 +6,10 @@ BACKEND_SERVICE = new-api
 POSTGRES_DB = new-api
 POSTGRES_USER = root
 IMAGE = new-api:local
-VERSION = v1.0.2
+VERSION_FILE = VERSION
+VERSION ?= $(shell if [ -f $(VERSION_FILE) ]; then cat $(VERSION_FILE); else echo v1.0.2; fi)
 DEV_SQLITE_PATH ?= one-api.db
+RELEASE_TEST_CONTAINER ?= new-api-build-check
 
 # Docker Hub 推送配置：使用前先 `docker login`
 # 可通过命令行覆盖，例如：make push DOCKER_USER=youruser VERSION=v1.0.1
@@ -15,18 +17,54 @@ DOCKER_USER ?=
 DOCKER_IMAGE_NAME ?= new-api
 REMOTE_IMAGE = $(DOCKER_USER)/$(DOCKER_IMAGE_NAME)
 
-.PHONY: build build-frontend build-image up down dev-web reset-setup push
+.PHONY: build bump-version build-frontend build-image test-image release up down dev-web reset-setup push
 
 # 一键构建：先打包前端，再构建 docker 镜像
-build: build-frontend build-image
+build: bump-version
+	@$(MAKE) build-frontend build-image VERSION="$$(cat $(VERSION_FILE))"
+
+bump-version:
+	@current="$$(if [ -f "$(VERSION_FILE)" ]; then cat "$(VERSION_FILE)"; else echo "$(VERSION)"; fi)"; \
+	next="$$(printf '%s\n' "$$current" | awk 'BEGIN{FS=OFS="."} /^v?[0-9]+(\.[0-9]+)*$$/ { prefix=""; if (substr($$1,1,1)=="v") { prefix="v"; $$1=substr($$1,2) } $$NF=$$NF+1; print prefix $$0; ok=1 } END{ if (!ok) exit 1 }')" || { \
+		echo "ERROR: 无法递增版本号：$$current"; \
+		exit 1; \
+	}; \
+	printf '%s\n' "$$next" > "$(VERSION_FILE)"; \
+	echo "==> Version bumped: $$current -> $$next"
 
 build-frontend:
 	@echo "==> Building frontend ($(VERSION))"
-	@cd $(FRONTEND_DIR) && bun install && DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(VERSION) bun run build
+	@if command -v bun >/dev/null 2>&1; then \
+		cd $(FRONTEND_DIR) && bun install && DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(VERSION) bun run build; \
+	elif [ -d "$(FRONTEND_DIR)/node_modules" ]; then \
+		cd $(FRONTEND_DIR) && DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(VERSION) npm run build; \
+	else \
+		cd $(FRONTEND_DIR) && npm install --no-package-lock && DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(VERSION) npm run build; \
+	fi
 
 build-image:
 	@echo "==> Building docker image $(IMAGE) ($(VERSION))"
 	@docker build --build-arg VERSION=$(VERSION) -t $(IMAGE) -f Dockerfile .
+
+test-image:
+	@echo "==> Testing docker image $(IMAGE) ($(VERSION))"
+	@container="$(RELEASE_TEST_CONTAINER)-$$(printf '%s' "$(VERSION)" | tr '.' '-')"; \
+	docker rm -f "$$container" >/dev/null 2>&1 || true; \
+	docker run -d --name "$$container" -e SQLITE_PATH=/data/test.db "$(IMAGE)" --log-dir /tmp/logs >/dev/null; \
+	trap 'docker rm -f "$$container" >/dev/null 2>&1 || true' EXIT; \
+	for i in $$(seq 1 30); do \
+		if docker exec "$$container" wget -q -O - http://localhost:3000/api/status | grep -q '"success"[[:space:]]*:[[:space:]]*true'; then \
+			echo "==> Image runtime check passed"; \
+			exit 0; \
+		fi; \
+		sleep 1; \
+	done; \
+	echo "ERROR: image runtime check failed"; \
+	docker logs "$$container"; \
+	exit 1
+
+release: build
+	@$(MAKE) test-image push VERSION="$$(cat $(VERSION_FILE))"
 
 # 推送到 Docker Hub：先 `docker login`，然后 `make push DOCKER_USER=youruser`
 push:
