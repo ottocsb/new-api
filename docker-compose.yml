@@ -27,6 +27,7 @@ services:
       - BATCH_UPDATE_ENABLED=true
       - NODE_NAME=new-api-node-1
 #      - STREAMING_TIMEOUT=300
+#      - RELAY_IDLE_CONN_TIMEOUT=90
 #      - SESSION_SECRET=random_string
 #      - SYNC_FREQUENCY=60
 #      - GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
