@@ -63,7 +63,6 @@ const SETUP_GUIDE_CODE_PATTERN = [
 type DashboardActionPath =
   | '/keys'
   | '/wallet'
-  | '/playground'
   | '/channels'
   | '/usage-logs'
   | '/pricing'
@@ -448,7 +447,6 @@ export function OverviewDashboard() {
     boolean | null
   >(() => getSavedSetupGuideExpanded())
 
-  const requestCount = Number(user?.request_count ?? 0)
   const remainQuota = Number(user?.quota ?? 0)
   const usedQuota = Number(user?.used_quota ?? 0)
   const isAdmin = Boolean(user?.role && user.role >= ROLE.ADMIN)
@@ -492,15 +490,8 @@ export function OverviewDashboard() {
         icon: CreditCard,
         completed: remainQuota > 0 || usedQuota > 0,
       },
-      {
-        title: t('Send a request'),
-        description: t('Verify routing with Playground or your client'),
-        to: '/playground',
-        icon: TerminalSquare,
-        completed: requestCount > 0,
-      },
     ],
-    [preferredKey, remainQuota, requestCount, t, usedQuota]
+    [preferredKey, remainQuota, t, usedQuota]
   )
 
   const quickActions = useMemo<QuickAction[]>(
