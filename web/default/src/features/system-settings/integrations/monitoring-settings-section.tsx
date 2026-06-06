@@ -49,6 +49,7 @@ const monitoringSchema = z
         .number()
         .int()
         .min(1, 'Interval must be at least 1 minute'),
+      auto_test_channel_exclude_ids: z.string(),
     }),
   })
   .superRefine((values, ctx) => {
@@ -93,6 +94,7 @@ type MonitoringSettingsSectionProps = {
     AutomaticRetryStatusCodes: string
     'monitor_setting.auto_test_channel_enabled': boolean
     'monitor_setting.auto_test_channel_minutes': number
+    'monitor_setting.auto_test_channel_exclude_ids': string
   }
 }
 
@@ -110,6 +112,7 @@ type NormalizedMonitoringValues = {
   AutomaticRetryStatusCodes: string
   'monitor_setting.auto_test_channel_enabled': boolean
   'monitor_setting.auto_test_channel_minutes': number
+  'monitor_setting.auto_test_channel_exclude_ids': string
 }
 
 const buildFormDefaults = (
@@ -129,6 +132,8 @@ const buildFormDefaults = (
       defaults['monitor_setting.auto_test_channel_enabled'],
     auto_test_channel_minutes:
       defaults['monitor_setting.auto_test_channel_minutes'],
+    auto_test_channel_exclude_ids:
+      defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? '',
   },
 })
 
@@ -152,6 +157,8 @@ const normalizeDefaults = (
     defaults['monitor_setting.auto_test_channel_enabled'],
   'monitor_setting.auto_test_channel_minutes':
     defaults['monitor_setting.auto_test_channel_minutes'],
+  'monitor_setting.auto_test_channel_exclude_ids':
+    (defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? '').trim(),
 })
 
 const normalizeFormValues = (
@@ -174,6 +181,8 @@ const normalizeFormValues = (
     values.monitor_setting.auto_test_channel_enabled,
   'monitor_setting.auto_test_channel_minutes':
     values.monitor_setting.auto_test_channel_minutes,
+  'monitor_setting.auto_test_channel_exclude_ids':
+    values.monitor_setting.auto_test_channel_exclude_ids.trim(),
 })
 
 export function MonitoringSettingsSection({
@@ -283,6 +292,29 @@ export function MonitoringSettingsSection({
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name='monitor_setting.auto_test_channel_exclude_ids'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('Channels excluded from tests')}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={t('e.g. 12, 34, 56')}
+                    value={field.value}
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {t(
+                    'Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.'
+                  )}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className='grid gap-6 md:grid-cols-2'>
             <FormField

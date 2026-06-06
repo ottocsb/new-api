@@ -585,6 +585,7 @@
     "by": "によって",
     "By category": "カテゴリ別",
     "By model author": "モデル提供者別",
+    "Contact Support": "联系客服",
     "Cache": "キャッシュ",
     "Cache create (1h) price": "キャッシュ作成価格 (1時間)",
     "Cache create price": "キャッシュ作成価格",
@@ -4503,6 +4504,9 @@
     "Zero retention": "データ保持なし",
     "Zhipu": "Zhipu",
     "Zhipu V4": "Zhipu V 4",
-    "Zoom": "ズーム"
+    "Zoom": "ズーム",
+    "Channels excluded from tests": "Channels excluded from tests",
+    "e.g. 12, 34, 56": "e.g. 12, 34, 56",
+    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail."
   }
 }

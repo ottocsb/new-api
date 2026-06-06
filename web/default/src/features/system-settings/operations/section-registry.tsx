@@ -41,6 +41,8 @@ const OPERATIONS_SECTIONS = [
             settings['monitor_setting.auto_test_channel_enabled'],
           'monitor_setting.auto_test_channel_minutes':
             settings['monitor_setting.auto_test_channel_minutes'],
+          'monitor_setting.auto_test_channel_exclude_ids':
+            settings['monitor_setting.auto_test_channel_exclude_ids'],
         }}
       />
     ),

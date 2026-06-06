@@ -585,6 +585,7 @@
     "by": "by",
     "By category": "Theo danh mục",
     "By model author": "Theo nhà phát triển mô hình",
+    "Contact Support": "联系客服",
     "Cache": "Bộ nhớ đệm",
     "Cache create (1h) price": "Giá tạo cache (1 giờ)",
     "Cache create price": "Giá tạo cache",
@@ -4503,6 +4504,9 @@
     "Zero retention": "Không lưu dữ liệu",
     "Zhipu": "Zhipu",
     "Zhipu V4": "Zhipu V4",
-    "Zoom": "Zoom"
+    "Zoom": "Zoom",
+    "Channels excluded from tests": "Channels excluded from tests",
+    "e.g. 12, 34, 56": "e.g. 12, 34, 56",
+    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail."
   }
 }
