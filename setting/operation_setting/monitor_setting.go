@@ -3,6 +3,7 @@ package operation_setting
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"newapi/setting/config"
 )
@@ -10,6 +11,9 @@ import (
 type MonitorSetting struct {
 	AutoTestChannelEnabled bool    `json:"auto_test_channel_enabled"`
 	AutoTestChannelMinutes float64 `json:"auto_test_channel_minutes"`
+	// AutoTestChannelExcludeIds 为不参与定期/批量渠道测试的渠道 ID，逗号分隔。
+	// 适用于附属生图等测试昂贵且大概率无法通过、但实际可用的渠道。
+	AutoTestChannelExcludeIds string `json:"auto_test_channel_exclude_ids"`
 }
 
 // 默认配置
@@ -32,4 +36,26 @@ func GetMonitorSetting() *MonitorSetting {
 		}
 	}
 	return &monitorSetting
+}
+
+// GetAutoTestChannelExcludeIdSet 解析排除渠道 ID 列表为集合，忽略空白与非法项；
+// 未配置时返回 nil（对 nil map 取值安全，调用方无需额外判空）。
+func (s *MonitorSetting) GetAutoTestChannelExcludeIdSet() map[int]bool {
+	if strings.TrimSpace(s.AutoTestChannelExcludeIds) == "" {
+		return nil
+	}
+	set := make(map[int]bool)
+	for _, part := range strings.Split(s.AutoTestChannelExcludeIds, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		if id, err := strconv.Atoi(part); err == nil {
+			set[id] = true
+		}
+	}
+	if len(set) == 0 {
+		return nil
+	}
+	return set
 }

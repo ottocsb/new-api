@@ -586,6 +586,7 @@
     "by": "от",
     "By category": "По категориям",
     "By model author": "По автору модели",
+    "Contact Support": "联系客服",
     "Cache": "Кэш",
     "Cache create (1h) price": "Цена создания кэша (1 ч)",
     "Cache create price": "Цена создания кэша",
@@ -4522,6 +4523,9 @@
     "Zero retention": "Без хранения данных",
     "Zhipu": "Zhipu",
     "Zhipu V4": "Zhipu V4",
-    "Zoom": "Zoom"
+    "Zoom": "Zoom",
+    "Channels excluded from tests": "Channels excluded from tests",
+    "e.g. 12, 34, 56": "e.g. 12, 34, 56",
+    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail."
   }
 }

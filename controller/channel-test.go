@@ -910,6 +910,8 @@ func testAllChannels(notify bool) error {
 	if getChannelErr != nil {
 		return getChannelErr
 	}
+	// 跳过用户配置的排除渠道（如测试昂贵的附属生图渠道）
+	excludeIdSet := operation_setting.GetMonitorSetting().GetAutoTestChannelExcludeIdSet()
 	var disableThreshold = int64(common.ChannelDisableThreshold * 1000)
 	if disableThreshold == 0 {
 		disableThreshold = 10000000 // a impossible value
@@ -924,6 +926,9 @@ func testAllChannels(notify bool) error {
 
 		for _, channel := range channels {
 			if channel.Status == common.ChannelStatusManuallyDisabled {
+				continue
+			}
+			if excludeIdSet[channel.Id] {
 				continue
 			}
 			isChannelEnabled := channel.Status == common.ChannelStatusEnabled

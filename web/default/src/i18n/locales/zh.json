@@ -4523,6 +4523,9 @@
     "Zero retention": "零数据保留",
     "Zhipu": "智谱",
     "Zhipu V4": "智谱 V4",
-    "Zoom": "缩放"
+    "Zoom": "缩放",
+    "Channels excluded from tests": "排除测试的渠道",
+    "e.g. 12, 34, 56": "例如：12, 34, 56",
+    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "以逗号分隔的渠道 ID，定期测试和批量测试时将跳过这些渠道。适用于测试昂贵且大概率无法通过、但实际可用的附属生图渠道。"
   }
 }
