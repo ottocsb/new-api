@@ -703,7 +703,6 @@
     "Choose the default charts, range, and time granularity for model analytics.": "Choose the default charts, range, and time granularity for model analytics.",
     "Choose where to fetch upstream metadata.": "Choose where to fetch upstream metadata.",
     "Choose which charts are selected by default when opening model analytics.": "Choose which charts are selected by default when opening model analytics.",
-    "Classic (Legacy Frontend)": "Classic (Legacy Frontend)",
     "Claude": "Claude",
     "Claude CLI Header Passthrough": "Claude CLI Header Passthrough",
     "Clean": "Clean",
