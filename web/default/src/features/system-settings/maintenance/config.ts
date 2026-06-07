@@ -171,7 +171,10 @@ export function parseSidebarModulesAdmin(
     Object.entries(parsed).forEach(([sectionKey, raw]) => {
       if (!raw || typeof raw !== 'object') return
 
-      const defaultSection = defaults[sectionKey] ?? { enabled: true }
+      // 仅保留当前仍存在的区块，丢弃已移除的区块（如旧数据里残留的 chat）
+      const defaultSection = defaults[sectionKey]
+      if (!defaultSection) return
+
       const sectionConfig: SidebarSectionConfig = {
         enabled: toBoolean(
           (raw as Record<string, unknown>).enabled,
@@ -182,6 +185,8 @@ export function parseSidebarModulesAdmin(
       Object.entries(raw as Record<string, unknown>).forEach(
         ([moduleKey, moduleValue]) => {
           if (moduleKey === 'enabled') return
+          // 丢弃已移除的模块（如旧数据里残留的 playground/chat）
+          if (!(moduleKey in defaultSection)) return
           sectionConfig[moduleKey] = toBoolean(
             moduleValue,
             defaultSection[moduleKey] ?? true
