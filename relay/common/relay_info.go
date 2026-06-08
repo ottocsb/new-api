@@ -1,10 +1,8 @@
 package common
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -99,7 +97,6 @@ type RelayInfo struct {
 	//SendLastReasoningResponse bool
 	IsStream               bool
 	IsGeminiBatchEmbedding bool
-	IsPlayground           bool
 	UsePrice               bool
 	RelayMode              int
 	OriginModelName        string
@@ -185,7 +182,6 @@ type RelayInfo struct {
 	*RerankerInfo
 	*ResponsesUsageInfo
 	*ChannelMeta
-	*TaskRelayInfo
 }
 
 func (info *RelayInfo) InitChannelMeta(c *gin.Context) {
@@ -252,7 +248,6 @@ func (info *RelayInfo) ToString() string {
 	fmt.Fprintf(b, "RelayFormat: %s, ", info.RelayFormat)
 	fmt.Fprintf(b, "RelayMode: %d, ", info.RelayMode)
 	fmt.Fprintf(b, "IsStream: %t, ", info.IsStream)
-	fmt.Fprintf(b, "IsPlayground: %t, ", info.IsPlayground)
 	fmt.Fprintf(b, "RequestURLPath: %q, ", info.RequestURLPath)
 	fmt.Fprintf(b, "OriginModelName: %q, ", info.OriginModelName)
 	fmt.Fprintf(b, "EstimatePromptTokens: %d, ", info.estimatePromptTokens)
@@ -499,12 +494,6 @@ func genBaseRelayInfo(c *gin.Context, request dto.Request) *RelayInfo {
 		info.RelayMode = c.GetInt("relay_mode")
 	}
 
-	if strings.HasPrefix(c.Request.URL.Path, "/pg") {
-		info.IsPlayground = true
-		info.RequestURLPath = strings.TrimPrefix(info.RequestURLPath, "/pg")
-		info.RequestURLPath = "/v1" + info.RequestURLPath
-	}
-
 	userSetting, ok := common.GetContextKeyType[dto.UserSetting](c, constant.ContextKeyUserSetting)
 	if ok {
 		info.UserSetting = userSetting
@@ -569,12 +558,6 @@ func GenRelayInfo(c *gin.Context, relayFormat types.RelayFormat, request dto.Req
 			return GenRelayInfoResponsesCompaction(c, request), nil
 		}
 		return nil, errors.New("request is not a OpenAIResponsesCompactionRequest")
-	case types.RelayFormatTask:
-		info = genBaseRelayInfo(c, nil)
-		info.TaskRelayInfo = &TaskRelayInfo{}
-	case types.RelayFormatMjProxy:
-		info = genBaseRelayInfo(c, nil)
-		info.TaskRelayInfo = &TaskRelayInfo{}
 	default:
 		err = errors.New("invalid relay format")
 	}
@@ -664,122 +647,6 @@ func (info *RelayInfo) SetFirstResponseTime() {
 
 func (info *RelayInfo) HasSendResponse() bool {
 	return info.FirstResponseTime.After(info.StartTime)
-}
-
-type TaskRelayInfo struct {
-	Action       string
-	OriginTaskID string
-	// PublicTaskID 是提交时预生成的 task_xxxx 格式公开 ID，
-	// 供 DoResponse 在返回给客户端时使用（避免暴露上游真实 ID）。
-	PublicTaskID string
-
-	ConsumeQuota bool
-
-	// LockedChannel holds the full channel object when the request is bound to
-	// a specific channel (e.g., remix on origin task's channel). Stored as any
-	// to avoid an import cycle with model; callers type-assert to *model.Channel.
-	LockedChannel any
-}
-
-type TaskSubmitReq struct {
-	Prompt         string                 `json:"prompt"`
-	Model          string                 `json:"model,omitempty"`
-	Mode           string                 `json:"mode,omitempty"`
-	Image          string                 `json:"image,omitempty"`
-	Images         []string               `json:"images,omitempty"`
-	Size           string                 `json:"size,omitempty"`
-	Duration       int                    `json:"duration,omitempty"`
-	Seconds        string                 `json:"seconds,omitempty"`
-	InputReference string                 `json:"input_reference,omitempty"`
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-}
-
-func (t *TaskSubmitReq) GetPrompt() string {
-	return t.Prompt
-}
-
-func (t *TaskSubmitReq) HasImage() bool {
-	return len(t.Images) > 0
-}
-
-func (t *TaskSubmitReq) UnmarshalJSON(data []byte) error {
-	type Alias TaskSubmitReq
-	aux := &struct {
-		Metadata json.RawMessage `json:"metadata,omitempty"`
-		Duration json.RawMessage `json:"duration,omitempty"`
-		*Alias
-	}{
-		Alias: (*Alias)(t),
-	}
-
-	if err := common.Unmarshal(data, &aux); err != nil {
-		return err
-	}
-
-	if len(aux.Duration) > 0 {
-		var durationInt int
-		if err := common.Unmarshal(aux.Duration, &durationInt); err == nil {
-			t.Duration = durationInt
-		} else {
-			var durationStr string
-			if err := common.Unmarshal(aux.Duration, &durationStr); err == nil && durationStr != "" {
-				if v, err := strconv.Atoi(durationStr); err == nil {
-					t.Duration = v
-				}
-			}
-		}
-	}
-
-	if len(aux.Metadata) > 0 {
-		var metadataStr string
-		if err := common.Unmarshal(aux.Metadata, &metadataStr); err == nil && metadataStr != "" {
-			var metadataObj map[string]interface{}
-			if err := common.Unmarshal([]byte(metadataStr), &metadataObj); err == nil {
-				t.Metadata = metadataObj
-				return nil
-			}
-		}
-
-		var metadataObj map[string]interface{}
-		if err := common.Unmarshal(aux.Metadata, &metadataObj); err == nil {
-			t.Metadata = metadataObj
-		}
-	}
-
-	return nil
-}
-func (t *TaskSubmitReq) UnmarshalMetadata(v any) error {
-	metadata := t.Metadata
-	if metadata != nil {
-		metadataBytes, err := common.Marshal(metadata)
-		if err != nil {
-			return fmt.Errorf("marshal metadata failed: %w", err)
-		}
-		err = common.Unmarshal(metadataBytes, v)
-		if err != nil {
-			return fmt.Errorf("unmarshal metadata to target failed: %w", err)
-		}
-	}
-	return nil
-}
-
-type TaskInfo struct {
-	Code             int    `json:"code"`
-	TaskID           string `json:"task_id"`
-	Status           string `json:"status"`
-	Reason           string `json:"reason,omitempty"`
-	Url              string `json:"url,omitempty"`
-	RemoteUrl        string `json:"remote_url,omitempty"`
-	Progress         string `json:"progress,omitempty"`
-	CompletionTokens int    `json:"completion_tokens,omitempty"` // 用于按倍率计费
-	TotalTokens      int    `json:"total_tokens,omitempty"`      // 用于按倍率计费
-}
-
-func FailTaskInfo(reason string) *TaskInfo {
-	return &TaskInfo{
-		Status: "FAILURE",
-		Reason: reason,
-	}
 }
 
 // RemoveDisabledFields 从请求 JSON 数据中移除渠道设置中禁用的字段

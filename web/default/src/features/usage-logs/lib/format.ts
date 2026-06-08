@@ -1,4 +1,3 @@
-import type { StatusBadgeProps } from '@/components/status-badge'
 import {
   BILLING_PRICING_VARS,
   normalizeTierLabel,
@@ -258,25 +257,4 @@ export function getTieredBillingSummary(
     }
   }
   return { tiers, tier, priceEntries }
-}
-
-/**
- * Calculate duration and return formatted result with color variant
- * @param submitTime - Submit timestamp
- * @param finishTime - Finish timestamp
- * @param unit - Unit of the timestamps ('seconds' or 'milliseconds')
- */
-export function formatDuration(
-  submitTime?: number,
-  finishTime?: number,
-  unit: 'seconds' | 'milliseconds' = 'milliseconds'
-): { durationSec: number; variant: StatusBadgeProps['variant'] } | null {
-  if (!submitTime || !finishTime) return null
-
-  const durationSec =
-    unit === 'milliseconds'
-      ? (finishTime - submitTime) / 1000
-      : finishTime - submitTime
-
-  return { durationSec, variant: durationSec > 60 ? 'red' : 'green' }
 }

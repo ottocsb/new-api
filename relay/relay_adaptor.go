@@ -1,8 +1,6 @@
 package relay
 
 import (
-	"strconv"
-
 	"newapi/constant"
 	"newapi/relay/channel"
 	"newapi/relay/channel/ali"
@@ -17,7 +15,6 @@ import (
 	"newapi/relay/channel/deepseek"
 	"newapi/relay/channel/dify"
 	"newapi/relay/channel/gemini"
-	"newapi/relay/channel/jimeng"
 	"newapi/relay/channel/jina"
 	"newapi/relay/channel/minimax"
 	"newapi/relay/channel/mistral"
@@ -30,16 +27,6 @@ import (
 	"newapi/relay/channel/replicate"
 	"newapi/relay/channel/siliconflow"
 	"newapi/relay/channel/submodel"
-	taskali "newapi/relay/channel/task/ali"
-	taskdoubao "newapi/relay/channel/task/doubao"
-	taskGemini "newapi/relay/channel/task/gemini"
-	"newapi/relay/channel/task/hailuo"
-	taskjimeng "newapi/relay/channel/task/jimeng"
-	"newapi/relay/channel/task/kling"
-	tasksora "newapi/relay/channel/task/sora"
-	"newapi/relay/channel/task/suno"
-	taskvertex "newapi/relay/channel/task/vertex"
-	taskVidu "newapi/relay/channel/task/vidu"
 	"newapi/relay/channel/tencent"
 	"newapi/relay/channel/vertex"
 	"newapi/relay/channel/volcengine"
@@ -47,7 +34,6 @@ import (
 	"newapi/relay/channel/xunfei"
 	"newapi/relay/channel/zhipu"
 	"newapi/relay/channel/zhipu_4v"
-	"github.com/gin-gonic/gin"
 )
 
 func GetAdaptor(apiType int) channel.Adaptor {
@@ -108,8 +94,6 @@ func GetAdaptor(apiType int) channel.Adaptor {
 		return &xai.Adaptor{}
 	case constant.APITypeCoze:
 		return &coze.Adaptor{}
-	case constant.APITypeJimeng:
-		return &jimeng.Adaptor{}
 	case constant.APITypeMoonshot:
 		return &moonshot.Adaptor{} // Moonshot uses Claude API
 	case constant.APITypeSubmodel:
@@ -120,46 +104,6 @@ func GetAdaptor(apiType int) channel.Adaptor {
 		return &replicate.Adaptor{}
 	case constant.APITypeCodex:
 		return &codex.Adaptor{}
-	}
-	return nil
-}
-
-func GetTaskPlatform(c *gin.Context) constant.TaskPlatform {
-	channelType := c.GetInt("channel_type")
-	if channelType > 0 {
-		return constant.TaskPlatform(strconv.Itoa(channelType))
-	}
-	return constant.TaskPlatform(c.GetString("platform"))
-}
-
-func GetTaskAdaptor(platform constant.TaskPlatform) channel.TaskAdaptor {
-	switch platform {
-	//case constant.APITypeAIProxyLibrary:
-	//	return &aiproxy.Adaptor{}
-	case constant.TaskPlatformSuno:
-		return &suno.TaskAdaptor{}
-	}
-	if channelType, err := strconv.ParseInt(string(platform), 10, 64); err == nil {
-		switch channelType {
-		case constant.ChannelTypeAli:
-			return &taskali.TaskAdaptor{}
-		case constant.ChannelTypeKling:
-			return &kling.TaskAdaptor{}
-		case constant.ChannelTypeJimeng:
-			return &taskjimeng.TaskAdaptor{}
-		case constant.ChannelTypeVertexAi:
-			return &taskvertex.TaskAdaptor{}
-		case constant.ChannelTypeVidu:
-			return &taskVidu.TaskAdaptor{}
-		case constant.ChannelTypeDoubaoVideo, constant.ChannelTypeVolcEngine:
-			return &taskdoubao.TaskAdaptor{}
-		case constant.ChannelTypeSora, constant.ChannelTypeOpenAI:
-			return &tasksora.TaskAdaptor{}
-		case constant.ChannelTypeGemini:
-			return &taskGemini.TaskAdaptor{}
-		case constant.ChannelTypeMiniMax:
-			return &hailuo.TaskAdaptor{}
-		}
 	}
 	return nil
 }

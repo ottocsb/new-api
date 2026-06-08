@@ -3,10 +3,8 @@ package constant
 const (
 	ChannelTypeUnknown        = 0
 	ChannelTypeOpenAI         = 1
-	ChannelTypeMidjourney     = 2
 	ChannelTypeAzure          = 3
 	ChannelTypeOllama         = 4
-	ChannelTypeMidjourneyPlus = 5
 	ChannelTypeOpenAIMax      = 6
 	ChannelTypeOhMyGPT        = 7
 	ChannelTypeCustom         = 8
@@ -33,7 +31,6 @@ const (
 	ChannelTypeAws            = 33
 	ChannelTypeCohere         = 34
 	ChannelTypeMiniMax        = 35
-	ChannelTypeSunoAPI        = 36
 	ChannelTypeDify           = 37
 	ChannelTypeJina           = 38
 	ChannelCloudflare         = 39
@@ -47,12 +44,7 @@ const (
 	ChannelTypeXinference     = 47
 	ChannelTypeXai            = 48
 	ChannelTypeCoze           = 49
-	ChannelTypeKling          = 50
-	ChannelTypeJimeng         = 51
-	ChannelTypeVidu           = 52
 	ChannelTypeSubmodel       = 53
-	ChannelTypeDoubaoVideo    = 54
-	ChannelTypeSora           = 55
 	ChannelTypeReplicate      = 56
 	ChannelTypeCodex          = 57
 	ChannelTypeDummy          // this one is only for count, do not add any channel after this
@@ -123,10 +115,8 @@ var ChannelBaseURLs = []string{
 var ChannelTypeNames = map[int]string{
 	ChannelTypeUnknown:        "Unknown",
 	ChannelTypeOpenAI:         "OpenAI",
-	ChannelTypeMidjourney:     "Midjourney",
 	ChannelTypeAzure:          "Azure",
 	ChannelTypeOllama:         "Ollama",
-	ChannelTypeMidjourneyPlus: "MidjourneyPlus",
 	ChannelTypeOpenAIMax:      "OpenAIMax",
 	ChannelTypeOhMyGPT:        "OhMyGPT",
 	ChannelTypeCustom:         "Custom",
@@ -153,7 +143,6 @@ var ChannelTypeNames = map[int]string{
 	ChannelTypeAws:            "AWS",
 	ChannelTypeCohere:         "Cohere",
 	ChannelTypeMiniMax:        "MiniMax",
-	ChannelTypeSunoAPI:        "SunoAPI",
 	ChannelTypeDify:           "Dify",
 	ChannelTypeJina:           "Jina",
 	ChannelCloudflare:         "Cloudflare",
@@ -167,12 +156,7 @@ var ChannelTypeNames = map[int]string{
 	ChannelTypeXinference:     "Xinference",
 	ChannelTypeXai:            "xAI",
 	ChannelTypeCoze:           "Coze",
-	ChannelTypeKling:          "Kling",
-	ChannelTypeJimeng:         "Jimeng",
-	ChannelTypeVidu:           "Vidu",
 	ChannelTypeSubmodel:       "Submodel",
-	ChannelTypeDoubaoVideo:    "DoubaoVideo",
-	ChannelTypeSora:           "Sora",
 	ChannelTypeReplicate:      "Replicate",
 	ChannelTypeCodex:          "Codex",
 }

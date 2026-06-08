@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
 	"newapi/common"
 	"newapi/constant"
 	"newapi/dto"
@@ -20,8 +22,6 @@ import (
 	"newapi/service"
 	"newapi/setting/operation_setting"
 	"newapi/types"
-	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
 )
 
 // https://platform.openai.com/docs/api-reference/models/list
@@ -37,6 +37,9 @@ func init() {
 			continue
 		}
 		adaptor := relay.GetAdaptor(i)
+		if adaptor == nil {
+			continue
+		}
 		channelName := adaptor.GetChannelName()
 		modelNames := adaptor.GetModelList()
 		for _, modelName := range modelNames {
@@ -80,14 +83,6 @@ func init() {
 			OwnedBy: minimax.ChannelName,
 		})
 	}
-	for modelName, _ := range constant.MidjourneyModel2Action {
-		openAIModels = append(openAIModels, dto.OpenAIModels{
-			Id:      modelName,
-			Object:  "model",
-			Created: 1626777600,
-			OwnedBy: "midjourney",
-		})
-	}
 	openAIModelsMap = make(map[string]dto.OpenAIModels)
 	for _, aiModel := range openAIModels {
 		openAIModelsMap[aiModel.Id] = aiModel
@@ -102,6 +97,9 @@ func init() {
 			ChannelType: i,
 		}}
 		adaptor := relay.GetAdaptor(apiType)
+		if adaptor == nil {
+			continue
+		}
 		adaptor.Init(meta)
 		channelId2Models[i] = adaptor.GetModelList()
 	}

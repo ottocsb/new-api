@@ -1415,35 +1415,6 @@ export function ChannelMutateDrawer({
                       />
                     )}
 
-                    {/* SunoAPI (type 36) */}
-                    {currentType === 36 && (
-                      <FormField
-                        control={form.control}
-                        name='base_url'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              {t('API Base URL (Important: Not Chat API) *')}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder={t(
-                                  'e.g., https://api.example.com (path before /suno)'
-                                )}
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              {t(
-                                'Enter the path before /suno, usually just the domain'
-                              )}
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
                     {/* Cloudflare Workers AI (type 39) */}
                     {currentType === 39 && (
                       <FormField

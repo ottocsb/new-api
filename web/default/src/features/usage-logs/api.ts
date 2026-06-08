@@ -5,8 +5,6 @@ import type {
   GetLogsResponse,
   GetLogStatsParams,
   GetLogStatsResponse,
-  GetMidjourneyLogsParams,
-  GetTaskLogsParams,
   UserInfo,
 } from './types'
 
@@ -71,23 +69,3 @@ export async function getUserInfo(
   const res = await api.get(`/api/user/${userId}`)
   return res.data
 }
-
-// ============================================================================
-// Midjourney (Drawing) Logs API
-// ============================================================================
-
-export const getAllMidjourneyLogs = (params: GetMidjourneyLogsParams) =>
-  fetchLogs('/api/mj', params, true)
-
-export const getUserMidjourneyLogs = (params: GetMidjourneyLogsParams) =>
-  fetchLogs('/api/mj', params, false)
-
-// ============================================================================
-// Task Logs API
-// ============================================================================
-
-export const getAllTaskLogs = (params: GetTaskLogsParams) =>
-  fetchLogs('/api/task', params, true)
-
-export const getUserTaskLogs = (params: GetTaskLogsParams) =>
-  fetchLogs('/api/task', params, false)

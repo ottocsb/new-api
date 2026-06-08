@@ -387,7 +387,6 @@ export type ModelVendor =
   | 'minimax'
   | 'tencent'
   | 'bytedance'
-  | 'midjourney'
   | 'stability'
   | 'unknown'
 
@@ -419,7 +418,6 @@ const VENDOR_LABELS: Record<ModelVendor, string> = {
   minimax: 'MiniMax',
   tencent: 'Tencent',
   bytedance: 'ByteDance',
-  midjourney: 'Midjourney',
   stability: 'Stability AI',
   unknown: 'Unknown',
 }
@@ -442,7 +440,6 @@ function detectVendor(name: string): ModelVendor {
   if (/abab|minimax|hailuo/.test(n)) return 'minimax'
   if (/hunyuan/.test(n)) return 'tencent'
   if (/doubao|seed|jimeng/.test(n)) return 'bytedance'
-  if (/midjourney|niji/.test(n)) return 'midjourney'
   if (/^sd-|stable[-_]?diffusion|sdxl/.test(n)) return 'stability'
   return 'unknown'
 }
@@ -501,7 +498,6 @@ const LICENSE_BY_VENDOR: Record<
   minimax: { license: 'Proprietary (commercial)', kind: 'proprietary' },
   tencent: { license: 'Hunyuan License', kind: 'open-weight' },
   bytedance: { license: 'Proprietary (commercial)', kind: 'proprietary' },
-  midjourney: { license: 'Proprietary (commercial)', kind: 'proprietary' },
   stability: { license: 'Stability AI Community License', kind: 'open-weight' },
   unknown: { license: 'Provider-specific', kind: 'unknown' },
 }
@@ -522,7 +518,6 @@ const HOMEPAGE_BY_VENDOR: Partial<Record<ModelVendor, string>> = {
   minimax: 'https://platform.minimaxi.com/document/notice',
   tencent: 'https://cloud.tencent.com/document/product/1729',
   bytedance: 'https://www.volcengine.com/docs/82379',
-  midjourney: 'https://www.midjourney.com/',
   stability: 'https://platform.stability.ai/',
 }
 
