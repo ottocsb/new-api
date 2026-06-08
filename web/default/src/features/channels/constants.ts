@@ -6,10 +6,8 @@
 export const CHANNEL_TYPES = {
   0: 'Unknown',
   1: 'OpenAI',
-  2: 'Midjourney',
   3: 'Azure',
   4: 'Ollama',
-  5: 'MidjourneyPlus',
   6: 'OpenAIMax',
   7: 'OhMyGPT',
   8: 'Custom',
@@ -36,7 +34,6 @@ export const CHANNEL_TYPES = {
   33: 'AWS',
   34: 'Cohere',
   35: 'MiniMax',
-  36: 'SunoAPI',
   37: 'Dify',
   38: 'Jina',
   39: 'Cloudflare',
@@ -50,20 +47,14 @@ export const CHANNEL_TYPES = {
   47: 'Xinference',
   48: 'xAI',
   49: 'Coze',
-  50: 'Kling',
-  51: 'Jimeng',
-  52: 'Vidu',
   53: 'Submodel',
-  54: 'DoubaoVideo',
-  55: 'Sora',
   56: 'Replicate',
   57: 'Codex',
 } as const
 
 const CHANNEL_TYPE_DISPLAY_ORDER: number[] = [
   1, 14, 33, 24, 43, 3, 41, 48, 42, 34, 20, 4, 40, 27, 25, 17, 26, 15, 46, 23,
-  18, 45, 31, 35, 49, 19, 47, 37, 38, 39, 11, 8, 57, 22, 21, 44, 2, 5, 36, 50,
-  51, 52, 53, 54, 55, 56,
+  18, 45, 31, 35, 49, 19, 47, 37, 38, 39, 11, 8, 57, 22, 21, 44, 53, 56,
 ]
 
 export const CHANNEL_TYPE_OPTIONS: { value: number; label: string }[] = (() => {

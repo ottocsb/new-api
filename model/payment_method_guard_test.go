@@ -4,10 +4,26 @@ import (
 	"testing"
 	"time"
 
-	"newapi/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"newapi/common"
 )
+
+func truncateTables(t *testing.T) {
+	t.Helper()
+	t.Cleanup(func() {
+		DB.Exec("DELETE FROM users")
+		DB.Exec("DELETE FROM tokens")
+		DB.Exec("DELETE FROM logs")
+		DB.Exec("DELETE FROM channels")
+		DB.Exec("DELETE FROM abilities")
+		DB.Exec("DELETE FROM top_ups")
+		DB.Exec("DELETE FROM subscription_orders")
+		DB.Exec("DELETE FROM subscription_plans")
+		DB.Exec("DELETE FROM user_subscriptions")
+		DB.Exec("DELETE FROM perf_metrics")
+	})
+}
 
 func insertUserForPaymentGuardTest(t *testing.T, id int, quota int) {
 	t.Helper()

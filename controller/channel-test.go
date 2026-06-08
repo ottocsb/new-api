@@ -76,21 +76,6 @@ func resolveChannelTestUserID(c *gin.Context) (int, error) {
 
 func testChannel(channel *model.Channel, testUserID int, testModel string, endpointType string, isStream bool) testResult {
 	tik := time.Now()
-	var unsupportedTestChannelTypes = []int{
-		constant.ChannelTypeMidjourney,
-		constant.ChannelTypeMidjourneyPlus,
-		constant.ChannelTypeSunoAPI,
-		constant.ChannelTypeKling,
-		constant.ChannelTypeJimeng,
-		constant.ChannelTypeDoubaoVideo,
-		constant.ChannelTypeVidu,
-	}
-	if lo.Contains(unsupportedTestChannelTypes, channel.Type) {
-		channelTypeName := constant.GetChannelTypeName(channel.Type)
-		return testResult{
-			localErr: fmt.Errorf("%s channel test is not supported", channelTypeName),
-		}
-	}
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 

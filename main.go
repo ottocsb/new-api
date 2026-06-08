@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"newapi/common"
-	"newapi/constant"
 	"newapi/controller"
 	"newapi/i18n"
 	"newapi/logger"
@@ -20,7 +19,6 @@ import (
 	"newapi/model"
 	"newapi/oauth"
 	perfmetrics "newapi/pkg/perf_metrics"
-	"newapi/relay"
 	"newapi/router"
 	"newapi/service"
 	_ "newapi/setting/performance_setting"
@@ -113,26 +111,9 @@ func main() {
 	// Subscription quota reset task (daily/weekly/monthly/custom)
 	service.StartSubscriptionQuotaResetTask()
 
-	// Wire task polling adaptor factory (breaks service -> relay import cycle)
-	service.GetTaskAdaptorFunc = func(platform constant.TaskPlatform) service.TaskPollingAdaptor {
-		a := relay.GetTaskAdaptor(platform)
-		if a == nil {
-			return nil
-		}
-		return a
-	}
-
 	// Channel upstream model update check task
 	controller.StartChannelUpstreamModelUpdateTask()
 
-	if common.IsMasterNode && constant.UpdateTask {
-		gopool.Go(func() {
-			controller.UpdateMidjourneyTaskBulk()
-		})
-		gopool.Go(func() {
-			controller.UpdateTaskBulk()
-		})
-	}
 	if os.Getenv("BATCH_UPDATE_ENABLED") == "true" {
 		common.BatchUpdateEnabled = true
 		common.SysLog("batch update enabled with interval " + strconv.Itoa(common.BatchUpdateInterval) + "s")
