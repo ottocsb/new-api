@@ -1,12 +1,7 @@
 /**
  * Utility functions for usage logs feature
  */
-import {
-  getAllLogs,
-  getUserLogs,
-  getAllTaskLogs,
-  getUserTaskLogs,
-} from '../api'
+import { getAllLogs, getUserLogs } from '../api'
 import {
   LOG_TYPES,
   DISPLAYABLE_LOG_TYPES,
@@ -16,7 +11,6 @@ import type {
   GetLogsParams,
   GetLogsResponse,
   FetchLogsConfig,
-  GetTaskLogsParams,
 } from '../types'
 
 // ============================================================================
@@ -117,36 +111,6 @@ function buildTimeRangeParams(
 }
 
 /**
- * Build base parameters with time range (for task logs)
- * @param useMilliseconds - Whether to use millisecond timestamps
- */
-export function buildBaseParams(config: {
-  page: number
-  pageSize: number
-  searchParams: Record<string, unknown>
-  useMilliseconds?: boolean
-}): {
-  p: number
-  page_size: number
-  channel_id?: string
-  start_timestamp?: number
-  end_timestamp?: number
-} {
-  const { page, pageSize, searchParams, useMilliseconds = false } = config
-
-  return {
-    p: page,
-    page_size: pageSize,
-    ...(searchParams.channel
-      ? {
-          channel_id: String(searchParams.channel),
-        }
-      : {}),
-    ...buildTimeRangeParams(searchParams, useMilliseconds),
-  }
-}
-
-/**
  * Build API params from search params and column filters (for common logs)
  */
 export function buildApiParams(config: {
@@ -233,38 +197,19 @@ export function buildApiParams(config: {
 // ============================================================================
 
 /**
- * Fetch logs based on category type
+ * Fetch logs
  */
-export async function fetchLogsByCategory(
+export async function fetchLogs(
   config: FetchLogsConfig
 ): Promise<GetLogsResponse> {
-  const { logCategory, isAdmin, page, pageSize, searchParams, columnFilters } =
-    config
+  const { isAdmin, page, pageSize, searchParams, columnFilters } = config
 
-  if (logCategory === 'common') {
-    const params = buildApiParams({
-      page,
-      pageSize,
-      searchParams,
-      columnFilters,
-      isAdmin,
-    })
-    return isAdmin ? await getAllLogs(params) : await getUserLogs(params)
-  }
-
-  // Task logs
-  const baseParams = buildBaseParams({
+  const params = buildApiParams({
     page,
     pageSize,
     searchParams,
+    columnFilters,
+    isAdmin,
   })
-
-  const paramsWithFilter = {
-    ...baseParams,
-    task_id: searchParams.filter as string | undefined,
-  }
-
-  return isAdmin
-    ? await getAllTaskLogs(paramsWithFilter as GetTaskLogsParams)
-    : await getUserTaskLogs(paramsWithFilter as GetTaskLogsParams)
+  return isAdmin ? await getAllLogs(params) : await getUserLogs(params)
 }

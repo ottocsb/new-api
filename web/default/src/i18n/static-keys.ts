@@ -305,7 +305,6 @@ export const STATIC_I18N_KEYS = [
   'Not backed up',
   'No backup',
   'Generate New Codes',
-  'Audio Preview',
 
   // Status-code risk dialog
   'High-risk status code retry risk check 1',
@@ -404,8 +403,6 @@ export const STATIC_I18N_KEYS = [
   'API token management',
   'Usage Logs',
   'API usage records',
-  'Task Logs',
-  'System task records',
   'Personal Center Area',
   'User personal functions',
   'Wallet Management',
@@ -453,8 +450,6 @@ export const STATIC_I18N_KEYS = [
   'Status',
   'Upgrade Group',
   'Regenerate',
-  'Untitled',
-  'Open in new tab',
   'Failed to load',
   'Expired at',
   'Cancelled at',

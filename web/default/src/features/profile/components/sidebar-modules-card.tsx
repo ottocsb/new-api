@@ -56,11 +56,6 @@ export function SidebarModulesCard() {
           title: t('Usage Logs'),
           description: t('API usage records'),
         },
-        {
-          key: 'task',
-          title: t('Task Logs'),
-          description: t('System task records'),
-        },
       ],
     },
     {

@@ -4,15 +4,6 @@
 import type { UsageLog } from './data/schema'
 
 // ============================================================================
-// Log Category Types
-// ============================================================================
-
-/**
- * Log category for different log types
- */
-export type LogCategory = 'common' | 'task'
-
-// ============================================================================
 // Filter Types
 // ============================================================================
 
@@ -38,16 +29,9 @@ export interface CommonLogFilters extends CommonFilters {
 }
 
 /**
- * Task logs specific filters
+ * All log filters (common logs only)
  */
-export interface TaskLogFilters extends CommonFilters {
-  taskId?: string
-}
-
-/**
- * Union type for all log filters
- */
-export type LogFilters = CommonLogFilters | TaskLogFilters
+export type LogFilters = CommonLogFilters
 
 // ============================================================================
 // Common Logs Additional Types
@@ -176,30 +160,6 @@ export interface LogStatistics {
 }
 
 // ============================================================================
-// Task Logs Types
-// ============================================================================
-
-export interface TaskLog {
-  id: number
-  user_id: number
-  username?: string
-  platform: string // suno, kling, runway, etc.
-  task_id: string
-  action: string // MUSIC, LYRICS, GENERATE, TEXT_GENERATE, etc.
-  channel_id: number
-  submit_time: number // seconds
-  finish_time?: number // seconds
-  progress?: string
-  progress_message_en?: string
-  data?: string // JSON string
-  fail_reason?: string
-  status: string // NOT_START, SUBMITTED, IN_PROGRESS, SUCCESS, FAILURE, QUEUED, UNKNOWN
-  other?: string
-  created_at?: number
-  updated_at?: number
-}
-
-// ============================================================================
 // Common Log Types
 // ============================================================================
 
@@ -222,7 +182,7 @@ export interface GetLogsResponse {
   success: boolean
   message?: string
   data?: {
-    items: UsageLog[] | TaskLog[]
+    items: UsageLog[]
     total: number
     page: number
     page_size: number
@@ -249,27 +209,13 @@ export interface GetLogStatsResponse {
 }
 
 // ============================================================================
-// Task Log Types
-// ============================================================================
-
-export interface GetTaskLogsParams {
-  p?: number
-  page_size?: number
-  channel_id?: string
-  task_id?: string
-  start_timestamp?: number
-  end_timestamp?: number
-}
-
-// ============================================================================
 // Fetch Logs Configuration
 // ============================================================================
 
 /**
- * Configuration for fetching logs by category
+ * Configuration for fetching logs
  */
 export interface FetchLogsConfig {
-  logCategory: LogCategory
   isAdmin: boolean
   page: number
   pageSize: number

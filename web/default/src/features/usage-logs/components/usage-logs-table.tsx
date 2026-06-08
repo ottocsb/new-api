@@ -24,11 +24,9 @@ import {
   LOG_TYPE_ALL_VALUE,
   LOG_TYPE_ENUM,
 } from '../constants'
-import { useColumnsByCategory } from '../lib/columns'
-import { fetchLogsByCategory } from '../lib/utils'
-import type { LogCategory } from '../types'
+import { fetchLogs } from '../lib/utils'
+import { useCommonLogsColumns } from './columns/common-logs-columns'
 import { CommonLogsFilterBar } from './common-logs-filter-bar'
-import { TaskLogsFilterBar } from './task-logs-filter-bar'
 import { UsageLogsMobileList } from './usage-logs-mobile-card'
 
 const route = getRouteApi('/_authenticated/usage-logs/$section')
@@ -43,11 +41,7 @@ function deserializeLogTypeFilter(value: unknown): unknown[] {
   return values.filter((item) => String(item) !== LOG_TYPE_ALL_VALUE)
 }
 
-interface UsageLogsTableProps {
-  logCategory: LogCategory
-}
-
-export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
+export function UsageLogsTable() {
   const { t } = useTranslation()
   const isAdmin = useIsAdmin()
   const isMobile = useMediaQuery('(max-width: 640px)')
@@ -94,7 +88,6 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [
       'logs',
-      logCategory,
       isAdmin,
       pagination.pageIndex + 1,
       pagination.pageSize,
@@ -103,8 +96,7 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
       t,
     ],
     queryFn: async () => {
-      const result = await fetchLogsByCategory({
-        logCategory,
+      const result = await fetchLogs({
         isAdmin,
         page: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
@@ -119,16 +111,11 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
 
       return result.data || DEFAULT_LOGS_DATA
     },
-    placeholderData: (previousData, previousQuery) => {
-      if (previousQuery?.queryKey[1] === logCategory) {
-        return previousData
-      }
-      return undefined
-    },
+    placeholderData: (previousData) => previousData,
   })
 
   const logs = data?.items || []
-  const columns = useColumnsByCategory(logCategory, isAdmin)
+  const columns = useCommonLogsColumns(isAdmin)
   const isLoadingData = isLoading || (isFetching && !data)
 
   const table = useReactTable({
@@ -156,8 +143,6 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
     ensurePageInRange(pageCount)
   }, [pageCount, ensurePageInRange])
 
-  const isCommon = logCategory === 'common'
-
   return (
     <DataTablePage
       table={table}
@@ -175,30 +160,20 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
       )}
       tableHeaderClassName='bg-muted/30 sticky top-0 z-10'
       mobile={
-        <UsageLogsMobileList
-          table={table}
-          isLoading={isLoadingData}
-          logCategory={logCategory}
-        />
+        <UsageLogsMobileList table={table} isLoading={isLoadingData} />
       }
-      toolbar={
-        isCommon ? (
-          <CommonLogsFilterBar table={table} />
-        ) : (
-          <TaskLogsFilterBar table={table} logCategory={logCategory} />
-        )
-      }
+      toolbar={<CommonLogsFilterBar table={table} />}
       renderRow={(row) => {
         const logType = (row.original as Record<string, unknown>).type as
           | number
           | undefined
         const tintClass =
-          isCommon && logType != null ? (logTypeRowTint[logType] ?? '') : ''
+          logType != null ? (logTypeRowTint[logType] ?? '') : ''
 
         return (
           <TableRow key={row.id} className={cn('transition-colors', tintClass)}>
             {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id} className={isCommon ? 'py-2' : 'py-3.5'}>
+              <TableCell key={cell.id} className='py-2'>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}

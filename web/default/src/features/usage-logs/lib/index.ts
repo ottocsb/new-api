@@ -7,14 +7,13 @@ export {
   parseLogOther,
   getTimeColor,
   formatModelName,
-  formatDuration,
   getParamOverrideActionLabel,
   parseAuditLine,
   isViolationFeeLog,
 } from './format'
 
 // Filter utilities
-export { buildSearchParams, getLogCategoryLabel } from './filter'
+export { buildSearchParams } from './filter'
 
 // General utilities
 export {
@@ -24,20 +23,6 @@ export {
   isPerCallBilling,
   getDefaultTimeRange,
   buildQueryParams,
-  buildBaseParams,
   buildApiParams,
-  fetchLogsByCategory,
+  fetchLogs,
 } from './utils'
-
-// Status mapper utilities
-export { createStatusMapper } from './status'
-
-// Mappers
-export {
-  taskActionMapper,
-  taskStatusMapper,
-  taskPlatformMapper,
-} from './mappers'
-
-// Column utilities
-export { useColumnsByCategory } from './columns'

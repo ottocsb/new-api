@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
 import { dotColorMap, textColorMap, type StatusVariant } from '@/components/status-badge'
-import type { LogCategory } from '../types'
 import { LOG_TYPE_ENUM } from '../constants'
 import { getLogTypeConfig } from '../lib/utils'
 
@@ -30,7 +29,6 @@ interface UsageLogsMobileListProps<TData> {
   isLoading?: boolean
   emptyTitle?: string
   emptyDescription?: string
-  logCategory: LogCategory
 }
 
 function UsageLogsMobileSkeleton() {
@@ -220,50 +218,11 @@ function CommonLogsCard<TData>({
   )
 }
 
-function TaskLogsCard<TData>({
-  cells,
-}: {
-  cells: Map<string, Cell<TData, unknown>>
-}) {
-  const { t } = useTranslation()
-
-  const taskIdCell = cells.get('task_id')
-  const statusCell = cells.get('status')
-  const submitTimeCell = cells.get('submit_time')
-
-  return (
-    <div className='space-y-2.5'>
-      <div className='flex min-w-0 items-start justify-between gap-3'>
-        <CompactCell cell={taskIdCell} className='flex-1' />
-        <CompactCell cell={statusCell} className='shrink-0 text-right' />
-      </div>
-
-      <div className='grid grid-cols-2 gap-1.5'>
-        <SummaryField
-          label={t('Submit Time')}
-          cell={submitTimeCell}
-        />
-        <SummaryField
-          label={t('User')}
-          cell={cells.get('user')}
-          primaryOnly
-        />
-        <SummaryField
-          label={t('Result')}
-          cell={cells.get('fail_reason')}
-          className='col-span-2 bg-transparent px-0 py-0'
-        />
-      </div>
-    </div>
-  )
-}
-
 export function UsageLogsMobileList<TData>({
   table,
   isLoading = false,
   emptyTitle,
   emptyDescription,
-  logCategory,
 }: UsageLogsMobileListProps<TData>) {
   const { t } = useTranslation()
 
@@ -314,12 +273,7 @@ export function UsageLogsMobileList<TData>({
               tintClass
             )}
           >
-            {logCategory === 'common' && (
-              <CommonLogsCard cells={cells} />
-            )}
-            {logCategory === 'task' && (
-              <TaskLogsCard cells={cells} />
-            )}
+            <CommonLogsCard cells={cells} />
           </div>
         )
       })}

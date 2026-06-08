@@ -5,7 +5,6 @@ import type {
   GetLogsResponse,
   GetLogStatsParams,
   GetLogStatsResponse,
-  GetTaskLogsParams,
   UserInfo,
 } from './types'
 
@@ -70,13 +69,3 @@ export async function getUserInfo(
   const res = await api.get(`/api/user/${userId}`)
   return res.data
 }
-
-// ============================================================================
-// Task Logs API
-// ============================================================================
-
-export const getAllTaskLogs = (params: GetTaskLogsParams) =>
-  fetchLogs('/api/task', params, true)
-
-export const getUserTaskLogs = (params: GetTaskLogsParams) =>
-  fetchLogs('/api/task', params, false)

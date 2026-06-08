@@ -74,10 +74,6 @@ export function SidebarModulesSection({
         title: t('Usage logs'),
         description: t('Detailed request logs for investigations.'),
       },
-      task: {
-        title: t('Task logs'),
-        description: t('Background job tracker for queued work.'),
-      },
     },
     personal: {
       topup: {
