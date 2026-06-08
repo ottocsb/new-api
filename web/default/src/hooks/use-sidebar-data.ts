@@ -54,8 +54,7 @@ export function useSidebarData(): SidebarData {
           {
             title: t('Task Logs'),
             url: '/usage-logs/task',
-            activeUrls: ['/usage-logs/drawing'],
-            configUrls: ['/usage-logs/drawing', '/usage-logs/task'],
+            configUrls: ['/usage-logs/task'],
             icon: ListTodo,
           },
         ],

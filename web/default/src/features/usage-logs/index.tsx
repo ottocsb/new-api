@@ -19,14 +19,11 @@ import {
 } from './section-registry'
 
 const route = getRouteApi('/_authenticated/usage-logs/$section')
-const TASK_LOG_SECTIONS = ['drawing', 'task'] as const
+const TASK_LOG_SECTIONS = ['task'] as const
 
 const SECTION_META: Record<UsageLogsSectionId, { titleKey: string }> = {
   common: {
     titleKey: 'Common Logs',
-  },
-  drawing: {
-    titleKey: 'Drawing Logs',
   },
   task: {
     titleKey: 'Task Logs',

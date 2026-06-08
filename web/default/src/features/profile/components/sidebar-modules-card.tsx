@@ -57,11 +57,6 @@ export function SidebarModulesCard() {
           description: t('API usage records'),
         },
         {
-          key: 'midjourney',
-          title: t('Drawing Logs'),
-          description: t('Drawing task records'),
-        },
-        {
           key: 'task',
           title: t('Task Logs'),
           description: t('System task records'),

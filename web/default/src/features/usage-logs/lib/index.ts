@@ -34,8 +34,6 @@ export { createStatusMapper } from './status'
 
 // Mappers
 export {
-  mjTaskTypeMapper,
-  mjStatusMapper,
   taskActionMapper,
   taskStatusMapper,
   taskPlatformMapper,

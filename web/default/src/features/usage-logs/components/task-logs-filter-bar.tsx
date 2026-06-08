@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useIsAdmin } from '@/hooks/use-admin'
 import { buildSearchParams } from '../lib/filter'
 import { getDefaultTimeRange } from '../lib/utils'
-import type { DrawingLogFilters, LogCategory, TaskLogFilters } from '../types'
+import type { LogCategory, TaskLogFilters } from '../types'
 import { CompactDateTimeRangePicker } from './compact-date-time-range-picker'
 import {
   LogsFilterField,
@@ -16,32 +16,22 @@ import {
 
 const route = getRouteApi('/_authenticated/usage-logs/$section')
 
-type TaskLikeLogCategory = Extract<LogCategory, 'drawing' | 'task'>
-type TaskLogsFilters = DrawingLogFilters | TaskLogFilters
+type TaskLikeLogCategory = Extract<LogCategory, 'task'>
+type TaskLogsFilters = TaskLogFilters
 
 interface TaskLogsFilterBarProps<TData> {
   table: Table<TData>
   logCategory: TaskLikeLogCategory
 }
 
-function getFilterValue(
-  filters: TaskLogsFilters,
-  logCategory: TaskLikeLogCategory
-): string {
-  if (logCategory === 'drawing') {
-    return (filters as DrawingLogFilters).mjId || ''
-  }
-  return (filters as TaskLogFilters).taskId || ''
+function getFilterValue(filters: TaskLogsFilters): string {
+  return filters.taskId || ''
 }
 
 function setFilterValue(
   filters: TaskLogsFilters,
-  logCategory: TaskLikeLogCategory,
   value: string
 ): TaskLogsFilters {
-  if (logCategory === 'drawing') {
-    return { ...filters, mjId: value }
-  }
   return { ...filters, taskId: value }
 }
 
@@ -69,16 +59,10 @@ export function TaskLogsFilterBar<TData>(props: TaskLogsFilterBarProps<TData>) {
         ? { channel: String(searchParams.channel) }
         : {}),
     }
-    const next: TaskLogsFilters =
-      props.logCategory === 'drawing'
-        ? {
-            ...baseFilters,
-            ...(searchParams.filter ? { mjId: searchParams.filter } : {}),
-          }
-        : {
-            ...baseFilters,
-            ...(searchParams.filter ? { taskId: searchParams.filter } : {}),
-          }
+    const next: TaskLogsFilters = {
+      ...baseFilters,
+      ...(searchParams.filter ? { taskId: searchParams.filter } : {}),
+    }
 
     setFilters(next)
   }, [
@@ -133,18 +117,12 @@ export function TaskLogsFilterBar<TData>(props: TaskLogsFilterBarProps<TData>) {
     [handleApply]
   )
 
-  const handleFilterChange = useCallback(
-    (value: string) => {
-      setFilters((prev) => setFilterValue(prev, props.logCategory, value))
-    },
-    [props.logCategory]
-  )
+  const handleFilterChange = useCallback((value: string) => {
+    setFilters((prev) => setFilterValue(prev, value))
+  }, [])
 
-  const filterValue = getFilterValue(filters, props.logCategory)
-  const placeholder =
-    props.logCategory === 'drawing'
-      ? t('Filter by Midjourney task ID')
-      : t('Filter by task ID')
+  const filterValue = getFilterValue(filters)
+  const placeholder = t('Filter by task ID')
   const hasAdditionalFilters = !!filterValue || !!filters.channel
   const dateRangeFilter = (
     <LogsFilterField wide>
