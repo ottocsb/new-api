@@ -96,7 +96,7 @@ export function Footer(props: FooterProps) {
       <div className='mx-auto max-w-6xl px-6 py-12 md:py-16'>
         {/* Bottom section */}
         <div>
-          <div className='text-muted-foreground/40 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs'>
+          <div className='text-foreground/70 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs'>
             <span>
               &copy; {currentYear} {displayName}.{' '}
               {props.copyright ?? t('footer.defaultCopyright')}

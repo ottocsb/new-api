@@ -95,7 +95,7 @@ export function Hero(props: HeroProps) {
           </div>
 
           <h1
-            className='landing-animate-fade-up text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.15] font-bold tracking-tight'
+            className='landing-animate-rise text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.15] font-bold tracking-tight'
             style={{ animationDelay: '60ms' }}
           >
             {t('Unified API Gateway for')}
@@ -185,7 +185,7 @@ export function Hero(props: HeroProps) {
               >
                 <img
                   src='https://ccswitch.io/favicon.png'
-                  alt='CC Switch'
+                  alt=''
                   className='size-6 shrink-0 rounded-md object-contain'
                   onError={(e) => {
                     // Fallback to a styled text avatar if the remote favicon fails to load in sandbox or local environments

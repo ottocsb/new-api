@@ -1,0 +1,5 @@
+# robots.txt for api.apiwarrior.xyz
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /v1/
