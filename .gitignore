@@ -36,3 +36,4 @@ token_estimator_test.go
 skills-lock.json
 .claude/settings.local.json
 .playwright-mcp
+/tmp/

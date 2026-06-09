@@ -36,10 +36,19 @@ export function useStatus() {
           )
         }
       }
-      // Save to localStorage
+      // Save to localStorage and refresh document.title (first-paint title comes
+      // from this cache in main.tsx)
       try {
         if (typeof window !== 'undefined' && status) {
           window.localStorage.setItem('status', JSON.stringify(status))
+          const systemName = (status as Record<string, unknown>).system_name
+          if (typeof systemName === 'string' && systemName) {
+            document.title = systemName
+            const metaTitle = document.querySelector(
+              'meta[name="title"]'
+            ) as HTMLMetaElement | null
+            if (metaTitle) metaTitle.setAttribute('content', systemName)
+          }
         }
       } catch {
         /* empty */

@@ -10,7 +10,6 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import i18next from 'i18next'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/auth-store'
-import { getStatus } from '@/lib/api'
 import { installBuildMetadata } from '@/lib/build-metadata'
 import '@/lib/dayjs'
 import { applyFaviconToDom } from '@/lib/dom-utils'
@@ -95,44 +94,23 @@ declare module '@tanstack/react-router' {
 
 // Render the app
 const rootElement = document.getElementById('root')!
-// Set document.title and favicon from cached status, then refresh from network
+// Set document.title and favicon from cached status for fast first paint.
+// Network refresh is handled by the shared `useStatus` query (see use-status.ts).
 ;(function initSystemBranding() {
   try {
     if (typeof window === 'undefined' || typeof document === 'undefined') return
-    const apply = (name: string) => {
-      document.title = name
-      const metaTitle = document.querySelector(
-        'meta[name="title"]'
-      ) as HTMLMetaElement | null
-      if (metaTitle) metaTitle.setAttribute('content', name)
-    }
-    // Cache-first
-    try {
-      const saved = localStorage.getItem('status')
-      if (saved) {
-        const s = JSON.parse(saved)
-        if (s?.system_name) apply(s.system_name)
-        if (s?.logo) applyFaviconToDom(s.logo)
+    const saved = localStorage.getItem('status')
+    if (saved) {
+      const s = JSON.parse(saved)
+      if (s?.system_name) {
+        document.title = s.system_name
+        const metaTitle = document.querySelector(
+          'meta[name="title"]'
+        ) as HTMLMetaElement | null
+        if (metaTitle) metaTitle.setAttribute('content', s.system_name)
       }
-    } catch {
-      /* empty */
+      if (s?.logo) applyFaviconToDom(s.logo)
     }
-    // Background refresh
-    getStatus()
-      .then((s) => {
-        if (s?.system_name) {
-          apply(s.system_name as string)
-          try {
-            localStorage.setItem('status', JSON.stringify(s))
-          } catch {
-            /* empty */
-          }
-        }
-        if (s?.logo) applyFaviconToDom(s.logo as string)
-      })
-      .catch(() => {
-        /* empty */
-      })
   } catch {
     /* empty */
   }

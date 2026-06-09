@@ -192,9 +192,18 @@ export async function getUserGroups(): Promise<{
 // ----------------------------------------------------------------------------
 
 // Get system status
+// 多个入口（useStatus 查询、useSystemConfig 初始化等）会在首屏同时请求 /api/status，
+// 这里对“进行中”的请求做去重，让并发调用共享同一个网络请求，避免重复加载。
+let statusInFlight: Promise<Record<string, unknown>> | null = null
 export async function getStatus() {
-  const res = await api.get('/api/status')
-  return res.data?.data as Record<string, unknown>
+  if (statusInFlight) return statusInFlight
+  statusInFlight = api
+    .get('/api/status')
+    .then((res) => res.data?.data as Record<string, unknown>)
+    .finally(() => {
+      statusInFlight = null
+    })
+  return statusInFlight
 }
 
 // Get system notice
