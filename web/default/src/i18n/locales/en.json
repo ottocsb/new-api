@@ -4451,6 +4451,9 @@
     "Zhipu V4": "Zhipu V4",
     "Channels excluded from tests": "Channels excluded from tests",
     "e.g. 12, 34, 56": "e.g. 12, 34, 56",
-    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail."
+    "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.",
+    "Charged amount = top-up USD × this ratio. Currency stays USD.": "Charged amount = top-up USD × this ratio. Currency stays USD.",
+    "Minimum top-up (Waffo Pancake)": "Minimum top-up (Waffo Pancake)",
+    "Dedicated minimum for Waffo Pancake only.": "Dedicated minimum for Waffo Pancake only."
   }
 }
