@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { type Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -37,7 +37,12 @@ export function DataTableBulkActions<TData>({
   const selectedRows = table.getFilteredSelectedRowModel().rows
   const selectedCount = selectedRows.length
   const toolbarRef = useRef<HTMLDivElement>(null)
+  const buttonsRef = useRef<NodeListOf<HTMLButtonElement> | null>(null)
   const [announcement, setAnnouncement] = useState('')
+
+  useLayoutEffect(() => {
+    buttonsRef.current = toolbarRef.current?.querySelectorAll('button') ?? null
+  })
 
   // Announce selection changes to screen readers
   useEffect(() => {
@@ -57,7 +62,7 @@ export function DataTableBulkActions<TData>({
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    const buttons = toolbarRef.current?.querySelectorAll('button')
+    const buttons = buttonsRef.current
     if (!buttons) return
 
     const currentIndex = Array.from(buttons).findIndex(

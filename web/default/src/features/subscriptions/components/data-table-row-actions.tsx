@@ -20,7 +20,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow, complianceConfirmed } = useSubscriptions()
 
   return (
-    <DropdownMenu>
+    <div className='-ml-2'>
+      <DropdownMenu>
       <DropdownMenuTrigger
         render={<Button variant='ghost' className='h-8 w-8 p-0' />}
       >
@@ -58,5 +59,6 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   )
 }

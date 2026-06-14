@@ -59,7 +59,8 @@ export function DataTableRowActions<TData>({
   const canToggle = !isUsed && !isExpired
 
   return (
-    <DropdownMenu modal={false}>
+    <div className='-ml-2'>
+      <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         render={
           <Button
@@ -118,5 +119,6 @@ export function DataTableRowActions<TData>({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   )
 }

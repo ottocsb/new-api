@@ -49,7 +49,7 @@ export const CHANNEL_TYPES = {
   49: 'Coze',
   53: 'Submodel',
   56: 'Replicate',
-  57: 'Codex',
+  57: 'ChatGPT Subscription (Codex)',
 } as const
 
 const CHANNEL_TYPE_DISPLAY_ORDER: number[] = [

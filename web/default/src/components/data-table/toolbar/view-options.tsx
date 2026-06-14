@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { type Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,18 @@ export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
   const { t } = useTranslation()
+
+  const hideableColumns = React.useMemo(
+    () =>
+      table
+        .getAllColumns()
+        .filter(
+          (column) =>
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
+        ),
+    [table]
+  )
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
@@ -34,24 +47,20 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuContent align='end' className='w-[150px]'>
         <DropdownMenuGroup>
           <DropdownMenuLabel>{t('Toggle columns')}</DropdownMenuLabel>
-          {table
-            .getAllColumns()
-            .filter(
-              (column) =>
-                typeof column.accessorFn !== 'undefined' && column.getCanHide()
+          {hideableColumns.map((column) => {
+            return (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                className='capitalize'
+                checked={column.getIsVisible()}
+                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+              >
+                {typeof column.columnDef.header === 'string'
+                  ? column.columnDef.header
+                  : (column.columnDef.meta?.label ?? column.id)}
+              </DropdownMenuCheckboxItem>
             )
-            .map((column) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className='capitalize'
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.columnDef.meta?.label ?? column.id}
-                </DropdownMenuCheckboxItem>
-              )
-            })}
+          })}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

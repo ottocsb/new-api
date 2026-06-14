@@ -1,8 +1,4 @@
-import {
-  flexRender,
-  type Cell,
-  type Table,
-} from '@tanstack/react-table'
+import { flexRender, type Cell, type Table } from '@tanstack/react-table'
 import { Database } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { formatTimestampToDate } from '@/lib/format'
@@ -15,13 +11,19 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
-import { dotColorMap, textColorMap, type StatusVariant } from '@/components/status-badge'
+import {
+  dotColorMap,
+  textColorMap,
+  type StatusVariant,
+} from '@/components/status-badge'
 import { LOG_TYPE_ENUM } from '../constants'
 import { getLogTypeConfig } from '../lib/utils'
 
 const logTypeRowTint: Record<number, string> = {
-  [LOG_TYPE_ENUM.ERROR]: 'bg-rose-50/40 dark:bg-rose-950/20 border-rose-200/50 dark:border-rose-900/30',
-  [LOG_TYPE_ENUM.REFUND]: 'bg-blue-50/30 dark:bg-blue-950/15 border-blue-200/50 dark:border-blue-900/30',
+  [LOG_TYPE_ENUM.ERROR]:
+    'bg-rose-50/40 dark:bg-rose-950/20 border-rose-200/50 dark:border-rose-900/30',
+  [LOG_TYPE_ENUM.REFUND]:
+    'bg-blue-50/30 dark:bg-blue-950/15 border-blue-200/50 dark:border-blue-900/30',
 }
 
 interface UsageLogsMobileListProps<TData> {
@@ -33,11 +35,11 @@ interface UsageLogsMobileListProps<TData> {
 
 function UsageLogsMobileSkeleton() {
   return (
-    <div className='overflow-hidden rounded-lg border border-border/50 bg-card'>
+    <div className='border-border/50 bg-card overflow-hidden rounded-lg border'>
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className='space-y-2.5 border-b border-border/40 p-3 last:border-b-0'
+          className='border-border/40 space-y-2.5 border-b p-3 last:border-b-0'
         >
           <div className='flex items-center justify-between gap-3'>
             <Skeleton className='h-5 w-40 rounded-md' />
@@ -73,7 +75,7 @@ function CompactCell<TData>({
       className={cn(
         'min-w-0 overflow-hidden leading-tight [&_button]:max-w-full [&_span]:max-w-full',
         primaryOnly &&
-          '[&_.flex-col>*:not(:first-child)]:hidden [&_.flex-col]:min-w-0',
+          '[&_.flex-col]:min-w-0 [&_.flex-col>*:not(:first-child)]:hidden',
         className
       )}
     >
@@ -103,10 +105,7 @@ function SummaryField<TData>({
 
   return (
     <div
-      className={cn(
-        'min-w-0 rounded-md bg-muted/20 px-2 py-1.5',
-        className
-      )}
+      className={cn('bg-muted/20 min-w-0 rounded-md px-2 py-1.5', className)}
     >
       <div className='text-muted-foreground mb-1 text-[11px] leading-none font-medium select-none'>
         {label}
@@ -178,7 +177,7 @@ function CommonLogsCard<TData>({
       </div>
 
       <div className='grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-1.5'>
-        <div className='min-w-0 rounded-md bg-muted/20 px-2 py-1.5'>
+        <div className='bg-muted/20 min-w-0 rounded-md px-2 py-1.5'>
           <div className='text-muted-foreground mb-1 text-[11px] leading-none font-medium select-none'>
             {t('Time')}
           </div>
@@ -239,11 +238,11 @@ export function UsageLogsMobileList<TData>({
 
   if (!rows || rows.length === 0) {
     return (
-      <div className="rounded-lg border p-6">
-        <Empty className="border-none p-0">
+      <div className='rounded-lg border p-6'>
+        <Empty className='border-none p-0'>
           <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Database className="size-6" />
+            <EmptyMedia variant='icon'>
+              <Database className='size-6' />
             </EmptyMedia>
             <EmptyTitle>{resolvedEmptyTitle}</EmptyTitle>
             <EmptyDescription>{resolvedEmptyDescription}</EmptyDescription>
@@ -254,7 +253,7 @@ export function UsageLogsMobileList<TData>({
   }
 
   return (
-    <div className='overflow-hidden rounded-lg border border-border/50 bg-card'>
+    <div className='border-border/50 bg-card overflow-hidden rounded-lg border'>
       {rows.map((row) => {
         const cells = new Map(
           row.getVisibleCells().map((cell) => [cell.column.id, cell])
@@ -269,7 +268,7 @@ export function UsageLogsMobileList<TData>({
           <div
             key={row.id}
             className={cn(
-              'border-l-2 border-l-transparent border-b border-border/40 p-3 transition-colors last:border-b-0',
+              'border-border/40 border-b border-l-2 border-l-transparent p-3 transition-colors last:border-b-0',
               tintClass
             )}
           >

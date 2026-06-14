@@ -158,7 +158,7 @@ var ChannelTypeNames = map[int]string{
 	ChannelTypeCoze:           "Coze",
 	ChannelTypeSubmodel:       "Submodel",
 	ChannelTypeReplicate:      "Replicate",
-	ChannelTypeCodex:          "Codex",
+	ChannelTypeCodex:          "ChatGPT Subscription (Codex)",
 }
 
 func GetChannelTypeName(channelType int) string {
