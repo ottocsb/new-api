@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { BadgeCell } from '@/components/data-table'
 import { StatusBadge } from '@/components/status-badge'
 import type { RatioType } from '../types'
 import {
@@ -45,8 +46,8 @@ export function useUpstreamRatioSyncColumns(
         cell: ({ row }) => {
           const model = row.original.model
           return (
-            <div className='flex min-w-[180px] items-center gap-2'>
-              <span className='font-medium'>{model}</span>
+            <div className='flex max-w-full min-w-0 items-center gap-2'>
+              <span className='truncate font-medium'>{model}</span>
               {row.original.billingConflict && (
                 <TooltipProvider>
                   <Tooltip>
@@ -76,14 +77,11 @@ export function useUpstreamRatioSyncColumns(
             ratioTypeFilter
           )
           return (
-            <div className='flex min-w-[260px] flex-col gap-2'>
+            <div className='flex max-w-full min-w-0 flex-col gap-2'>
               {fields.map((ratioType) => {
                 const current = row.original.ratioTypes[ratioType]?.current
                 return (
-                  <div
-                    key={ratioType}
-                    className='flex min-w-0 flex-wrap items-center gap-2'
-                  >
+                  <BadgeCell key={ratioType} className='ml-0 flex-wrap gap-2'>
                     <StatusBadge
                       label={getSyncFieldLabel(ratioType, t)}
                       autoColor={ratioType}
@@ -118,7 +116,7 @@ export function useUpstreamRatioSyncColumns(
                         </Tooltip>
                       </TooltipProvider>
                     )}
-                  </div>
+                  </BadgeCell>
                 )
               })}
             </div>
@@ -197,7 +195,7 @@ export function useUpstreamRatioSyncColumns(
           )
 
           return (
-            <div className='flex min-w-[280px] flex-col gap-2'>
+            <div className='flex max-w-full min-w-0 flex-col gap-2'>
               {fields.map((ratioType) => {
                 const diff = row.original.ratioTypes[ratioType]
                 const upstreamVal = diff?.upstreams?.[upstreamName]
