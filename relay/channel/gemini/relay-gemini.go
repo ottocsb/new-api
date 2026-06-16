@@ -12,6 +12,8 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
 	"newapi/common"
 	"newapi/constant"
 	"newapi/dto"
@@ -23,8 +25,6 @@ import (
 	"newapi/setting/model_setting"
 	"newapi/setting/reasoning"
 	"newapi/types"
-	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
 )
 
 // https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference?hl=zh-cn#blob
@@ -1534,6 +1534,7 @@ func GeminiChatHandler(c *gin.Context, info *relaycommon.RelayInfo, resp *http.R
 		}
 
 		service.ResetStatusCode(newAPIError, c.GetString("status_code_mapping"))
+		service.MaskClientErrorMessage(c, newAPIError)
 
 		switch info.RelayFormat {
 		case types.RelayFormatClaude:

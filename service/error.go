@@ -11,7 +11,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
+
 	"newapi/common"
+	"newapi/constant"
 	"newapi/dto"
 	"newapi/logger"
 	"newapi/types"
@@ -168,4 +171,23 @@ func parseStatusCodeMappingValue(value any) (int, bool) {
 	default:
 		return 0, false
 	}
+}
+
+// HiddenClientErrorMessage 渠道开启「覆盖错误展示」后返回给客户端的统一提示文案(可按需修改)。
+const HiddenClientErrorMessage = "当前服务繁忙，请稍后重试"
+
+// MaskClientErrorMessage 当所选渠道开启「覆盖错误展示」开关时,把返回给客户端的错误文案替换为通用提示。
+// 仅影响客户端可见的 message;系统日志与数据库错误日志仍记录原始错误,便于管理员定位问题。
+func MaskClientErrorMessage(c *gin.Context, newApiErr *types.NewAPIError) {
+	if newApiErr == nil {
+		return
+	}
+	if !common.GetContextKeyBool(c, constant.ContextKeyChannelHideUpstreamError) {
+		return
+	}
+	msg := HiddenClientErrorMessage
+	if requestId := c.GetString(common.RequestIdKey); requestId != "" {
+		msg = common.MessageWithRequestId(msg, requestId)
+	}
+	newApiErr.SetClientMessage(msg)
 }

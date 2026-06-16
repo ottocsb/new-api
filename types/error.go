@@ -96,6 +96,7 @@ type NewAPIError struct {
 	errorCode      ErrorCode
 	StatusCode     int
 	Metadata       json.RawMessage
+	clientMessage  *string
 }
 
 // Unwrap enables errors.Is / errors.As to work with NewAPIError by exposing the underlying error.
@@ -177,6 +178,11 @@ func (e *NewAPIError) SetMessage(message string) {
 	e.Err = errors.New(message)
 }
 
+// SetClientMessage 设置仅对客户端可见的替换文案;不改动 e.Err,日志与重试仍使用原始错误。
+func (e *NewAPIError) SetClientMessage(message string) {
+	e.clientMessage = &message
+}
+
 func (e *NewAPIError) ToOpenAIError() OpenAIError {
 	var result OpenAIError
 	switch e.errorType {
@@ -207,6 +213,9 @@ func (e *NewAPIError) ToOpenAIError() OpenAIError {
 	if result.Message == "" {
 		result.Message = string(e.errorType)
 	}
+	if e.clientMessage != nil {
+		result.Message = *e.clientMessage
+	}
 	return result
 }
 
@@ -235,6 +244,9 @@ func (e *NewAPIError) ToClaudeError() ClaudeError {
 	}
 	if result.Message == "" {
 		result.Message = string(e.errorType)
+	}
+	if e.clientMessage != nil {
+		result.Message = *e.clientMessage
 	}
 	return result
 }

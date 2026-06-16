@@ -2555,6 +2555,33 @@ export function ChannelMutateDrawer({
                             </FormItem>
                           )}
                         />
+
+                        <FormField
+                          control={form.control}
+                          name='hide_upstream_error'
+                          render={({ field }) => (
+                            <FormItem className='flex items-center justify-between'>
+                              <div className='space-y-0.5'>
+                                <FormLabel>
+                                  {t('Hide Upstream Error')}
+                                </FormLabel>
+                                <FormDescription>
+                                  {t(
+                                    'When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.'
+                                  )}
+                                </FormDescription>
+                              </div>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value === 1}
+                                  onCheckedChange={(checked) =>
+                                    field.onChange(checked ? 1 : 0)
+                                  }
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
                       </div>
 
                       <div className='flex flex-col gap-4 border-t pt-4'>

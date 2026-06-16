@@ -439,6 +439,8 @@
     "Auto (Circuit Breaker)": "自动分组（熔断）",
     "Auto assignment order": "自动分配顺序",
     "Auto Ban": "自动封禁",
+    "Hide Upstream Error": "隐藏上游错误",
+    "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.": "开启后，该渠道请求出错时客户端只会收到通用提示，原始错误仍记录在日志中以便排查。",
     "Auto detect (default)": "自动检测（默认）",
     "Auto Disabled": "自动禁用",
     "Auto group behavior": "自动分组行为",

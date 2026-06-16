@@ -250,6 +250,7 @@ export const DEFAULT_CHANNEL_VALUES = {
   priority: 0,
   weight: 0,
   auto_ban: 1,
+  hide_upstream_error: 0,
   remark: '',
 } as const
 

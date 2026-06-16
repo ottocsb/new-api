@@ -10,9 +10,9 @@ import (
 	"sync"
 
 	"newapi/common"
-	"newapi/logger"
 	"newapi/constant"
 	"newapi/dto"
+	"newapi/logger"
 	"newapi/types"
 
 	"github.com/samber/lo"
@@ -44,6 +44,7 @@ type Channel struct {
 	StatusCodeMapping *string `json:"status_code_mapping" gorm:"type:varchar(1024);default:''"`
 	Priority          *int64  `json:"priority" gorm:"bigint;default:0"`
 	AutoBan           *int    `json:"auto_ban" gorm:"default:1"`
+	HideUpstreamError *int    `json:"hide_upstream_error" gorm:"default:0"`
 	OtherInfo         string  `json:"other_info"`
 	Tag               *string `json:"tag" gorm:"index"`
 	Setting           *string `json:"setting" gorm:"type:text"` // 渠道额外设置
@@ -340,6 +341,15 @@ func (channel *Channel) GetAutoBan() bool {
 		return false
 	}
 	return *channel.AutoBan == 1
+}
+
+// GetHideUpstreamError 渠道是否开启「覆盖错误展示」:开启后该渠道请求出错时,只向客户端返回通用提示,
+// 原始错误仍记录到日志供管理员排查。
+func (channel *Channel) GetHideUpstreamError() bool {
+	if channel.HideUpstreamError == nil {
+		return false
+	}
+	return *channel.HideUpstreamError == 1
 }
 
 func (channel *Channel) Save() error {

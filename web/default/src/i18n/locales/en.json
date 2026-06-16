@@ -439,6 +439,8 @@
     "Auto (Circuit Breaker)": "Auto (Circuit Breaker)",
     "Auto assignment order": "Auto assignment order",
     "Auto Ban": "Auto Ban",
+    "Hide Upstream Error": "Hide Upstream Error",
+    "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.": "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.",
     "Auto detect (default)": "Auto detect (default)",
     "Auto Disabled": "Auto Disabled",
     "Auto group behavior": "Auto group behavior",
