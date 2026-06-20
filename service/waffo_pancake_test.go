@@ -9,7 +9,6 @@ import (
 
 	"newapi/common"
 	"newapi/model"
-	"newapi/setting"
 	"github.com/glebarez/sqlite"
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"

@@ -11,11 +11,11 @@ export const CHANNEL_TYPES = {
   6: 'OpenAIMax',
   7: 'OhMyGPT',
   8: 'Custom',
-  9: 'AILS',
-  10: 'AI Proxy',
-  11: 'PaLM',
-  12: 'API2GPT',
-  13: 'AIGC2D',
+  // 9: 'AILS',
+  // 10: 'AI Proxy',
+  // 11: 'PaLM',
+  // 12: 'API2GPT',
+  // 13: 'AIGC2D',
   14: 'Anthropic',
   15: 'Baidu',
   16: 'Zhipu',
@@ -23,7 +23,7 @@ export const CHANNEL_TYPES = {
   18: 'Xunfei',
   19: '360',
   20: 'OpenRouter',
-  21: 'AI Proxy Library',
+  // 21: 'AI Proxy Library',
   22: 'FastGPT',
   23: 'Tencent',
   24: 'Gemini',
@@ -50,11 +50,12 @@ export const CHANNEL_TYPES = {
   53: 'Submodel',
   56: 'Replicate',
   57: 'ChatGPT Subscription (Codex)',
+  58: 'Advanced Custom',
 } as const
 
 const CHANNEL_TYPE_DISPLAY_ORDER: number[] = [
-  1, 14, 33, 24, 43, 3, 41, 48, 42, 34, 20, 4, 40, 27, 25, 17, 26, 15, 46, 23,
-  18, 45, 31, 35, 49, 19, 47, 37, 38, 39, 11, 8, 57, 22, 21, 44, 53, 56,
+  1, 14, 33, 24, 43, 3, 41, 48, 58, 42, 34, 20, 4, 40, 27, 25, 17, 26, 15, 46,
+  23, 18, 45, 31, 35, 49, 19, 47, 37, 38, 39, 11, 8, 57, 22, 21, 44, 53, 56,
 ]
 
 export const CHANNEL_TYPE_OPTIONS: { value: number; label: string }[] = (() => {
@@ -295,7 +296,7 @@ export const RESPONSE_TIME_THRESHOLDS = {
 
 export const RESPONSE_TIME_CONFIG = {
   EXCELLENT: { variant: 'success' as const, label: 'Excellent' },
-  GOOD: { variant: 'info' as const, label: 'Good' },
+  GOOD: { variant: 'success' as const, label: 'Good' },
   FAIR: { variant: 'warning' as const, label: 'Fair' },
   POOR: { variant: 'danger' as const, label: 'Poor' },
   UNKNOWN: { variant: 'neutral' as const, label: 'Not tested' },

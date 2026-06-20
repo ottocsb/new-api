@@ -3,6 +3,7 @@ package relay
 import (
 	"newapi/constant"
 	"newapi/relay/channel"
+	"newapi/relay/channel/advancedcustom"
 	"newapi/relay/channel/ali"
 	"newapi/relay/channel/aws"
 	"newapi/relay/channel/baidu"
@@ -104,6 +105,8 @@ func GetAdaptor(apiType int) channel.Adaptor {
 		return &replicate.Adaptor{}
 	case constant.APITypeCodex:
 		return &codex.Adaptor{}
+	case constant.APITypeAdvancedCustom:
+		return &advancedcustom.Adaptor{}
 	}
 	return nil
 }

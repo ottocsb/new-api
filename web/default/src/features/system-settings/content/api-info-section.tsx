@@ -273,7 +273,7 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
             checked={isEnabled}
             onCheckedChange={handleToggleEnabled}
             label={t('Enabled')}
-            className='border-b-0 py-0'
+            className='py-0'
           />
         </div>
 
@@ -457,8 +457,7 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
                 <FormItem>
                   <FormLabel>{t('Badge Color')}</FormLabel>
                   <Select
-                    items={[
-                      ...colorOptions.map((option) => ({
+                    items={colorOptions.map((option) => ({
                         value: option.value,
                         label: (
                           <div className='flex items-center gap-2'>
@@ -468,8 +467,7 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
                             {option.label}
                           </div>
                         ),
-                      })),
-                    ]}
+                      }))}
                     onValueChange={field.onChange}
                     value={field.value}
                   >

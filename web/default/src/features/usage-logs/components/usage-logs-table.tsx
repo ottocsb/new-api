@@ -29,6 +29,10 @@ const logTypeRowTint: Record<number, string> = {
   [LOG_TYPE_ENUM.REFUND]: 'bg-blue-50/30 dark:bg-blue-950/15',
 }
 
+function getColumnVisibilityStorageKey(isAdmin: boolean): string {
+  return `usage-logs:common:${isAdmin ? 'admin' : 'user'}:column-visibility`
+}
+
 function deserializeLogTypeFilter(value: unknown): unknown[] {
   const values = Array.isArray(value) ? value : value ? [value] : []
   return values.filter((item) => String(item) !== LOG_TYPE_ALL_VALUE)
@@ -115,6 +119,7 @@ export function UsageLogsTable() {
     data: logs as Record<string, unknown>[],
     columns: columns as ColumnDef<Record<string, unknown>>[],
     columnFilters,
+    columnVisibilityStorageKey: getColumnVisibilityStorageKey(isAdmin),
     pagination,
     enableRowSelection: false,
     onPaginationChange,

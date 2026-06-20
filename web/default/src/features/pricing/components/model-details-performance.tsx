@@ -13,6 +13,7 @@ import {
   formatLatency,
   formatThroughput,
   formatUptimePct,
+  getSuccessRateTextClass,
 } from '@/features/performance-metrics/lib/format'
 import type { PerformanceGroup } from '@/features/performance-metrics/types'
 import { type UptimeDayPoint } from '../lib/mock-stats'
@@ -25,10 +26,9 @@ function StatCard(props: {
   label: string
   value: React.ReactNode
   hint?: string
-  intent?: 'default' | 'warning' | 'success'
+  valueClassName?: string
 }) {
   const Icon = props.icon
-  const intent = props.intent ?? 'default'
   return (
     <div className='bg-background flex flex-col gap-1 rounded-lg border p-3'>
       <span className='text-muted-foreground inline-flex items-center gap-1.5 text-[10px] font-medium tracking-wider uppercase'>
@@ -38,8 +38,7 @@ function StatCard(props: {
       <span
         className={cn(
           'text-foreground font-mono text-lg font-semibold tabular-nums',
-          intent === 'warning' && 'text-amber-600 dark:text-amber-400',
-          intent === 'success' && 'text-emerald-600 dark:text-emerald-400'
+          props.valueClassName
         )}
       >
         {props.value}
@@ -59,6 +58,12 @@ type PerformanceRow = {
   avg_latency_ms: number
   success_rate: number
   avg_tps: number
+}
+
+function toUptimePct(value: number): number {
+  if (!Number.isFinite(value)) return 0
+  const clamped = Math.min(100, Math.max(0, value))
+  return Math.round(clamped * 100) / 100
 }
 
 function toLatencySeries(groups: PerformanceGroup[]) {
@@ -89,8 +94,9 @@ function toUptimeSeries(groups: PerformanceGroup[]): UptimeDayPoint[] {
     for (const point of group.series) {
       const current = byTs.get(point.ts) ?? { rates: [], incidents: 0 }
       if (Number.isFinite(point.success_rate)) {
-        current.rates.push(point.success_rate)
-        if (point.success_rate < 100) current.incidents += 1
+        const successRate = toUptimePct(point.success_rate)
+        current.rates.push(successRate)
+        if (successRate < 100) current.incidents += 1
       }
       byTs.set(point.ts, current)
     }
@@ -105,7 +111,7 @@ function toUptimeSeries(groups: PerformanceGroup[]): UptimeDayPoint[] {
           : 0
       return {
         date: new Date(ts * 1000).toISOString(),
-        uptime_pct: Math.round(uptime * 100) / 100,
+        uptime_pct: toUptimePct(uptime),
         incidents: value.incidents,
         outage_minutes: 0,
       }
@@ -113,12 +119,15 @@ function toUptimeSeries(groups: PerformanceGroup[]): UptimeDayPoint[] {
 }
 
 function toGroupUptimeSeries(group: PerformanceGroup): UptimeDayPoint[] {
-  return group.series.map((point) => ({
-    date: new Date(point.ts * 1000).toISOString(),
-    uptime_pct: Math.round(point.success_rate * 100) / 100,
-    incidents: point.success_rate < 100 ? 1 : 0,
-    outage_minutes: 0,
-  }))
+  return group.series.map((point) => {
+    const successRate = toUptimePct(point.success_rate)
+    return {
+      date: new Date(point.ts * 1000).toISOString(),
+      uptime_pct: successRate,
+      incidents: successRate < 100 ? 1 : 0,
+      outage_minutes: 0,
+    }
+  })
 }
 
 function average(
@@ -189,12 +198,6 @@ export function ModelDetailsPerformance(props: { model: PricingModel }) {
         successRates.length
       : 0
   const incidentCount = uptimeSeries.reduce((s, p) => s + p.incidents, 0)
-  let intent: 'default' | 'warning' | 'success' = 'warning'
-  if (successRate >= 99.9) {
-    intent = 'success'
-  } else if (successRate >= 99) {
-    intent = 'default'
-  }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -221,7 +224,7 @@ export function ModelDetailsPerformance(props: { model: PricingModel }) {
                 })
               : t('No incidents in the last 24 hours')
           }
-          intent={intent}
+          valueClassName={getSuccessRateTextClass(successRate)}
         />
       </div>
 

@@ -148,6 +148,16 @@ export type ModelSettings = {
   AutoGroups: string
   DefaultUseAutoGroup: boolean
   'group_ratio_setting.group_special_usable_group': string
+  RetryTimes: number
+  ChannelDisableThreshold: string
+  AutomaticDisableChannelEnabled: boolean
+  AutomaticEnableChannelEnabled: boolean
+  AutomaticDisableKeywords: string
+  AutomaticDisableStatusCodes: string
+  AutomaticRetryStatusCodes: string
+  'monitor_setting.auto_test_channel_enabled': boolean
+  'monitor_setting.auto_test_channel_minutes': number
+  'monitor_setting.auto_test_channel_exclude_ids': string
   'channel_affinity_setting.enabled': boolean
   'channel_affinity_setting.switch_on_success': boolean
   'channel_affinity_setting.keep_on_channel_disabled': boolean
@@ -243,20 +253,10 @@ export type BillingSettings = {
 }
 
 export type OperationsSettings = {
-  RetryTimes: number
   DefaultCollapseSidebar: boolean
   DemoSiteEnabled: boolean
   SelfUseModeEnabled: boolean
-  ChannelDisableThreshold: string
   QuotaRemindThreshold: string
-  AutomaticDisableChannelEnabled: boolean
-  AutomaticEnableChannelEnabled: boolean
-  AutomaticDisableKeywords: string
-  AutomaticDisableStatusCodes: string
-  AutomaticRetryStatusCodes: string
-  'monitor_setting.auto_test_channel_enabled': boolean
-  'monitor_setting.auto_test_channel_minutes': number
-  'monitor_setting.auto_test_channel_exclude_ids': string
   SMTPServer: string
   SMTPPort: string
   SMTPAccount: string
