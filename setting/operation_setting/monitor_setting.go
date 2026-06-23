@@ -14,12 +14,19 @@ type MonitorSetting struct {
 	// AutoTestChannelExcludeIds 为不参与定期/批量渠道测试的渠道 ID，逗号分隔。
 	// 适用于附属生图等测试昂贵且大概率无法通过、但实际可用的渠道。
 	AutoTestChannelExcludeIds string `json:"auto_test_channel_exclude_ids"`
+	ChannelTestMode           string `json:"channel_test_mode"`
 }
+
+const (
+	ChannelTestModeScheduledAll    = "scheduled_all"
+	ChannelTestModePassiveRecovery = "passive_recovery"
+)
 
 // 默认配置
 var monitorSetting = MonitorSetting{
 	AutoTestChannelEnabled: false,
 	AutoTestChannelMinutes: 10,
+	ChannelTestMode:        ChannelTestModeScheduledAll,
 }
 
 func init() {
@@ -33,7 +40,17 @@ func GetMonitorSetting() *MonitorSetting {
 		if err == nil && frequency > 0 {
 			monitorSetting.AutoTestChannelEnabled = true
 			monitorSetting.AutoTestChannelMinutes = float64(frequency)
+			monitorSetting.ChannelTestMode = ChannelTestModeScheduledAll
 		}
+	}
+	if enabled, ok := os.LookupEnv("CHANNEL_TEST_ENABLED"); ok {
+		parsed, err := strconv.ParseBool(enabled)
+		if err == nil {
+			monitorSetting.AutoTestChannelEnabled = parsed
+		}
+	}
+	if monitorSetting.ChannelTestMode != ChannelTestModePassiveRecovery {
+		monitorSetting.ChannelTestMode = ChannelTestModeScheduledAll
 	}
 	return &monitorSetting
 }

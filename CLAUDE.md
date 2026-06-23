@@ -118,14 +118,15 @@ Do not call `encoding/json` marshal/unmarshal functions directly outside the wra
 All DB code must support SQLite, MySQL >= 5.7.8, and PostgreSQL >= 9.6.
 
 - Prefer GORM methods (`Create`, `Find`, `Where`, `Updates`, etc.) over raw SQL.
-- Let GORM handle primary key generation; do not hard-code `AUTO_INCREMENT` or `SERIAL`.
-- If raw SQL is unavoidable, account for DB differences:
-  - PostgreSQL quotes columns with `"column"`; MySQL/SQLite use `` `column` ``.
-  - Use `commonGroupCol` and `commonKeyCol` from `model/main.go` for reserved columns such as `group` and `key`.
-  - Use `commonTrueVal` / `commonFalseVal` for DB-specific boolean values.
-  - Use `common.UsingPostgreSQL`, `common.UsingSQLite`, and `common.UsingMySQL` for DB-specific branches.
-- Avoid database-specific functions/operators without cross-DB fallbacks.
-- For migrations, follow existing patterns in `model/main.go`; SQLite does not support many `ALTER COLUMN` operations, so use compatible add-column/workaround patterns.
+- Let GORM handle primary key generation; do not use `AUTO_INCREMENT` or `SERIAL` directly.
+- When raw SQL is unavoidable, account for dialect differences:
+  - PostgreSQL uses `"column"` quoting, while MySQL/SQLite use `` `column` ``.
+  - Use `commonGroupCol`, `commonKeyCol` from `model/main.go` for reserved-word columns like `group` and `key`.
+  - Use `commonTrueVal`/`commonFalseVal` for boolean values.
+  - Use `common.UsingMainDatabase(...)` for primary database branches and `common.UsingLogDatabase(...)` for log database branches.
+- Do not use database-specific features without cross-DB fallback, including MySQL-only functions, PostgreSQL-only operators, SQLite-unsupported `ALTER COLUMN`, or database-specific JSON column types without a `TEXT` fallback.
+- Migrations must work on all three databases. For SQLite, use `ALTER TABLE ... ADD COLUMN` instead of `ALTER COLUMN` (see `model/main.go` for patterns).
+- Avoid GORM boolean default tags such as `gorm:"default:true"` when the default is a business rule already enforced by code. MySQL and PostgreSQL can normalize boolean defaults differently, causing GORM `AutoMigrate` to repeatedly issue `ALTER TABLE` on restart. Prefer setting these defaults in request/model normalization, hooks, constructors, or service logic; do not replace `default:true` with `default:1` unless the behavior is verified across SQLite, MySQL, and PostgreSQL.
 
 ### Upstream request DTOs
 

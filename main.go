@@ -111,6 +111,9 @@ func main() {
 	// Subscription quota reset task (daily/weekly/monthly/custom)
 	service.StartSubscriptionQuotaResetTask()
 
+	// Persistent system maintenance task runner
+	service.StartSystemTaskRunner()
+
 	// Channel upstream model update check task
 	controller.StartChannelUpstreamModelUpdateTask()
 

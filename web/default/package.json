@@ -83,6 +83,7 @@
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "@typescript/native-preview": "^7.0.0-dev.20260621.1",
     "@xyflow/react": "^12.10.2",
     "embla-carousel-react": "^8.6.0",
     "eslint": "^10.4.0",

@@ -33,6 +33,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
@@ -53,6 +61,9 @@ const numericString = z.string().refine((value) => {
   return !Number.isNaN(Number(trimmed)) && Number(trimmed) >= 0
 }, 'Enter a non-negative number or leave empty')
 
+const channelTestModes = ['scheduled_all', 'passive_recovery'] as const
+type ChannelTestMode = (typeof channelTestModes)[number]
+
 const routingReliabilitySchema = z
   .object({
     RetryTimes: z.coerce.number().min(0).max(10),
@@ -69,6 +80,7 @@ const routingReliabilitySchema = z
         .int()
         .min(1, 'Interval must be at least 1 minute'),
       auto_test_channel_exclude_ids: z.string(),
+      channel_test_mode: z.enum(channelTestModes),
     }),
   })
   .superRefine((values, ctx) => {
@@ -114,6 +126,7 @@ type RoutingReliabilitySectionProps = {
     'monitor_setting.auto_test_channel_enabled': boolean
     'monitor_setting.auto_test_channel_minutes': number
     'monitor_setting.auto_test_channel_exclude_ids': string
+    'monitor_setting.channel_test_mode': ChannelTestMode
   }
 }
 
@@ -132,6 +145,11 @@ type NormalizedRoutingReliabilityValues = {
   'monitor_setting.auto_test_channel_enabled': boolean
   'monitor_setting.auto_test_channel_minutes': number
   'monitor_setting.auto_test_channel_exclude_ids': string
+  'monitor_setting.channel_test_mode': ChannelTestMode
+}
+
+function normalizeChannelTestMode(value?: string): ChannelTestMode {
+  return value === 'passive_recovery' ? 'passive_recovery' : 'scheduled_all'
 }
 
 const buildFormDefaults = (
@@ -153,6 +171,9 @@ const buildFormDefaults = (
       defaults['monitor_setting.auto_test_channel_minutes'],
     auto_test_channel_exclude_ids:
       defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? '',
+    channel_test_mode: normalizeChannelTestMode(
+      defaults['monitor_setting.channel_test_mode']
+    ),
   },
 })
 
@@ -178,6 +199,9 @@ const normalizeDefaults = (
     defaults['monitor_setting.auto_test_channel_minutes'],
   'monitor_setting.auto_test_channel_exclude_ids':
     (defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? '').trim(),
+  'monitor_setting.channel_test_mode': normalizeChannelTestMode(
+    defaults['monitor_setting.channel_test_mode']
+  ),
 })
 
 const normalizeFormValues = (
@@ -202,6 +226,7 @@ const normalizeFormValues = (
     values.monitor_setting.auto_test_channel_minutes,
   'monitor_setting.auto_test_channel_exclude_ids':
     values.monitor_setting.auto_test_channel_exclude_ids.trim(),
+  'monitor_setting.channel_test_mode': values.monitor_setting.channel_test_mode,
 })
 
 export function RoutingReliabilitySection({
@@ -231,6 +256,7 @@ export function RoutingReliabilitySection({
 
   const autoDisableStatusCodes = form.watch('AutomaticDisableStatusCodes')
   const autoRetryStatusCodes = form.watch('AutomaticRetryStatusCodes')
+  const channelTestMode = form.watch('monitor_setting.channel_test_mode')
   const autoDisableParsed = useMemo(
     () => parseHttpStatusCodeRules(autoDisableStatusCodes),
     [autoDisableStatusCodes]
@@ -362,6 +388,52 @@ export function RoutingReliabilitySection({
 
               <FormField
                 control={form.control}
+                name='monitor_setting.channel_test_mode'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('Channel test mode')}</FormLabel>
+                    <Select
+                      items={[
+                        {
+                          value: 'scheduled_all',
+                          label: t('Scheduled full test'),
+                        },
+                        {
+                          value: 'passive_recovery',
+                          label: t('Passive recovery only'),
+                        },
+                      ]}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent alignItemWithTrigger={false}>
+                        <SelectGroup>
+                          <SelectItem value='scheduled_all'>
+                            {t('Scheduled full test')}
+                          </SelectItem>
+                          <SelectItem value='passive_recovery'>
+                            {t('Passive recovery only')}
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      {t(
+                        'Scheduled full test probes non-manually-disabled channels; passive recovery only checks auto-disabled channels after real request failures.'
+                      )}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name='monitor_setting.auto_test_channel_minutes'
                 render={({ field }) => (
                   <FormItem>
@@ -375,7 +447,11 @@ export function RoutingReliabilitySection({
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('How frequently the system tests all channels')}
+                      {channelTestMode === 'passive_recovery'
+                        ? t(
+                            'How frequently the system checks auto-disabled channels for recovery'
+                          )
+                        : t('How frequently the system tests all channels')}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
