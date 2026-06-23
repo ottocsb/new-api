@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { SECURITY_DEFAULT_SECTION } from '@/features/system-settings/security/section-registry.tsx'
 
 export const Route = createFileRoute(

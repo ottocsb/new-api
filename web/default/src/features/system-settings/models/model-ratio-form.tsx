@@ -1,7 +1,9 @@
+import { Code2, Eye, RotateCcw, Save } from 'lucide-react'
 import { memo, useCallback, useRef, useState } from 'react'
 import { type UseFormReturn } from 'react-hook-form'
-import { Code2, Eye, RotateCcw, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
+import { JsonCodeEditor } from '@/components/json-code-editor'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,7 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
-import { JsonCodeEditor } from '@/components/json-code-editor'
+
 import {
   SettingsForm,
   SettingsSwitchContent,

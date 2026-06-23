@@ -5,6 +5,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react'
+
 import { Main } from './main'
 import { PageFooterProvider } from './page-footer'
 

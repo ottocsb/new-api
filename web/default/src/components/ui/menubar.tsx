@@ -1,11 +1,11 @@
 'use client'
 
-import * as React from 'react'
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
 import { Menubar as MenubarPrimitive } from '@base-ui/react/menubar'
 import { Tick02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { cn } from '@/lib/utils'
+import * as React from 'react'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { cn } from '@/lib/utils'
 
 function Menubar({ className, ...props }: MenubarPrimitive.Props) {
   return (

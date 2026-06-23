@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next'
+
 import { createSectionRegistry } from '@/features/system-settings/utils/section-registry'
 
 /**

@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react'
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import * as z from 'zod'
+
 import {
   Form,
   FormControl,
@@ -12,6 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
+
 import {
   SettingsControlChildren,
   SettingsForm,

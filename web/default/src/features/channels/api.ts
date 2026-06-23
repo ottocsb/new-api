@@ -1,6 +1,6 @@
-
-import { api, type ApiRequestConfig } from '@/lib/api'
 import { getGroups as getUserGroups } from '@/features/users/api'
+import { api, type ApiRequestConfig } from '@/lib/api'
+
 import type {
   AddChannelRequest,
   BatchDeleteParams,

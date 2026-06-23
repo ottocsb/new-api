@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import {
   SidebarHeader,
   SidebarMenu,
@@ -9,6 +9,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
+
 import type { SidebarView } from '../types'
 
 type SidebarViewHeaderProps = {

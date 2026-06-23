@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 
 export type ApiKeyGroupOption = {
   value: string

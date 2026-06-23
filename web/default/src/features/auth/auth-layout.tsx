@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useSystemConfig } from '@/hooks/use-system-config'
-import { Skeleton } from '@/components/ui/skeleton'
+
 import { Footer } from '@/components/layout/components/footer'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useSystemConfig } from '@/hooks/use-system-config'
 
 type AuthLayoutProps = {
   children: React.ReactNode

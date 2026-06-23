@@ -1,5 +1,6 @@
-import { useMemo, useCallback, useState } from 'react'
 import { useSearch } from '@tanstack/react-router'
+import { useMemo, useCallback, useState } from 'react'
+
 import {
   FILTER_ALL,
   SORT_OPTIONS,

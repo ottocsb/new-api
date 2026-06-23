@@ -1,4 +1,5 @@
 import { type SVGProps } from 'react'
+
 import { cn } from '@/lib/utils'
 
 export function IconDiscord({ className, ...props }: SVGProps<SVGSVGElement>) {

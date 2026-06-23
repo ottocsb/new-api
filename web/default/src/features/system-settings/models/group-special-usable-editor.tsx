@@ -1,6 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
 import { ChevronDown, ChevronUp, Plus, Trash2 } from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { StatusBadge } from '@/components/status-badge'
 
 const OP_ADD = 'add' as const
 const OP_REMOVE = 'remove' as const

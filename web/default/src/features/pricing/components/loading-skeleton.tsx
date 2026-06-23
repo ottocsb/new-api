@@ -1,4 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
+
 import { VIEW_MODES, type ViewMode } from '../constants'
 
 export interface LoadingSkeletonProps {

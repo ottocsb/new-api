@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { SecuritySettings } from '@/features/system-settings/security'
 import {
   SECURITY_DEFAULT_SECTION,

@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { cn } from '@/lib/utils'
 
 interface FooterProps {
   logo?: string
@@ -14,10 +15,7 @@ interface FooterProps {
 
 export function Footer(props: FooterProps) {
   const { t } = useTranslation()
-  const {
-    systemName,
-    footerHtml,
-  } = useSystemConfig()
+  const { systemName, footerHtml } = useSystemConfig()
   const { status } = useStatus()
 
   const displayName = systemName || props.name || 'New API'

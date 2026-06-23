@@ -1,3 +1,4 @@
+import type { Row, Table as TanstackTable } from '@tanstack/react-table'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -17,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import type * as React from 'react'
-import type { Row, Table as TanstackTable } from '@tanstack/react-table'
 
 export type DataTableColumnClassName = (
   columnId: string,

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { ScrollArea } from '@/components/ui/scroll-area'
+
 import { Dialog } from '@/components/dialog'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 type DescriptionDialogProps = {
   open: boolean

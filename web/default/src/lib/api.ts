@@ -1,6 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { t } from 'i18next'
 import { toast } from 'sonner'
+
 import { useAuthStore } from '@/stores/auth-store'
 
 declare module 'axios' {

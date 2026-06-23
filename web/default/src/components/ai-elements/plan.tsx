@@ -1,9 +1,9 @@
 'use client'
 
-import { type ComponentProps, createContext, useContext } from 'react'
 import { ChevronsUpDownIcon } from 'lucide-react'
+import { type ComponentProps, createContext, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,6 +19,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { cn } from '@/lib/utils'
+
 import { Shimmer } from './shimmer'
 
 type PlanContextValue = {

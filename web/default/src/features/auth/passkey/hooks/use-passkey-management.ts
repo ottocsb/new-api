@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import i18next from 'i18next'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+
 import {
   buildRegistrationResult,
   createCredential,
   isPasskeySupported as detectPasskeySupport,
   prepareCredentialCreationOptions,
 } from '@/lib/passkey'
+
 import {
   beginPasskeyRegistration,
   deletePasskey,

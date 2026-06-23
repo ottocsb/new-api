@@ -1,4 +1,5 @@
 import { parseCurrencyDisplayType } from '@/lib/currency'
+
 import { PricingSection } from '../general/pricing-section'
 import { QuotaSettingsSection } from '../general/quota-settings-section'
 import { PaymentSettingsSection } from '../integrations/payment-settings-section'

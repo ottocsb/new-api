@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react'
 import { Gift, ExternalLink, Loader2, Receipt, WalletCards } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatNumber } from '@/lib/format'
-import { cn } from '@/lib/utils'
+
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -16,6 +15,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { formatNumber } from '@/lib/format'
+import { cn } from '@/lib/utils'
+
 import {
   formatCurrency,
   getDiscountLabel,

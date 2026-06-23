@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useCallback } from 'react'
 import { ChevronsUpDown, Check, CpuIcon, LayersIcon } from 'lucide-react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
-import { useIsMobile } from '@/hooks/use-mobile'
+
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -24,6 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { cn } from '@/lib/utils'
 
 interface ModelOption {
   label: string

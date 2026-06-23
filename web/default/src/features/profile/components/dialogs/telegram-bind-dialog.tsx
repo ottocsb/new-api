@@ -1,7 +1,8 @@
 import { Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+
 import { Dialog } from '@/components/dialog'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 // ============================================================================
 // Telegram Bind Dialog Component

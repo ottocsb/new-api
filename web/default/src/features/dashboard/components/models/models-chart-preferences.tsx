@@ -1,7 +1,8 @@
-import { useState } from 'react'
 import { Save, Settings2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { TimeGranularity } from '@/lib/time'
+
+import { Dialog } from '@/components/dialog'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -12,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Dialog } from '@/components/dialog'
 import {
   CONSUMPTION_DISTRIBUTION_CHART_OPTIONS,
   MODEL_ANALYTICS_CHART_OPTIONS,
@@ -24,6 +24,7 @@ import type {
   DashboardChartPreferences,
   ModelAnalyticsChartTab,
 } from '@/features/dashboard/types'
+import type { TimeGranularity } from '@/lib/time'
 
 interface ModelsChartPreferencesProps {
   preferences: DashboardChartPreferences

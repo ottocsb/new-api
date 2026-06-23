@@ -1,7 +1,8 @@
 import type { Table } from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
+
 import { Skeleton } from '@/components/ui/skeleton'
 import { TableRow, TableCell } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 const SKELETON_WIDTHS = [
   '75%',

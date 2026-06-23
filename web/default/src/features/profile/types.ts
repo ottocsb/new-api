@@ -166,4 +166,3 @@ export interface TwoFASetupData {
   qr_code_data: string
   backup_codes: string[]
 }
-

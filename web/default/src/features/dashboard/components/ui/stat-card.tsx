@@ -1,7 +1,8 @@
-import { useId, type ReactNode } from 'react'
 import { type LucideIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useId, type ReactNode } from 'react'
+
 import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 
 type StatCardTone = 'rose' | 'teal' | 'gray'
 type StatCardSparklineVariant = 'bars' | 'line'

@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { AuthUser } from '@/stores/auth-store'
+
 import { getRoleLabel } from '@/lib/roles'
+import type { AuthUser } from '@/stores/auth-store'
 
 /**
  * Custom hook to format user display information

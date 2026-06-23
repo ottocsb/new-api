@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useMemo } from 'react'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -9,6 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { cn } from '@/lib/utils'
+
 import { type TopNavLink } from '../types'
 
 type TopNavProps = React.HTMLAttributes<HTMLElement> & {

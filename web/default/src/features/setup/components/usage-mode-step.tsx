@@ -1,8 +1,8 @@
+import { Building2, Home, Presentation } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
-import { Building2, Home, Presentation } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import {
   FormControl,
   FormField,
@@ -12,6 +12,8 @@ import {
 } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { cn } from '@/lib/utils'
+
 import type { SetupFormValues, SetupUsageMode } from '../types'
 
 interface UsageModeStepProps {

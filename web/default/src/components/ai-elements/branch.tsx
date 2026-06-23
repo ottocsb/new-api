@@ -1,5 +1,7 @@
 'use client'
 
+import type { UIMessage } from 'ai'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import {
   type ComponentProps,
   createContext,
@@ -10,11 +12,10 @@ import {
   useMemo,
   useState,
 } from 'react'
-import type { UIMessage } from 'ai'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 type BranchContextType = {
   currentBranch: number

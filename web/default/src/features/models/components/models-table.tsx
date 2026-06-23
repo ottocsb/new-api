@@ -1,10 +1,12 @@
-import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
-import { useMediaQuery } from '@/hooks'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTableUrlState } from '@/hooks/use-table-url-state'
+
 import { DataTablePage, useDataTable } from '@/components/data-table'
+import { useMediaQuery } from '@/hooks'
+import { useTableUrlState } from '@/hooks/use-table-url-state'
+
 import { getModels, searchModels, getVendors } from '../api'
 import {
   DEFAULT_PAGE_SIZE,

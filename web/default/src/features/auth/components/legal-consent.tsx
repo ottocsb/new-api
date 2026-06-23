@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
+
 import type { SystemStatus } from '../types'
 
 interface LegalConsentProps {

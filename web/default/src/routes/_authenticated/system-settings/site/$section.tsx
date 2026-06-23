@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { SiteSettings } from '@/features/system-settings/site'
 import {
   SITE_DEFAULT_SECTION,

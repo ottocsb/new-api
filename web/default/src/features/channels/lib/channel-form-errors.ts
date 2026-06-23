@@ -1,4 +1,5 @@
 import type { FieldPath } from 'react-hook-form'
+
 import type { ChannelFormValues } from './channel-form'
 
 type ChannelFormErrorMap = Partial<

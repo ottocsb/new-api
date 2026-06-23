@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
 import i18next from 'i18next'
+import { useState, useEffect, useCallback } from 'react'
 import { toast } from 'sonner'
+
 import { getUserProfile, updateUserProfile, updateUserSettings } from '../api'
 import type {
   UserProfile,

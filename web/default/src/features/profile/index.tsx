@@ -1,9 +1,10 @@
-import { useAuthStore } from '@/stores/auth-store'
 import { Main } from '@/components/layout'
 import {
   CardStaggerContainer,
   CardStaggerItem,
 } from '@/components/page-transition'
+import { useAuthStore } from '@/stores/auth-store'
+
 import { LanguagePreferencesCard } from './components/language-preferences-card'
 import { PasskeyCard } from './components/passkey-card'
 import { ProfileHeader } from './components/profile-header'

@@ -1,5 +1,7 @@
 import { type Table } from '@tanstack/react-table'
+
 import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-table'
+
 import { type User } from '../types'
 
 interface DataTableBulkActionsProps {

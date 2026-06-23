@@ -1,4 +1,5 @@
 import { type TFunction } from 'i18next'
+
 import { SYSTEM_SETTINGS_VIEW } from '../config/system-settings.config'
 import type { NavGroup, SidebarView } from '../types'
 

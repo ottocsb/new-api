@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+
 import { getUserAgreement } from './api'
 import { LegalDocument } from './legal-document'
 

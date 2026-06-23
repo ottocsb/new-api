@@ -1,6 +1,9 @@
-import { useState, useMemo } from 'react'
 import { Lightbulb, Pencil, Plus, Search, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StaticDataTable } from '@/components/data-table'
+import { ReactIconByName } from '@/components/react-icon-by-name'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -8,8 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { StaticDataTable } from '@/components/data-table'
-import { ReactIconByName } from '@/components/react-icon-by-name'
+
 import { safeJsonParseWithValidation } from '../utils/json-parser'
 import { isArray } from '../utils/json-validators'
 import {

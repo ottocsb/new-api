@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react'
 import i18next from 'i18next'
+import { useState, useCallback } from 'react'
 import { toast } from 'sonner'
+
 import { requestWaffoPayment, isApiSuccess } from '../api'
 
 function getPaymentUrl(data: unknown): string | null {

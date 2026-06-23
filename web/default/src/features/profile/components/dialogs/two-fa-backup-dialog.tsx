@@ -1,14 +1,15 @@
-import { useState } from 'react'
 import { RefreshCw, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { regenerate2FABackupCodes } from '@/lib/api'
+
+import { CopyButton } from '@/components/copy-button'
+import { Dialog } from '@/components/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CopyButton } from '@/components/copy-button'
-import { Dialog } from '@/components/dialog'
+import { regenerate2FABackupCodes } from '@/lib/api'
 
 // ============================================================================
 // Two-FA Backup Codes Dialog Component

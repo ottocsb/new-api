@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+
 import type { AboutResponse } from './types'
 
 export async function getAboutContent() {

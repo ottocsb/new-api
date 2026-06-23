@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+
 import { get2FAStatus } from '@/lib/api'
+
 import type { TwoFAStatus } from '../types'
 
 // ============================================================================

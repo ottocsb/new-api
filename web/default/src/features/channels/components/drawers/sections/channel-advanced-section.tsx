@@ -1,12 +1,13 @@
-import type { ReactNode } from 'react'
 import { ChevronDown, Settings } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { cn } from '@/lib/utils'
 
 type ChannelAdvancedSectionProps = {
   children: ReactNode

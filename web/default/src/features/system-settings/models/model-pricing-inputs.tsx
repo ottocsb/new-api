@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { cn } from '@/lib/utils'
+
 import {
   SettingsControlGroup,
   SettingsSwitchField,

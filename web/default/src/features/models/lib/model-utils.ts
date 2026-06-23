@@ -1,5 +1,7 @@
 import { type TFunction } from 'i18next'
+
 import { formatTimestampToDate } from '@/lib/format'
+
 import { getNameRuleConfig, getQuotaTypeConfig } from '../constants'
 import type { NameRule, Model } from '../types'
 

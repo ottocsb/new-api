@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
 
 type HeaderProps = React.HTMLAttributes<HTMLElement>
 

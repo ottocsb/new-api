@@ -1,19 +1,10 @@
-import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import type { OnChangeFn, SortingState, Row } from '@tanstack/react-table'
 import { Eye, EyeOff } from 'lucide-react'
-import { useMediaQuery } from '@/hooks'
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getLobeIcon } from '@/lib/lobe-icon'
-import { useTableUrlState } from '@/hooks/use-table-url-state'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+
 import {
   DISABLED_ROW_DESKTOP,
   DISABLED_ROW_MOBILE,
@@ -21,6 +12,17 @@ import {
   useDebouncedColumnFilter,
   useDataTable,
 } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { useMediaQuery } from '@/hooks'
+import { useTableUrlState } from '@/hooks/use-table-url-state'
+import { getLobeIcon } from '@/lib/lobe-icon'
+
 import { getChannels, searchChannels, getGroups } from '../api'
 import {
   DEFAULT_PAGE_SIZE,
@@ -35,14 +37,13 @@ import {
   getChannelTypeLabel,
 } from '../lib'
 import type { Channel, ChannelSortBy } from '../types'
-import { useChannelsColumns } from './channels-columns'
 import { ChannelCard } from './channel-card'
+import { useChannelsColumns } from './channels-columns'
 import { useChannels } from './channels-provider'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 
 const route = getRouteApi('/_authenticated/channels/')
-const CHANNELS_COLUMN_VISIBILITY_STORAGE_KEY =
-  'channels:column-visibility'
+const CHANNELS_COLUMN_VISIBILITY_STORAGE_KEY = 'channels:column-visibility'
 const CHANNELS_VIEW_MODE_STORAGE_KEY = 'channels:view-mode'
 
 const CHANNEL_SORTABLE_COLUMNS = new Set<ChannelSortBy>([
@@ -62,12 +63,8 @@ function isDisabledChannelRow(channel: Channel) {
 
 export function ChannelsTable() {
   const { t } = useTranslation()
-  const {
-    enableTagMode,
-    idSort,
-    sensitiveVisible,
-    setSensitiveVisible,
-  } = useChannels()
+  const { enableTagMode, idSort, sensitiveVisible, setSensitiveVisible } =
+    useChannels()
   const isMobile = useMediaQuery('(max-width: 640px)')
 
   // Table state

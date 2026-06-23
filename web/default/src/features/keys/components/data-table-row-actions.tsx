@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react'
 import { type Row } from '@tanstack/react-table'
 import {
   Trash2,
@@ -11,9 +10,10 @@ import {
   Loader2,
   MoreHorizontal as DotsHorizontalIcon,
 } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { copyToClipboard } from '@/lib/copy-to-clipboard'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -28,6 +28,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { copyToClipboard } from '@/lib/copy-to-clipboard'
+
 import { updateApiKeyStatus } from '../api'
 import { API_KEY_STATUS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants'
 import { apiKeySchema } from '../types'

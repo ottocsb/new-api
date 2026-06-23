@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { api } from '@/lib/api'
-import dayjs from '@/lib/dayjs'
-import { formatTimestampToDate } from '@/lib/format'
+import * as z from 'zod'
+
+import { DateTimePicker } from '@/components/datetime-picker'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   AlertDialog,
@@ -41,7 +40,10 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
-import { DateTimePicker } from '@/components/datetime-picker'
+import { api } from '@/lib/api'
+import dayjs from '@/lib/dayjs'
+import { formatTimestampToDate } from '@/lib/format'
+
 import {
   getCurrentLogCleanupTask,
   getSystemTask,
@@ -139,9 +141,7 @@ export function LogSettingsSection({
     null
   )
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-  const [serverLogInfo, setServerLogInfo] = useState<ServerLogInfo | null>(
-    null
-  )
+  const [serverLogInfo, setServerLogInfo] = useState<ServerLogInfo | null>(null)
   const [serverLogCleanupMode, setServerLogCleanupMode] = useState('by_count')
   const [serverLogCleanupValue, setServerLogCleanupValue] = useState(10)
   const [serverLogCleanupLoading, setServerLogCleanupLoading] = useState(false)

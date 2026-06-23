@@ -1,7 +1,7 @@
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { enUS, fr, ja, ru, vi, zhCN } from 'react-day-picker/locale'
 import { useTranslation } from 'react-i18next'
-import dayjs from '@/lib/dayjs'
+
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import dayjs from '@/lib/dayjs'
 
 const calendarLocales = {
   en: enUS,

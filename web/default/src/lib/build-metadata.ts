@@ -1,4 +1,3 @@
-
 /**
  * Build metadata helper.
  *

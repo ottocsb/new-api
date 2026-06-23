@@ -1,7 +1,9 @@
-import { useState } from 'react'
 import i18next from 'i18next'
+import { useState } from 'react'
 import { toast } from 'sonner'
+
 import { useCountdown } from '@/hooks/use-countdown'
+
 import { sendEmailVerification } from '../api'
 import { EMAIL_VERIFICATION_COUNTDOWN } from '../constants'
 

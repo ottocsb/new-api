@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+
 import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
 
 type Theme = 'dark' | 'light' | 'system'

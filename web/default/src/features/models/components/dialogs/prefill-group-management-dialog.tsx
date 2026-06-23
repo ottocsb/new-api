@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Layers3,
@@ -8,10 +7,15 @@ import {
   RefreshCcw,
   Trash2,
 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
-import { useIsMobile } from '@/hooks/use-mobile'
+
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { StaticDataTable } from '@/components/data-table'
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
+import { TableId } from '@/components/table-id'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,11 +32,9 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { StaticDataTable } from '@/components/data-table'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
-import { TableId } from '@/components/table-id'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { cn } from '@/lib/utils'
+
 import { deletePrefillGroup, getPrefillGroups } from '../../api'
 import { prefillGroupsQueryKeys } from '../../lib'
 import type { PrefillGroup } from '../../types'

@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { Pencil } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
-import { formatQuota, parseQuotaFromDollars } from '@/lib/format'
+
+import {
+  SideDrawerSection,
+  sideDrawerContentClassName,
+  sideDrawerFooterClassName,
+  sideDrawerFormClassName,
+  sideDrawerHeaderClassName,
+} from '@/components/drawer-layout'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -37,13 +43,9 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  SideDrawerSection,
-  sideDrawerContentClassName,
-  sideDrawerFooterClassName,
-  sideDrawerFormClassName,
-  sideDrawerHeaderClassName,
-} from '@/components/drawer-layout'
+import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
+import { formatQuota, parseQuotaFromDollars } from '@/lib/format'
+
 import { createUser, updateUser, getUser, getGroups } from '../api'
 import { BINDING_FIELDS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants'
 import {

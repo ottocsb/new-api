@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import i18next from 'i18next'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+
 import {
   extractVerificationInfo,
   isVerificationRequiredError,
 } from '@/lib/secure-verification'
+
 import { checkVerificationMethods, verify } from '../api'
 import type {
   SecureVerificationState,

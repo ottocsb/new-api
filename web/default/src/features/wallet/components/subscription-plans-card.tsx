@@ -1,9 +1,13 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Crown, RefreshCw, Sparkles, Check } from 'lucide-react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { formatQuota } from '@/lib/format'
-import { cn } from '@/lib/utils'
+
+import {
+  StatusBadge,
+  dotColorMap,
+  textColorMap,
+} from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
@@ -24,11 +28,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import {
-  StatusBadge,
-  dotColorMap,
-  textColorMap,
-} from '@/components/status-badge'
-import {
   getPublicPlans,
   getSelfSubscriptionFull,
   updateBillingPreference,
@@ -39,6 +38,9 @@ import type {
   PlanRecord,
   UserSubscriptionRecord,
 } from '@/features/subscriptions/types'
+import { formatQuota } from '@/lib/format'
+import { cn } from '@/lib/utils'
+
 import type { PaymentMethod, TopupInfo } from '../types'
 
 interface SubscriptionPlansCardProps {

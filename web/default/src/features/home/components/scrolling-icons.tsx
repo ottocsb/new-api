@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+
 import { IconCard } from './icon-card'
 
 interface ScrollingIconsProps {

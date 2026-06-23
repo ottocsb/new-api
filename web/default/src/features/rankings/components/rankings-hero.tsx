@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
+
 import { cn } from '@/lib/utils'
+
 import type { RankingPeriod } from '../types'
 
 const PERIODS: { id: RankingPeriod; labelKey: string }[] = [

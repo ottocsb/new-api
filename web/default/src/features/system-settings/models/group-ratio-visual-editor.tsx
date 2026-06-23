@@ -1,6 +1,9 @@
-import { useState, useMemo, useEffect, useCallback, memo } from 'react'
 import { Pencil, Plus, Trash2, GripVertical, ChevronDown } from 'lucide-react'
+import { useState, useMemo, useEffect, useCallback, memo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StaticDataTable } from '@/components/data-table'
+import { Dialog } from '@/components/dialog'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,8 +20,7 @@ import {
 } from '@/components/ui/collapsible'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { StaticDataTable } from '@/components/data-table'
-import { Dialog } from '@/components/dialog'
+
 import { safeJsonParse } from '../utils/json-parser'
 
 type GroupRatioVisualEditorProps = {

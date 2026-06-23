@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { getRankings } from '../api'
 import type { RankingPeriod } from '../types'
 

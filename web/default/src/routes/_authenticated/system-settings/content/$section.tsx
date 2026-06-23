@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { ContentSettings } from '@/features/system-settings/content'
 import {
   CONTENT_DEFAULT_SECTION,

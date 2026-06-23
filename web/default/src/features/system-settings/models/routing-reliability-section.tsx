@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -17,12 +18,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useMemo, useRef } from 'react'
-import * as z from 'zod'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { parseHttpStatusCodeRules } from '@/lib/http-status-code-rules'
+import * as z from 'zod'
+
 import {
   Form,
   FormControl,
@@ -44,6 +44,8 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { parseHttpStatusCodeRules } from '@/lib/http-status-code-rules'
+
 import {
   SettingsForm,
   SettingsSwitchContent,
@@ -197,8 +199,9 @@ const normalizeDefaults = (
     defaults['monitor_setting.auto_test_channel_enabled'],
   'monitor_setting.auto_test_channel_minutes':
     defaults['monitor_setting.auto_test_channel_minutes'],
-  'monitor_setting.auto_test_channel_exclude_ids':
-    (defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? '').trim(),
+  'monitor_setting.auto_test_channel_exclude_ids': (
+    defaults['monitor_setting.auto_test_channel_exclude_ids'] ?? ''
+  ).trim(),
   'monitor_setting.channel_test_mode': normalizeChannelTestMode(
     defaults['monitor_setting.channel_test_mode']
   ),
@@ -373,7 +376,9 @@ export function RoutingReliabilitySection({
                     <SettingsSwitchContent>
                       <FormLabel>{t('Scheduled channel tests')}</FormLabel>
                       <FormDescription>
-                        {t('Automatically probe all channels in the background')}
+                        {t(
+                          'Automatically probe all channels in the background'
+                        )}
                       </FormDescription>
                     </SettingsSwitchContent>
                     <FormControl>
@@ -489,7 +494,9 @@ export function RoutingReliabilitySection({
                     <SettingsSwitchContent>
                       <FormLabel>{t('Re-enable on success')}</FormLabel>
                       <FormDescription>
-                        {t('Bring channels back online after successful checks')}
+                        {t(
+                          'Bring channels back online after successful checks'
+                        )}
                       </FormDescription>
                     </SettingsSwitchContent>
                     <FormControl>
@@ -508,9 +515,7 @@ export function RoutingReliabilitySection({
 
           <div className='flex min-w-0 flex-col gap-4'>
             <div className='flex flex-col gap-1'>
-              <h4 className='text-sm font-medium'>
-                {t('Auto-disable rules')}
-              </h4>
+              <h4 className='text-sm font-medium'>{t('Auto-disable rules')}</h4>
             </div>
             <div className='grid min-w-0 gap-6 lg:grid-cols-2'>
               <FormField

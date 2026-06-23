@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
 import type { AxiosRequestConfig } from 'axios'
+import { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useAuthStore } from '@/stores/auth-store'
+
 import { api } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth-store'
+
 import { getOAuthState } from '../api'
 import {
   buildGitHubOAuthUrl,

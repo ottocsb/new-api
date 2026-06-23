@@ -1,9 +1,11 @@
-import { Link } from '@tanstack/react-router'
 import { CherryStudio } from '@lobehub/icons'
+import { Link } from '@tanstack/react-router'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useStatus } from '@/hooks/use-status'
+
 import { Button } from '@/components/ui/button'
+import { useStatus } from '@/hooks/use-status'
+
 import { HeroTerminalDemo } from '../hero-terminal-demo'
 
 interface HeroProps {

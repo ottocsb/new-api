@@ -1,6 +1,7 @@
 import React from 'react'
-import { cn } from '@/lib/utils'
+
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 export interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {
   image: React.ComponentType<React.SVGProps<SVGSVGElement>>

@@ -1,9 +1,7 @@
 import type { TFunction } from 'i18next'
 import { Bell, Megaphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { getAnnouncementColorClass } from '@/lib/colors'
-import { formatDateTimeObject } from '@/lib/time'
-import { cn } from '@/lib/utils'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,6 +22,9 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getAnnouncementColorClass } from '@/lib/colors'
+import { formatDateTimeObject } from '@/lib/time'
+import { cn } from '@/lib/utils'
 
 interface AnnouncementItem {
   type?: string

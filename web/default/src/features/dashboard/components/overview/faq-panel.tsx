@@ -1,5 +1,6 @@
 import { HelpCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +11,7 @@ import { Markdown } from '@/components/ui/markdown'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useFAQ } from '@/features/dashboard/hooks/use-status-data'
 import type { FAQItem } from '@/features/dashboard/types'
+
 import { PanelWrapper } from '../ui/panel-wrapper'
 
 export function FAQPanel() {

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
 import { DEFAULT_SYSTEM_NAME, DEFAULT_LOGO } from '@/lib/constants'
 
 export type CurrencyDisplayType = 'USD' | 'CNY' | 'TOKENS' | 'CUSTOM'

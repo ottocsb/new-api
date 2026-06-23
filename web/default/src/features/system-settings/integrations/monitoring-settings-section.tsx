@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react'
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useMemo, useRef } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import * as z from 'zod'
+
 import {
   Form,
   FormControl,
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+
 import {
   SettingsForm,
   SettingsSwitchContent,
@@ -84,7 +86,8 @@ const normalizeDefaults = (
   'perf_metrics_setting.enabled': defaults['perf_metrics_setting.enabled'],
   'perf_metrics_setting.flush_interval':
     defaults['perf_metrics_setting.flush_interval'],
-  'perf_metrics_setting.bucket_time': defaults['perf_metrics_setting.bucket_time'],
+  'perf_metrics_setting.bucket_time':
+    defaults['perf_metrics_setting.bucket_time'],
   'perf_metrics_setting.retention_days':
     defaults['perf_metrics_setting.retention_days'],
 })

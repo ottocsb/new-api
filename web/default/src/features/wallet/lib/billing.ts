@@ -1,5 +1,6 @@
-import { formatTimestampToDate } from '@/lib/format'
 import type { StatusBadgeProps } from '@/components/status-badge'
+import { formatTimestampToDate } from '@/lib/format'
+
 import type { TopupStatus } from '../types'
 
 // ============================================================================

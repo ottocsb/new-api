@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react'
 import i18next from 'i18next'
+import { useState, useCallback } from 'react'
 import { toast } from 'sonner'
+
 import { getSelf } from '@/lib/api'
 import { formatQuota } from '@/lib/format'
+
 import { redeemTopupCode } from '../api'
 
 // ============================================================================

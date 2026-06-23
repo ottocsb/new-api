@@ -1,7 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { type Resolver, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
+
+import { Dialog } from '@/components/dialog'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -24,7 +26,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { Dialog } from '@/components/dialog'
+
 import {
   SettingsForm,
   SettingsSwitchContent,

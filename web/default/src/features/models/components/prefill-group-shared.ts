@@ -1,4 +1,5 @@
 import type { StatusBadgeProps } from '@/components/status-badge'
+
 import { type PrefillGroup, type PrefillGroupFormValues } from '../types'
 
 export type PrefillGroupType = PrefillGroup['type']

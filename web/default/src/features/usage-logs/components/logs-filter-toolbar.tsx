@@ -1,9 +1,9 @@
-import { useState, type ComponentProps, type ReactNode } from 'react'
 import type { Table } from '@tanstack/react-table'
-import { useMediaQuery } from '@/hooks'
 import { ChevronDown, Loader2 } from 'lucide-react'
+import { useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
+import { DataTableViewOptions } from '@/components/data-table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,7 +16,8 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
-import { DataTableViewOptions } from '@/components/data-table'
+import { useMediaQuery } from '@/hooks'
+import { cn } from '@/lib/utils'
 
 interface LogsFilterToolbarProps<TData> {
   table: Table<TData>

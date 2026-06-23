@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import type { Model } from '../types'
 import { parseModelTags as parseTagsFromUtils } from './model-utils'
 

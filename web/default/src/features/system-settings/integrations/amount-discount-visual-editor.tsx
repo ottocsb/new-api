@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui/button'
+
 import { StaticDataTable } from '@/components/data-table'
 import { StatusBadge } from '@/components/status-badge'
+import { Button } from '@/components/ui/button'
+
 import { safeJsonParseWithValidation } from '../utils/json-parser'
 import { isObjectRecord } from '../utils/json-validators'
 import {

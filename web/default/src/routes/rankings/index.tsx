@@ -1,8 +1,9 @@
-import z from 'zod'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { useAuthStore } from '@/stores/auth-store'
-import { getFreshModuleAccess } from '@/lib/nav-modules'
+import z from 'zod'
+
 import { Rankings } from '@/features/rankings'
+import { getFreshModuleAccess } from '@/lib/nav-modules'
+import { useAuthStore } from '@/stores/auth-store'
 
 const rankingsSearchSchema = z.object({
   period: z

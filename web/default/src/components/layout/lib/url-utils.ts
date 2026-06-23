@@ -1,4 +1,5 @@
 import type { LinkProps } from '@tanstack/react-router'
+
 import type { NavItem, NavCollapsible } from '../types'
 
 /**

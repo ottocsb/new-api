@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react'
 import { Database, type LucideIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
+import { FadeIn } from '@/components/page-transition'
 import {
   Empty,
   EmptyContent,
@@ -10,7 +11,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
-import { FadeIn } from '@/components/page-transition'
+import { cn } from '@/lib/utils'
 
 interface EmptyStateProps {
   icon?: LucideIcon

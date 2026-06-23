@@ -1,14 +1,15 @@
-import { useState } from 'react'
 import { AlertTriangle, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { disable2FA } from '@/lib/api'
+
+import { Dialog } from '@/components/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Dialog } from '@/components/dialog'
+import { disable2FA } from '@/lib/api'
 
 // ============================================================================
 // Two-FA Disable Dialog Component

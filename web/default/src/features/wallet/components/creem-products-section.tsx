@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { formatNumber } from '@/lib/format'
+
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { formatNumber } from '@/lib/format'
+
 import { formatCreemPrice } from '../lib/format'
 import type { CreemProduct } from '../types'
 

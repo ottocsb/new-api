@@ -1,7 +1,8 @@
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const FEEDBACK_URL = 'https://github.com/QuantumNous/new-api/issues'
 

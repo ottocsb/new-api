@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
+
 import { Separator } from '@/components/ui/separator'
+
 import { getGatewayFeatures } from '../constants'
 
 interface GatewayCardProps {

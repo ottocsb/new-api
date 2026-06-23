@@ -1,5 +1,5 @@
-import * as z from 'zod'
 import { redirect } from '@tanstack/react-router'
+import * as z from 'zod'
 
 /**
  * Create search schema for settings routes with section parameter

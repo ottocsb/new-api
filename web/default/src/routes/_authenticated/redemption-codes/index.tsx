@@ -1,9 +1,10 @@
-import z from 'zod'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { useAuthStore } from '@/stores/auth-store'
-import { ROLE } from '@/lib/roles'
+import z from 'zod'
+
 import { Redemptions } from '@/features/redemption-codes'
 import { REDEMPTION_STATUS_VALUES } from '@/features/redemption-codes/constants'
+import { ROLE } from '@/lib/roles'
+import { useAuthStore } from '@/stores/auth-store'
 
 const redemptionsSearchSchema = z.object({
   page: z.number().optional().catch(1),

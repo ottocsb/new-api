@@ -1,6 +1,5 @@
 'use client'
 
-import { type ComponentProps, isValidElement, type ReactNode } from 'react'
 import type { ToolUIPart } from 'ai'
 import {
   CheckCircleIcon,
@@ -10,14 +9,17 @@ import {
   WrenchIcon,
   XCircleIcon,
 } from 'lucide-react'
+import { type ComponentProps, isValidElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Badge } from '@/components/ui/badge'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { cn } from '@/lib/utils'
+
 import { CodeBlock } from './code-block'
 
 // Workaround for missing types in 'ai' package

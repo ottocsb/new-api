@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   Plus,
@@ -12,7 +11,10 @@ import {
   RefreshCw,
   ArrowUpFromLine,
 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,7 +27,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { ConfirmDialog } from '@/components/confirm-dialog'
+
 import {
   handleDeleteAllDisabled,
   handleFixAbilities,

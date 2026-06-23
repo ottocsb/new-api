@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+
 import type { ApiResponse, PasskeyOptionsPayload, PasskeyStatus } from './types'
 
 export async function getPasskeyStatus(): Promise<ApiResponse<PasskeyStatus>> {

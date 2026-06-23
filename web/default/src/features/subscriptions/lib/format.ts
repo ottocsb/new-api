@@ -1,5 +1,7 @@
 import type { TFunction } from 'i18next'
+
 import dayjs from '@/lib/dayjs'
+
 import type { SubscriptionPlan } from '../types'
 
 export function formatDuration(

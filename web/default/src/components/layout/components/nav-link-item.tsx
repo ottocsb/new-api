@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
+
 import { cn } from '@/lib/utils'
+
 import type { TopNavLink } from '../types'
 
 interface NavLinkItemProps {

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, RefreshCw, Trash2, Download, Search } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { getCommonHeaders } from '@/lib/api'
+
+import { Dialog } from '@/components/dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +21,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
-import { Dialog } from '@/components/dialog'
+import { getCommonHeaders } from '@/lib/api'
+
 import {
   deleteOllamaModel,
   fetchModels as fetchModelsFromEndpoint,

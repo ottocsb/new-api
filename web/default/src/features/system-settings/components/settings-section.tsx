@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+
 import { useSuppressSettingsSectionHeader } from './settings-page-context'
 
 type SettingsSectionProps = {

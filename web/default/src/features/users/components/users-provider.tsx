@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+
 import useDialogState from '@/hooks/use-dialog'
+
 import { type User, type UsersDialogType } from '../types'
 
 type UsersContextType = {

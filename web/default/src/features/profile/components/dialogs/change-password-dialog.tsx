@@ -1,11 +1,13 @@
-import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+
 import { Dialog } from '@/components/dialog'
 import { PasswordInput } from '@/components/password-input'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+
 import { updateUserProfile } from '../../api'
 
 // ============================================================================

@@ -1,9 +1,10 @@
-import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import * as z from 'zod'
+
 import {
   Form,
   FormControl,
@@ -15,6 +16,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
+
 import {
   SettingsForm,
   SettingsSwitchContent,

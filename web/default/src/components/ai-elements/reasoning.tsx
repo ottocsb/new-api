@@ -1,5 +1,6 @@
 'use client'
 
+import { BrainIcon, ChevronDownIcon } from 'lucide-react'
 import {
   type ComponentProps,
   createContext,
@@ -8,14 +9,15 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { BrainIcon, ChevronDownIcon } from 'lucide-react'
-import { useControllableState } from '@/lib/use-controllable-state'
-import { cn } from '@/lib/utils'
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { useControllableState } from '@/lib/use-controllable-state'
+import { cn } from '@/lib/utils'
+
 import { Response } from './response'
 import { Shimmer } from './shimmer'
 

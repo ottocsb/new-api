@@ -1,12 +1,13 @@
-import * as React from 'react'
-import * as z from 'zod'
-import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Code2, Eye, ShieldAlert } from 'lucide-react'
+import * as React from 'react'
+import { useForm, type Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
+import * as z from 'zod'
+
+import { RiskAcknowledgementDialog } from '@/components/risk-acknowledgement-dialog'
 import {
   Alert,
   AlertAction,
@@ -27,7 +28,8 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
-import { RiskAcknowledgementDialog } from '@/components/risk-acknowledgement-dialog'
+import { cn } from '@/lib/utils'
+
 import { confirmPaymentCompliance } from '../api'
 import {
   SettingsForm,

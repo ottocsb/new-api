@@ -1,8 +1,9 @@
 import type { ComponentProps, ReactNode } from 'react'
-import { cn } from '@/lib/utils'
+
 import { FormItem } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { cn } from '@/lib/utils'
 
 type SettingsFormGridProps = {
   children: ReactNode

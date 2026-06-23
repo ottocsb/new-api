@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react'
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { motion, useReducedMotion, type Variants } from 'motion/react'
+import type { ReactNode } from 'react'
+
 import {
   CARD_ITEM_VARIANTS,
   CARD_STAGGER_VARIANTS,

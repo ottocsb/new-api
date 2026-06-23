@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
+
 import { SectionPageLayout } from '@/components/layout'
+
 import { RedemptionsDialogs } from './components/redemptions-dialogs'
 import { RedemptionsPrimaryButtons } from './components/redemptions-primary-buttons'
 import { RedemptionsProvider } from './components/redemptions-provider'

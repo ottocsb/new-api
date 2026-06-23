@@ -1,16 +1,18 @@
-import { useMemo } from 'react'
 import {
   ArrowDownRight,
   ArrowUpRight,
   ExternalLink,
   Trophy,
 } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import {
   StaticDataTable,
   staticDataTableClassNames as tableStyles,
 } from '@/components/data-table'
+import { cn } from '@/lib/utils'
+
 import {
   buildAppRankings,
   formatTokenVolume,

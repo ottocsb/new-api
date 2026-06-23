@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react'
 import { Server } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import {
   SideDrawerSection,
   SideDrawerSectionHeader,

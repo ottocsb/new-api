@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useMediaQuery } from '@/hooks'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
-import { useIsAdmin } from '@/hooks/use-admin'
-import { useTableUrlState } from '@/hooks/use-table-url-state'
+
 import {
   DataTablePage,
   DataTableRow,
   useDataTable,
 } from '@/components/data-table'
+import { useMediaQuery } from '@/hooks'
+import { useIsAdmin } from '@/hooks/use-admin'
+import { useTableUrlState } from '@/hooks/use-table-url-state'
+import { cn } from '@/lib/utils'
+
 import {
   DEFAULT_LOGS_DATA,
   LOG_TYPE_ALL_VALUE,
@@ -145,16 +147,13 @@ export function UsageLogsTable() {
       tableClassName={cn(
         '[&_[data-slot=table]]:text-[13px] [&_[data-slot=table]_td]:text-[13px] [&_[data-slot=table]_td_*]:text-[13px] [&_[data-slot=table]_th]:text-[13px] [&_[data-slot=table]_th_*]:text-[13px]'
       )}
-      mobile={
-        <UsageLogsMobileList table={table} isLoading={isLoadingData} />
-      }
+      mobile={<UsageLogsMobileList table={table} isLoading={isLoadingData} />}
       toolbar={<CommonLogsFilterBar table={table} />}
       renderRow={(row) => {
         const logType = (row.original as Record<string, unknown>).type as
           | number
           | undefined
-        const tintClass =
-          logType != null ? (logTypeRowTint[logType] ?? '') : ''
+        const tintClass = logType != null ? (logTypeRowTint[logType] ?? '') : ''
 
         return (
           <DataTableRow

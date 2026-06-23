@@ -1,4 +1,5 @@
 import { type TFunction } from 'i18next'
+
 import type { NameRule, ModelStatus, SyncSource } from './types'
 
 // ============================================================================

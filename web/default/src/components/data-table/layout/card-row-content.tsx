@@ -1,3 +1,4 @@
+import type { Row } from '@tanstack/react-table'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -17,8 +18,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import * as React from 'react'
-import type { Row } from '@tanstack/react-table'
+
 import { StatusBadgeTypeContext } from '@/components/status-badge'
+
 import { getCellLabel, renderCellContent } from './card-cell-utils'
 
 /**

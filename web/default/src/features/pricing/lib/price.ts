@@ -1,4 +1,5 @@
 import { formatCurrencyFromUSD } from '@/lib/currency'
+
 import { QUOTA_TYPE_VALUES, TOKEN_UNIT_DIVISORS } from '../constants'
 import type { PricingModel, TokenUnit, PriceType } from '../types'
 

@@ -1,5 +1,6 @@
-import z from 'zod'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import z from 'zod'
+
 import { UsageLogs } from '@/features/usage-logs'
 import {
   isUsageLogsSectionId,
@@ -8,13 +9,10 @@ import {
 
 const logTypeValues = ['0', '1', '2', '3', '4', '5', '6', '7'] as const
 const logTypeSearchSchema = z
-  .preprocess(
-    (value) => {
-      if (value == null || value === '') return undefined
-      return Array.isArray(value) ? value : [value]
-    },
-    z.array(z.enum(logTypeValues)).optional()
-  )
+  .preprocess((value) => {
+    if (value == null || value === '') return undefined
+    return Array.isArray(value) ? value : [value]
+  }, z.array(z.enum(logTypeValues)).optional())
   .catch([])
 
 const usageLogsSearchSchema = z.object({

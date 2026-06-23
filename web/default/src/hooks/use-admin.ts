@@ -1,8 +1,8 @@
+import { ROLE } from '@/lib/roles'
 /**
  * Hook for checking admin privileges
  */
 import { useAuthStore } from '@/stores/auth-store'
-import { ROLE } from '@/lib/roles'
 
 /**
  * Check if current user has admin privileges

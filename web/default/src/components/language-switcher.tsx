@@ -1,13 +1,7 @@
-import { useCallback } from 'react'
-import {
-  INTERFACE_LANGUAGE_OPTIONS,
-  normalizeInterfaceLanguage,
-} from '@/i18n/languages'
 import { Languages, Check } from 'lucide-react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuthStore } from '@/stores/auth-store'
-import { api } from '@/lib/api'
-import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -15,6 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  INTERFACE_LANGUAGE_OPTIONS,
+  normalizeInterfaceLanguage,
+} from '@/i18n/languages'
+import { api } from '@/lib/api'
+import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/auth-store'
 
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation()

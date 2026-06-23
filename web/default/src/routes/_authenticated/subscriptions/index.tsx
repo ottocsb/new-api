@@ -1,7 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { useAuthStore } from '@/stores/auth-store'
-import { ROLE } from '@/lib/roles'
+
 import { Subscriptions } from '@/features/subscriptions'
+import { ROLE } from '@/lib/roles'
+import { useAuthStore } from '@/stores/auth-store'
 
 export const Route = createFileRoute('/_authenticated/subscriptions/')({
   beforeLoad: () => {

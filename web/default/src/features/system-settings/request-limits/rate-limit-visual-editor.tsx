@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react'
 import { Pencil, Plus, Search, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StaticDataTable } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { StaticDataTable } from '@/components/data-table'
+
 import { safeJsonParseWithValidation } from '../utils/json-parser'
 import { isObjectRecord } from '../utils/json-validators'
 import { RateLimitDialog, type RateLimitEntryData } from './rate-limit-dialog'

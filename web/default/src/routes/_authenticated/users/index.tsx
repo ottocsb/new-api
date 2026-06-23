@@ -1,8 +1,9 @@
-import z from 'zod'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { useAuthStore } from '@/stores/auth-store'
-import { ROLE } from '@/lib/roles'
+import z from 'zod'
+
 import { Users } from '@/features/users'
+import { ROLE } from '@/lib/roles'
+import { useAuthStore } from '@/stores/auth-store'
 
 const usersSearchSchema = z.object({
   page: z.number().optional().catch(1),

@@ -1,4 +1,5 @@
 import { createFileRoute, useSearch } from '@tanstack/react-router'
+
 import {
   ResetPasswordConfirm,
   type ResetPasswordSearchParams,

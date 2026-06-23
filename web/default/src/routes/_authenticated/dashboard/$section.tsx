@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { Dashboard } from '@/features/dashboard'
 import {
   DASHBOARD_SECTION_IDS,

@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, Loader2, Plus, Search } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useIsMobile } from '@/hooks/use-mobile'
+
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 import {
   Empty,
@@ -12,8 +14,8 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
+import { useIsMobile } from '@/hooks/use-mobile'
+
 import { getMissingModels } from '../../api'
 import { DEFAULT_PAGE_SIZE } from '../../constants'
 import { modelsQueryKeys } from '../../lib'

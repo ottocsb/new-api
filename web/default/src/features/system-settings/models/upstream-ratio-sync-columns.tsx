@@ -1,7 +1,10 @@
-import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { AlertTriangle } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { BadgeCell } from '@/components/data-table'
+import { StatusBadge } from '@/components/status-badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Tooltip,
@@ -9,8 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { BadgeCell } from '@/components/data-table'
-import { StatusBadge } from '@/components/status-badge'
+
 import type { RatioType } from '../types'
 import {
   getOrderedRatioTypes,

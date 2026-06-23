@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+
 import type { RankingPeriod, RankingsSnapshot } from './types'
 
 type RankingsResponse = {

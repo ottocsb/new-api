@@ -1,7 +1,9 @@
 import { Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+
 import { SectionPageLayout } from '@/components/layout'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+
 import { SubscriptionsDialogs } from './components/subscriptions-dialogs'
 import { SubscriptionsPrimaryButtons } from './components/subscriptions-primary-buttons'
 import {

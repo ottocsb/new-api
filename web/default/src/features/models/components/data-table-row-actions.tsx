@@ -1,8 +1,10 @@
-import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Row } from '@tanstack/react-table'
 import { MoreHorizontal, Pencil, Power, PowerOff, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -12,7 +14,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ConfirmDialog } from '@/components/confirm-dialog'
+
 import {
   handleDeleteModel,
   handleToggleModelStatus,

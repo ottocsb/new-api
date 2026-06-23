@@ -1,6 +1,8 @@
-import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
 import { useStatus } from '@/hooks/use-status'
+
 import { getPricing } from '../api'
 
 export function usePricingData() {

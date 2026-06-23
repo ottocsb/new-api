@@ -1,10 +1,12 @@
-import { memo } from 'react'
 import { ChevronRight, Copy } from 'lucide-react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StatusBadge } from '@/components/status-badge'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { getLobeIcon } from '@/lib/lobe-icon'
 import { cn } from '@/lib/utils'
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
-import { StatusBadge } from '@/components/status-badge'
+
 import { DEFAULT_TOKEN_UNIT } from '../constants'
 import {
   getDynamicDisplayGroupRatio,

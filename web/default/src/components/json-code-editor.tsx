@@ -1,3 +1,4 @@
+import { AlertCircle, Braces, CheckCircle2, Code2 } from 'lucide-react'
 import {
   useMemo,
   useRef,
@@ -5,11 +6,11 @@ import {
   type ComponentProps,
   type KeyboardEvent,
 } from 'react'
-import { AlertCircle, Braces, CheckCircle2, Code2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 export type JsonCodeEditorProps = Omit<ComponentProps<'div'>, 'onChange'> & {
   value: string

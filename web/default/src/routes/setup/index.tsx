@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { SetupWizard } from '@/features/setup'
 import { getSetupStatus } from '@/features/setup/api'
 

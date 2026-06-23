@@ -1,4 +1,5 @@
 import { formatBillingCurrencyFromUSD } from '@/lib/currency'
+
 import { TOKEN_UNIT_DIVISORS } from '../constants'
 import type { PricingModel, TokenUnit } from '../types'
 import {

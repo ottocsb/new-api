@@ -1,9 +1,9 @@
-import { cn } from '@/lib/utils'
 import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
+import { cn } from '@/lib/utils'
 
 type SettingsAccordionProps = {
   value: string

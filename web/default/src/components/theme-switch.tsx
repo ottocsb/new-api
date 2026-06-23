@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
 import { Check, Moon, Sun } from 'lucide-react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
-import { useTheme } from '@/context/theme-provider'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,6 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useTheme } from '@/context/theme-provider'
+import { cn } from '@/lib/utils'
 
 export function ThemeSwitch() {
   const { t } = useTranslation()
