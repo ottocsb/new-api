@@ -1,4 +1,5 @@
-import { type Row } from '@tanstack/react-table'
+import { useCallback, useState } from 'react'
+import type { Row } from '@tanstack/react-table'
 import {
   Trash2,
   Edit,
@@ -8,20 +9,16 @@ import {
   Copy,
   Link,
   Loader2,
-  MoreHorizontal as DotsHorizontalIcon,
 } from 'lucide-react'
-import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { DataTableRowActionMenu } from '@/components/data-table/core/row-action-menu'
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
   Tooltip,
@@ -79,6 +76,8 @@ export function DataTableRowActions<TData>({
   const resolvedRealKey = resolvedKeys[apiKey.id]
   const isRealKeyLoading = Boolean(loadingKeys[apiKey.id])
 
+  const toggleLabel = isEnabled ? t('Disable') : t('Enable')
+
   const handleMenuOpenChange = useCallback(
     (open: boolean) => {
       if (open && !resolvedRealKey && !isRealKeyLoading) {
@@ -122,6 +121,13 @@ export function DataTableRowActions<TData>({
     }
   }
 
+  let statusIcon = <Power className='size-4' />
+  if (isTogglingStatus) {
+    statusIcon = <Loader2 className='size-4 animate-spin' />
+  } else if (isEnabled) {
+    statusIcon = <PowerOff className='size-4' />
+  }
+
   return (
     <div className='-ml-1.5 flex items-center gap-1'>
       <Tooltip>
@@ -132,7 +138,7 @@ export function DataTableRowActions<TData>({
               size='icon-sm'
               onClick={handleToggleStatus}
               disabled={isTogglingStatus}
-              aria-label={isEnabled ? t('Disable') : t('Enable')}
+              aria-label={toggleLabel}
               className={
                 isEnabled
                   ? 'text-destructive hover:text-destructive'
@@ -141,103 +147,92 @@ export function DataTableRowActions<TData>({
             />
           }
         >
-          {isTogglingStatus ? (
-            <Loader2 className='size-4 animate-spin' />
-          ) : isEnabled ? (
-            <PowerOff className='size-4' />
-          ) : (
-            <Power className='size-4' />
-          )}
+          {statusIcon}
         </TooltipTrigger>
-        <TooltipContent>
-          {isEnabled ? t('Disable') : t('Enable')}
-        </TooltipContent>
+        <TooltipContent>{toggleLabel}</TooltipContent>
       </Tooltip>
 
-      <DropdownMenu modal={false} onOpenChange={handleMenuOpenChange}>
-        <DropdownMenuTrigger
+      <Tooltip>
+        <TooltipTrigger
           render={
             <Button
               variant='ghost'
-              className='data-popup-open:bg-muted flex h-8 w-8 p-0'
+              size='icon-sm'
+              onClick={() => {
+                setCurrentRow(apiKey)
+                setOpen('update')
+              }}
+              aria-label={t('Edit')}
             />
           }
         >
-          <DotsHorizontalIcon className='h-4 w-4' />
-          <span className='sr-only'>{t('Open menu')}</span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-[200px]'>
-          <DropdownMenuItem
-            onClick={async () => {
-              const realKey = getCachedRealKey()
-              if (!realKey) return
-              const ok = await copyToClipboard(realKey)
-              if (ok) toast.success(t('Copied'))
-            }}
-          >
-            {t('Copy Key')}
-            <DropdownMenuShortcut>
-              <Copy size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={async () => {
-              const realKey = getCachedRealKey()
-              if (!realKey) return
-              const connStr = encodeConnectionString(
-                realKey,
-                getServerAddress()
-              )
-              const ok = await copyToClipboard(connStr)
-              if (ok) toast.success(t('Copied'))
-            }}
-          >
-            {t('Copy Connection Info')}
-            <DropdownMenuShortcut>
-              <Link size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              setCurrentRow(apiKey)
-              setOpen('update')
-            }}
-          >
-            {t('Edit')}
-            <DropdownMenuShortcut>
-              <Edit size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={async () => {
-              const realKey = await resolveRealKey(apiKey.id)
-              if (!realKey) return
-              setResolvedKey(realKey)
-              setCurrentRow(apiKey)
-              setOpen('cc-switch')
-            }}
-          >
-            {t('CC Switch')}
-            <DropdownMenuShortcut>
-              <ArrowRightLeft size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              setCurrentRow(apiKey)
-              setOpen('delete')
-            }}
-            className='text-destructive focus:text-destructive'
-          >
-            {t('Delete')}
-            <DropdownMenuShortcut>
-              <Trash2 size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <Edit />
+        </TooltipTrigger>
+        <TooltipContent>{t('Edit')}</TooltipContent>
+      </Tooltip>
+
+      <DataTableRowActionMenu
+        ariaLabel={t('Open menu')}
+        contentClassName='w-[200px]'
+        modal={false}
+        onOpenChange={handleMenuOpenChange}
+      >
+        <DropdownMenuItem
+          onClick={async () => {
+            const realKey = getCachedRealKey()
+            if (!realKey) return
+            const ok = await copyToClipboard(realKey)
+            if (ok) toast.success(t('Copied'))
+          }}
+        >
+          {t('Copy Key')}
+          <DropdownMenuShortcut>
+            <Copy size={16} />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const realKey = getCachedRealKey()
+            if (!realKey) return
+            const connStr = encodeConnectionString(realKey, getServerAddress())
+            const ok = await copyToClipboard(connStr)
+            if (ok) toast.success(t('Copied'))
+          }}
+        >
+          {t('Copy Connection Info')}
+          <DropdownMenuShortcut>
+            <Link size={16} />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={async () => {
+            const realKey = await resolveRealKey(apiKey.id)
+            if (!realKey) return
+            setResolvedKey(realKey)
+            setCurrentRow(apiKey)
+            setOpen('cc-switch')
+          }}
+        >
+          {t('CC Switch')}
+          <DropdownMenuShortcut>
+            <ArrowRightLeft size={16} />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentRow(apiKey)
+            setOpen('delete')
+          }}
+          className='text-destructive focus:text-destructive'
+        >
+          {t('Delete')}
+          <DropdownMenuShortcut>
+            <Trash2 size={16} />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DataTableRowActionMenu>
     </div>
   )
 }

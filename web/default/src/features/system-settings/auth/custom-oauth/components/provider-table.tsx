@@ -1,12 +1,12 @@
-import { Pencil, Trash2, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { BadgeCell, StaticDataTable } from '@/components/data-table'
-import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
-
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { BadgeCell } from '@/components/data-table/core/badge-cell'
+import { StaticDataTable } from '@/components/data-table/static/static-data-table'
+import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { StatusBadge } from '@/components/status-badge'
 import { useDeleteProvider } from '../hooks/use-custom-oauth-mutations'
 import type { CustomOAuthProvider } from '../types'
 
@@ -102,22 +102,13 @@ export function ProviderTable(props: ProviderTableProps) {
             className: 'text-right',
             cellClassName: 'text-right',
             cell: (provider) => (
-              <div className='flex justify-end gap-1'>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => props.onEdit(provider)}
-                >
-                  <Pencil className='h-4 w-4' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => setDeleteTarget(provider)}
-                >
-                  <Trash2 className='text-destructive h-4 w-4' />
-                </Button>
-              </div>
+              <StaticRowActions
+                editLabel={t('Edit')}
+                deleteLabel={t('Delete')}
+                menuLabel={t('Open menu')}
+                onEdit={() => props.onEdit(provider)}
+                onDelete={() => setDeleteTarget(provider)}
+              />
             ),
           },
         ]}

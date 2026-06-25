@@ -1,14 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus, Edit, Trash2, Save } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import * as z from 'zod'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus, Trash2, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import * as z from 'zod'
-
-import { BadgeCell, StaticDataTable } from '@/components/data-table'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
+import { getBgColorClass } from '@/lib/colors'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,8 +36,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { getBgColorClass } from '@/lib/colors'
-
+import { BadgeCell } from '@/components/data-table/core/badge-cell'
+import { StaticDataTable } from '@/components/data-table/static/static-data-table'
+import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
 import { SettingsSwitchField } from '../components/settings-form-layout'
 import { SettingsSection } from '../components/settings-section'
 import { useUpdateOption } from '../hooks/use-update-option'
@@ -353,24 +353,14 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
             {
               id: 'actions',
               header: t('Actions'),
-              className: 'w-32',
               cell: (apiInfo) => (
-                <div className='flex gap-2'>
-                  <Button
-                    onClick={() => handleEdit(apiInfo)}
-                    size='sm'
-                    variant='ghost'
-                  >
-                    <Edit className='h-4 w-4' />
-                  </Button>
-                  <Button
-                    onClick={() => handleDelete(apiInfo)}
-                    size='sm'
-                    variant='ghost'
-                  >
-                    <Trash2 className='h-4 w-4' />
-                  </Button>
-                </div>
+                <StaticRowActions
+                  editLabel={t('Edit')}
+                  deleteLabel={t('Delete')}
+                  menuLabel={t('Open menu')}
+                  onEdit={() => handleEdit(apiInfo)}
+                  onDelete={() => handleDelete(apiInfo)}
+                />
               ),
             },
           ]}
@@ -460,16 +450,16 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
                   <FormLabel>{t('Badge Color')}</FormLabel>
                   <Select
                     items={colorOptions.map((option) => ({
-                      value: option.value,
-                      label: (
-                        <div className='flex items-center gap-2'>
-                          <div
-                            className={`h-4 w-4 rounded-full ${getBgColorClass(option.value)}`}
-                          />
-                          {option.label}
-                        </div>
-                      ),
-                    }))}
+                        value: option.value,
+                        label: (
+                          <div className='flex items-center gap-2'>
+                            <div
+                              className={`h-4 w-4 rounded-full ${getBgColorClass(option.value)}`}
+                            />
+                            {option.label}
+                          </div>
+                        ),
+                      }))}
                     onValueChange={field.onChange}
                     value={field.value}
                   >
@@ -510,13 +500,16 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
             <AlertDialogTitle>{t('Are you sure?')}</AlertDialogTitle>
             <AlertDialogDescription>
               {deleteTarget === 'single'
-                ? 'This API shortcut will be removed from the list.'
-                : `${selectedIds.length} API shortcuts will be removed from the list.`}
+                ? t('This API shortcut will be removed from the list.')
+                : t(
+                    '{{count}} API shortcuts will be removed from the list.',
+                    { count: selectedIds.length }
+                  )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>
+            <AlertDialogAction variant='destructive' onClick={confirmDelete}>
               {t('Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>

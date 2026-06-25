@@ -103,19 +103,23 @@ func main() {
 		go controller.AutomaticallyUpdateChannels(frequency)
 	}
 
-	go controller.AutomaticallyTestChannels()
-
 	// Codex credential auto-refresh check every 10 minutes, refresh when expires within 1 day
 	service.StartCodexCredentialAutoRefreshTask()
 
 	// Subscription quota reset task (daily/weekly/monthly/custom)
 	service.StartSubscriptionQuotaResetTask()
 
-	// Persistent system maintenance task runner
-	service.StartSystemTaskRunner()
+	// Report this process as a system instance so the System Info page can show
+	// all currently alive nodes in multi-instance deployments.
+	service.StartSystemInstanceReporter()
 
-	// Channel upstream model update check task
-	controller.StartChannelUpstreamModelUpdateTask()
+	// Register the periodic channel test and upstream model update jobs as
+	// scheduled system tasks (DB-lease dedup across masters + run history), then
+	// start the runner that schedules and executes them. Master-only execution and
+	// the UpdateTask switch are enforced inside the runner and each handler's
+	// Enabled().
+	controller.RegisterScheduledSystemTasks()
+	service.StartSystemTaskRunner()
 
 	if os.Getenv("BATCH_UPDATE_ENABLED") == "true" {
 		common.BatchUpdateEnabled = true
