@@ -2,6 +2,7 @@ import i18next from 'i18next'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+import { isHttpUrl } from '@/lib/content-format'
 import { getHomePageContent } from '../api'
 import type { HomePageContentResult } from '../types'
 
@@ -58,13 +59,7 @@ export function useHomePageContent(): HomePageContentResult {
     }
   }, [])
 
-  let isUrl = false
-  try {
-    const url = new URL(content)
-    isUrl = url.protocol === 'http:' || url.protocol === 'https:'
-  } catch {
-    // not a URL
-  }
+  const isUrl = isHttpUrl(content)
 
   return { content, isLoaded, isUrl }
 }

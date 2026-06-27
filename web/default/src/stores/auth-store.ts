@@ -1,8 +1,10 @@
 import { create } from 'zustand'
+import type { AdminCapabilities } from '@/lib/admin-permissions'
 
 export type UserPermissions = {
   sidebar_settings?: boolean
   sidebar_modules?: Record<string, unknown>
+  admin_permissions?: AdminCapabilities
 }
 
 export interface AuthUser {

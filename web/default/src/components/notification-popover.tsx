@@ -2,6 +2,7 @@ import type { TFunction } from 'i18next'
 import { Bell, Megaphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { RichContent } from '@/components/rich-content'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,7 +12,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
-import { Markdown } from '@/components/ui/markdown'
 import {
   Popover,
   PopoverContent,
@@ -27,6 +27,7 @@ import { formatDateTimeObject } from '@/lib/time'
 import { cn } from '@/lib/utils'
 
 interface AnnouncementItem {
+  id?: number | string
   type?: string
   content?: string
   extra?: string
@@ -55,8 +56,9 @@ function getRelativeTime(publishDate: string | Date, t: TFunction): string {
   const pubDate = new Date(publishDate)
 
   // If invalid date, return original string
-  if (isNaN(pubDate.getTime()))
+  if (Number.isNaN(pubDate.getTime())) {
     return typeof publishDate === 'string' ? publishDate : ''
+  }
 
   const diffMs = now.getTime() - pubDate.getTime()
   const diffSeconds = Math.floor(diffMs / 1000)
@@ -72,26 +74,31 @@ function getRelativeTime(publishDate: string | Date, t: TFunction): string {
 
   // Return relative time based on difference
   if (diffSeconds < 60) return t('Just now')
-  if (diffMinutes < 60)
+  if (diffMinutes < 60) {
     return diffMinutes === 1
       ? t('1 minute ago')
       : t('{{count}} minutes ago', { count: diffMinutes })
-  if (diffHours < 24)
+  }
+  if (diffHours < 24) {
     return diffHours === 1
       ? t('1 hour ago')
       : t('{{count}} hours ago', { count: diffHours })
-  if (diffDays < 7)
+  }
+  if (diffDays < 7) {
     return diffDays === 1
       ? t('1 day ago')
       : t('{{count}} days ago', { count: diffDays })
-  if (diffWeeks < 4)
+  }
+  if (diffWeeks < 4) {
     return diffWeeks === 1
       ? t('1 week ago')
       : t('{{count}} weeks ago', { count: diffWeeks })
-  if (diffMonths < 12)
+  }
+  if (diffMonths < 12) {
     return diffMonths === 1
       ? t('1 month ago')
       : t('{{count}} months ago', { count: diffMonths })
+  }
   if (diffYears < 2) return t('1 year ago')
 
   // Over 2 years, show specific date
@@ -110,6 +117,19 @@ function AnnouncementDot({ type }: { type?: string }) {
       )}
     />
   )
+}
+
+function getAnnouncementRenderKey(announcement: AnnouncementItem): string {
+  if (announcement.id !== undefined && announcement.id !== null) {
+    return `id:${announcement.id}`
+  }
+
+  return JSON.stringify({
+    content: announcement.content ?? '',
+    extra: announcement.extra ?? '',
+    publishDate: announcement.publishDate ?? '',
+    type: announcement.type ?? '',
+  })
 }
 
 /**
@@ -167,7 +187,7 @@ function NoticeContent({
 
   return (
     <ScrollArea className='h-[min(52vh,28rem)] pr-3'>
-      <Markdown>{notice}</Markdown>
+      <RichContent breaks content={notice} />
     </ScrollArea>
   )
 }
@@ -204,6 +224,7 @@ function AnnouncementsContent({
     <ScrollArea className='h-[min(52vh,28rem)] pr-3'>
       <div className='flex flex-col'>
         {announcements.map((item, idx) => {
+          const announcementKey = getAnnouncementRenderKey(item)
           const publishDate = item.publishDate
             ? new Date(item.publishDate)
             : null
@@ -215,18 +236,18 @@ function AnnouncementsContent({
             : ''
 
           return (
-            <div key={idx}>
+            <div key={announcementKey}>
               <div className='py-3'>
                 <div className='flex items-start gap-3'>
                   <AnnouncementDot type={item.type} />
                   <div className='flex min-w-0 flex-1 flex-col gap-2'>
                     <div className='text-sm'>
-                      <Markdown>{item.content || ''}</Markdown>
+                      <RichContent breaks content={item.content || ''} />
                     </div>
 
                     {item.extra ? (
                       <div className='text-muted-foreground text-xs'>
-                        <Markdown>{item.extra}</Markdown>
+                        <RichContent breaks content={item.extra} />
                       </div>
                     ) : null}
 

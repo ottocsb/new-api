@@ -137,6 +137,7 @@ export const ModelPricingEditorPanel = forwardRef<
   })
   const [billingExpr, setBillingExpr] = useState('')
   const [requestRuleExpr, setRequestRuleExpr] = useState('')
+  const [editorReloadToken, setEditorReloadToken] = useState(0)
   const isEditMode = !!editData
 
   const form = useForm<ModelPricingFormValues>({
@@ -198,6 +199,7 @@ export const ModelPricingEditorPanel = forwardRef<
     setPromptPrice(nextLaneState.promptPrice)
     setLanePrices(nextLaneState.prices)
     setLaneEnabled(nextLaneState.enabled)
+    setEditorReloadToken((token) => token + 1)
   }, [editData, form])
 
   const setFormValue = (field: keyof ModelPricingFormValues, value: string) => {
@@ -622,6 +624,7 @@ export const ModelPricingEditorPanel = forwardRef<
                   <TabsContent value='tiered_expr' className='pt-0'>
                     <FieldGroup className='gap-5'>
                       <TieredPricingEditor
+                        key={editorReloadToken}
                         modelName={watchedValues.name}
                         billingExpr={billingExpr}
                         requestRuleExpr={requestRuleExpr}

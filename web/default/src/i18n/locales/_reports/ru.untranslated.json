@@ -1,0 +1,9 @@
+{
+  "Hide Upstream Error": "Hide Upstream Error",
+  "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.": "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.",
+  "Channels excluded from tests": "Channels excluded from tests",
+  "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.",
+  "Charged amount = top-up USD × this ratio. Currency stays USD.": "Charged amount = top-up USD × this ratio. Currency stays USD.",
+  "Minimum top-up (Waffo Pancake)": "Minimum top-up (Waffo Pancake)",
+  "Dedicated minimum for Waffo Pancake only.": "Dedicated minimum for Waffo Pancake only."
+}

@@ -21,6 +21,7 @@ import (
 	perfmetrics "newapi/pkg/perf_metrics"
 	"newapi/router"
 	"newapi/service"
+	"newapi/service/authz"
 	_ "newapi/setting/performance_setting"
 	"newapi/setting/ratio_setting"
 
@@ -91,6 +92,9 @@ func main() {
 
 	// 热更新配置
 	go model.SyncOptions(common.SyncFrequency)
+
+	// 周期性重载授权策略，保证多节点/多 master 部署下权限变更能传播到每个实例
+	go authz.StartPolicySync(common.SyncFrequency)
 
 	// 数据看板
 	go model.UpdateQuotaData()
@@ -259,6 +263,10 @@ func InitResources() error {
 	err = model.InitDB()
 	if err != nil {
 		common.FatalLog("failed to initialize database: " + err.Error())
+		return err
+	}
+	if err = authz.Init(model.DB); err != nil {
+		common.FatalLog("failed to initialize authorization: " + err.Error())
 		return err
 	}
 

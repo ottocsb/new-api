@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
-import { Markdown } from '@/components/ui/markdown'
+import { RichContent } from '@/components/rich-content'
+import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { CTA, Features, Hero, HowItWorks } from './components'
@@ -24,21 +25,28 @@ export function Home() {
   }
 
   if (content) {
+    if (isUrl) {
+      return (
+        <PublicLayout showMainContainer={false}>
+          <iframe
+            src={content}
+            className='h-screen w-full border-none'
+            title={t('Custom Home Page')}
+            sandbox='allow-forms allow-popups allow-popups-to-escape-sandbox allow-scripts'
+          />
+        </PublicLayout>
+      )
+    }
+
     return (
-      <PublicLayout showMainContainer={false}>
-        <main className='overflow-x-hidden'>
-          {isUrl ? (
-            <iframe
-              src={content}
-              className='h-screen w-full border-none'
-              title={t('Custom Home Page')}
-            />
-          ) : (
-            <div className='container mx-auto py-8'>
-              <Markdown className='custom-home-content'>{content}</Markdown>
-            </div>
-          )}
-        </main>
+      <PublicLayout>
+        <div className='mx-auto max-w-6xl px-4 py-8'>
+          <RichContent
+            mode={isLikelyHtml(content) ? 'html' : 'markdown'}
+            content={content}
+            className='custom-home-content'
+          />
+        </div>
       </PublicLayout>
     )
   }
