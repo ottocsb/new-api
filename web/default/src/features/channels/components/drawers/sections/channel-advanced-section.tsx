@@ -13,6 +13,7 @@ type ChannelAdvancedSectionProps = {
   children: ReactNode
   open: boolean
   onOpenChange: (open: boolean) => void
+  summary?: ReactNode
 }
 
 export function ChannelAdvancedSection(props: ChannelAdvancedSectionProps) {
@@ -38,9 +39,10 @@ export function ChannelAdvancedSection(props: ChannelAdvancedSectionProps) {
               {t('Advanced Settings')}
             </div>
             <div className='text-muted-foreground text-xs'>
-              {t(
-                'Request overrides, routing behavior, and upstream model automation'
-              )}
+              {props.summary ??
+                t(
+                  'Request overrides, routing behavior, and upstream model automation'
+                )}
             </div>
           </div>
         </div>

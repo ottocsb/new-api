@@ -1,4 +1,4 @@
-import { Link2 } from 'lucide-react'
+import { KeyRound } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,11 +17,9 @@ export function ChannelApiAccessSection(props: ChannelApiAccessSectionProps) {
   return (
     <SideDrawerSection>
       <SideDrawerSectionHeader
-        title={t('API Access')}
-        description={t(
-          'Endpoint, provider-specific settings, and credentials.'
-        )}
-        icon={<Link2 className='h-4 w-4' aria-hidden='true' />}
+        title={t('Credentials')}
+        description={t('Authentication')}
+        icon={<KeyRound className='h-4 w-4' aria-hidden='true' />}
       />
       {props.children}
     </SideDrawerSection>
