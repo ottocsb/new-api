@@ -5,7 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus, Trash2, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import dayjs from '@/lib/dayjs'
+
+import { StaticDataTable } from '@/components/data-table/static/static-data-table'
+import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { DateTimePicker } from '@/components/datetime-picker'
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,11 +42,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { StaticDataTable } from '@/components/data-table/static/static-data-table'
-import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
-import { DateTimePicker } from '@/components/datetime-picker'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
+import dayjs from '@/lib/dayjs'
+
 import { SettingsSwitchField } from '../components/settings-form-layout'
 import { SettingsSection } from '../components/settings-section'
 import { useUpdateOption } from '../hooks/use-update-option'
@@ -503,16 +505,16 @@ export function AnnouncementsSection({
                   <FormLabel>{t('Type')}</FormLabel>
                   <Select
                     items={typeOptions.map((option) => ({
-                        value: option.value,
-                        label: (
-                          <div className='flex items-center gap-2'>
-                            <div
-                              className={`h-3 w-3 rounded-full ${option.color}`}
-                            />
-                            {option.label}
-                          </div>
-                        ),
-                      }))}
+                      value: option.value,
+                      label: (
+                        <div className='flex items-center gap-2'>
+                          <div
+                            className={`h-3 w-3 rounded-full ${option.color}`}
+                          />
+                          {option.label}
+                        </div>
+                      ),
+                    }))}
                     onValueChange={field.onChange}
                     value={field.value}
                   >
@@ -574,10 +576,9 @@ export function AnnouncementsSection({
             <AlertDialogDescription>
               {deleteTarget === 'single'
                 ? t('This announcement will be removed from the list.')
-                : t(
-                    '{{count}} announcements will be removed from the list.',
-                    { count: selectedIds.length }
-                  )}
+                : t('{{count}} announcements will be removed from the list.', {
+                    count: selectedIds.length,
+                  })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

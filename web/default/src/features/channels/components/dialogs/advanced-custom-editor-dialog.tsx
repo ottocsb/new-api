@@ -2,6 +2,8 @@ import { type ReactNode, useMemo, useRef, useState } from 'react'
 import { ArrowRight, Check, Plus, Shuffle, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+
+import { Dialog } from '@/components/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,8 +23,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Dialog } from '@/components/dialog'
 import { cn } from '@/lib/utils'
+
 import {
   ADVANCED_CUSTOM_AUTH_MODE_OPTIONS,
   ADVANCED_CUSTOM_CONVERTER_OPTIONS,
@@ -323,7 +325,7 @@ export function AdvancedCustomEditorDialog({
               )
             }
           >
-            <SelectTrigger className='h-8 min-w-[260px] max-w-full flex-1 sm:w-[320px]'>
+            <SelectTrigger className='h-8 max-w-full min-w-[260px] flex-1 sm:w-[320px]'>
               <SelectValue className='min-w-0 truncate'>
                 {t(templateLabel)}
               </SelectValue>
@@ -339,7 +341,7 @@ export function AdvancedCustomEditorDialog({
                     value={option.value}
                     className={longSelectItemClass}
                   >
-                    <span className='min-w-0 whitespace-normal break-words leading-snug'>
+                    <span className='min-w-0 leading-snug break-words whitespace-normal'>
                       {t(option.label)}
                     </span>
                   </SelectItem>
@@ -477,8 +479,10 @@ function RouteEditor({
     [incomingPath]
   )
   const incomingPathLabel = getAdvancedCustomIncomingPathLabel(incomingPath)
-  const converterLabel =
-    getOptionLabel(ADVANCED_CUSTOM_CONVERTER_OPTIONS, converter)
+  const converterLabel = getOptionLabel(
+    ADVANCED_CUSTOM_CONVERTER_OPTIONS,
+    converter
+  )
   const authLabel = getOptionLabel(ADVANCED_CUSTOM_AUTH_MODE_OPTIONS, authMode)
   const isNativeConverter = converter === 'none'
   const ConverterVisualIcon = isNativeConverter ? ArrowRight : Shuffle
@@ -557,7 +561,9 @@ function RouteEditor({
                     />
                     <span className='sr-only'>{t(converterLabel)}</span>
                   </TooltipTrigger>
-                  <TooltipContent side='top'>{t(converterLabel)}</TooltipContent>
+                  <TooltipContent side='top'>
+                    {t(converterLabel)}
+                  </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -579,10 +585,7 @@ function RouteEditor({
           className='lg:gap-1'
           labelClassName='lg:sr-only'
         >
-          <Select
-            value={incomingPath}
-            onValueChange={setIncomingPath}
-          >
+          <Select value={incomingPath} onValueChange={setIncomingPath}>
             <SelectTrigger className='w-full max-w-full lg:h-8'>
               <SelectValue className='min-w-0 truncate'>
                 {`${incomingPathLabel}`}
@@ -599,9 +602,9 @@ function RouteEditor({
                     value={option.value}
                     className={longSelectItemClass}
                   >
-                    <div className='flex min-w-0 flex-col gap-1 whitespace-normal leading-snug'>
+                    <div className='flex min-w-0 flex-col gap-1 leading-snug whitespace-normal'>
                       <span>{option.label}</span>
-                      <span className='text-muted-foreground break-all font-mono text-xs'>
+                      <span className='text-muted-foreground font-mono text-xs break-all'>
                         {option.value}
                       </span>
                     </div>
@@ -658,7 +661,7 @@ function RouteEditor({
                     value={option.value}
                     className={longSelectItemClass}
                   >
-                    <span className='min-w-0 whitespace-normal break-words leading-snug'>
+                    <span className='min-w-0 leading-snug break-words whitespace-normal'>
                       {t(option.label)}
                     </span>
                   </SelectItem>
@@ -767,9 +770,7 @@ function FieldBlock({
 }) {
   return (
     <div className={cn('flex min-w-0 flex-col gap-2', className)}>
-      <span className={cn('text-sm font-medium', labelClassName)}>
-        {label}
-      </span>
+      <span className={cn('text-sm font-medium', labelClassName)}>{label}</span>
       {children}
     </div>
   )

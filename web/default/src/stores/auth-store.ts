@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 import type { AdminCapabilities } from '@/lib/admin-permissions'
 
 export type UserPermissions = {

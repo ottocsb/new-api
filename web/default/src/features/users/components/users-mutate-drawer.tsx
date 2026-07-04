@@ -13,17 +13,6 @@ import {
   sideDrawerFormClassName,
   sideDrawerHeaderClassName,
 } from '@/components/drawer-layout'
-import {
-  ADMIN_PERMISSION_ACTIONS,
-  ADMIN_PERMISSION_RESOURCES,
-  EMPTY_PERMISSION_CATALOG,
-  hasPermission,
-  normalizeAdminPermissions,
-} from '@/lib/admin-permissions'
-import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
-import { formatQuota, parseQuotaFromDollars } from '@/lib/format'
-import { ROLE } from '@/lib/roles'
-import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -55,6 +44,18 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  ADMIN_PERMISSION_ACTIONS,
+  ADMIN_PERMISSION_RESOURCES,
+  EMPTY_PERMISSION_CATALOG,
+  hasPermission,
+  normalizeAdminPermissions,
+} from '@/lib/admin-permissions'
+import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
+import { formatQuota, parseQuotaFromDollars } from '@/lib/format'
+import { ROLE } from '@/lib/roles'
+import { useAuthStore } from '@/stores/auth-store'
+
 import {
   createUser,
   updateUser,
@@ -434,88 +435,93 @@ export function UsersMutateDrawer({
               {canEditAdminPermissions &&
                 targetIsAdmin &&
                 permissionCatalog.resources.length > 0 && (
-                <SideDrawerSection>
-                  <h3 className='text-sm font-medium'>
-                    {t('Admin Permissions')}
-                  </h3>
-                  <p className='text-muted-foreground text-xs'>
-                    {t(
-                      'Default administrator permissions can be overridden for this user.'
-                    )}
-                  </p>
-                  <FormField
-                    control={form.control}
-                    name='admin_permissions'
-                    render={({ field }) => {
-                      const selected = normalizeAdminPermissions(
-                        field.value,
-                        permissionCatalog
-                      )
-                      return (
-                        <FormItem>
-                          <div className='space-y-3'>
-                            {permissionCatalog.resources.map((resource) => (
-                              <div
-                                key={resource.resource}
-                                className='space-y-2 rounded-md border p-3'
-                              >
-                                <div className='text-sm font-medium'>
-                                  {t(resource.label_key)}
-                                </div>
-                                <div className='space-y-2'>
-                                  {resource.actions.map((option) => (
-                                    <label
-                                      key={option.action}
-                                      className='flex items-start gap-3'
-                                    >
-                                      <Checkbox
-                                        checked={
-                                          selected[resource.resource]?.[
-                                            option.action
-                                          ] === true
-                                        }
-                                        onCheckedChange={(checked) => {
-                                          field.onChange({
-                                            ...selected,
-                                            [resource.resource]: {
-                                              ...selected[resource.resource],
-                                              [option.action]: checked === true,
-                                            },
-                                          })
-                                        }}
-                                      />
-                                      <span className='flex flex-col gap-1'>
-                                        <span className='text-sm font-medium'>
-                                          {t(option.label_key)}
-                                        </span>
-                                        <span className='text-muted-foreground text-xs'>
-                                          {t(option.description_key)}
-                                        </span>
-                                      </span>
-                                    </label>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )
-                    }}
-                  />
-                  {currentUser && (
+                  <SideDrawerSection>
+                    <h3 className='text-sm font-medium'>
+                      {t('Admin Permissions')}
+                    </h3>
                     <p className='text-muted-foreground text-xs'>
-                      {hasPermission(
-                        currentUser,
-                        ADMIN_PERMISSION_RESOURCES.CHANNEL,
-                        ADMIN_PERMISSION_ACTIONS.SENSITIVE_WRITE
-                      )
-                        ? t('Your account can edit sensitive channel settings.')
-                        : t('Your account cannot edit sensitive channel settings.')}
+                      {t(
+                        'Default administrator permissions can be overridden for this user.'
+                      )}
                     </p>
-                  )}
-                </SideDrawerSection>
-              )}
+                    <FormField
+                      control={form.control}
+                      name='admin_permissions'
+                      render={({ field }) => {
+                        const selected = normalizeAdminPermissions(
+                          field.value,
+                          permissionCatalog
+                        )
+                        return (
+                          <FormItem>
+                            <div className='space-y-3'>
+                              {permissionCatalog.resources.map((resource) => (
+                                <div
+                                  key={resource.resource}
+                                  className='space-y-2 rounded-md border p-3'
+                                >
+                                  <div className='text-sm font-medium'>
+                                    {t(resource.label_key)}
+                                  </div>
+                                  <div className='space-y-2'>
+                                    {resource.actions.map((option) => (
+                                      <label
+                                        key={option.action}
+                                        className='flex items-start gap-3'
+                                      >
+                                        <Checkbox
+                                          checked={
+                                            selected[resource.resource]?.[
+                                              option.action
+                                            ] === true
+                                          }
+                                          onCheckedChange={(checked) => {
+                                            field.onChange({
+                                              ...selected,
+                                              [resource.resource]: {
+                                                ...selected[resource.resource],
+                                                [option.action]:
+                                                  checked === true,
+                                              },
+                                            })
+                                          }}
+                                        />
+                                        <span className='flex flex-col gap-1'>
+                                          <span className='text-sm font-medium'>
+                                            {t(option.label_key)}
+                                          </span>
+                                          <span className='text-muted-foreground text-xs'>
+                                            {t(option.description_key)}
+                                          </span>
+                                        </span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )
+                      }}
+                    />
+                    {currentUser && (
+                      <p className='text-muted-foreground text-xs'>
+                        {hasPermission(
+                          currentUser,
+                          ADMIN_PERMISSION_RESOURCES.CHANNEL,
+                          ADMIN_PERMISSION_ACTIONS.SENSITIVE_WRITE
+                        )
+                          ? t(
+                              'Your account can edit sensitive channel settings.'
+                            )
+                          : t(
+                              'Your account cannot edit sensitive channel settings.'
+                            )}
+                      </p>
+                    )}
+                  </SideDrawerSection>
+                )}
 
               {/* Binding Information (Read-only) */}
               {isUpdate && (

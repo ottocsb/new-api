@@ -1,5 +1,6 @@
 import { api } from '@/lib/api'
 import type { PermissionCatalog } from '@/lib/admin-permissions'
+
 import type {
   User,
   GetUsersParams,

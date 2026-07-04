@@ -125,9 +125,7 @@ export function PrefillGroupManagementDialog({
     try {
       const response = await deletePrefillGroup(deleteState.group.id)
       if (response.success) {
-        toast.success(
-          t('Deleted "{{name}}"', { name: deleteState.group.name })
-        )
+        toast.success(t('Deleted "{{name}}"', { name: deleteState.group.name }))
         queryClient.invalidateQueries({
           queryKey: prefillGroupsQueryKeys.lists(),
         })

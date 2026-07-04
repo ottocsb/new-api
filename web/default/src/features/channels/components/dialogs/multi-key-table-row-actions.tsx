@@ -48,9 +48,7 @@ export function MultiKeyTableRowActions({
         }}
         disabled={!canDelete}
         title={
-          canDelete
-            ? undefined
-            : t('No permission to perform this action')
+          canDelete ? undefined : t('No permission to perform this action')
         }
       >
         {t('Delete')}

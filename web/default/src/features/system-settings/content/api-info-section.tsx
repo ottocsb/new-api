@@ -5,7 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus, Trash2, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { getBgColorClass } from '@/lib/colors'
+
+import { BadgeCell } from '@/components/data-table/core/badge-cell'
+import { StaticDataTable } from '@/components/data-table/static/static-data-table'
+import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,11 +41,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { BadgeCell } from '@/components/data-table/core/badge-cell'
-import { StaticDataTable } from '@/components/data-table/static/static-data-table'
-import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
+import { getBgColorClass } from '@/lib/colors'
+
 import { SettingsSwitchField } from '../components/settings-form-layout'
 import { SettingsSection } from '../components/settings-section'
 import { useUpdateOption } from '../hooks/use-update-option'
@@ -450,16 +452,16 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
                   <FormLabel>{t('Badge Color')}</FormLabel>
                   <Select
                     items={colorOptions.map((option) => ({
-                        value: option.value,
-                        label: (
-                          <div className='flex items-center gap-2'>
-                            <div
-                              className={`h-4 w-4 rounded-full ${getBgColorClass(option.value)}`}
-                            />
-                            {option.label}
-                          </div>
-                        ),
-                      }))}
+                      value: option.value,
+                      label: (
+                        <div className='flex items-center gap-2'>
+                          <div
+                            className={`h-4 w-4 rounded-full ${getBgColorClass(option.value)}`}
+                          />
+                          {option.label}
+                        </div>
+                      ),
+                    }))}
                     onValueChange={field.onChange}
                     value={field.value}
                   >
@@ -501,10 +503,9 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
             <AlertDialogDescription>
               {deleteTarget === 'single'
                 ? t('This API shortcut will be removed from the list.')
-                : t(
-                    '{{count}} API shortcuts will be removed from the list.',
-                    { count: selectedIds.length }
-                  )}
+                : t('{{count}} API shortcuts will be removed from the list.', {
+                    count: selectedIds.length,
+                  })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
