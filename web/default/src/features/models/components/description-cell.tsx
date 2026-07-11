@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/design-system/button'
 
 import { useModels } from './models-provider'
 
@@ -23,11 +23,11 @@ export function DescriptionCell({
   }
 
   return (
-    <div className='max-w-[150px]'>
+    <div className='max-w-full sm:max-w-[150px]'>
       <Button
         variant='link'
         onClick={handleClick}
-        className='text-muted-foreground hover:text-foreground block h-auto w-full cursor-pointer overflow-hidden p-0 text-left text-sm text-ellipsis whitespace-nowrap no-underline'
+        className='text-muted-foreground hover:text-foreground block h-auto w-full cursor-pointer p-0 text-left text-sm [overflow-wrap:anywhere] whitespace-normal no-underline sm:h-auto sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap'
       >
         {description}
       </Button>

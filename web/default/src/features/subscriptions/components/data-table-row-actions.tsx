@@ -1,8 +1,8 @@
 import type { Row } from '@tanstack/react-table'
-import { Pencil, Power, PowerOff } from 'lucide-react'
+import { Pencil, Power, PowerOff, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/design-system/button'
 import {
   Tooltip,
   TooltipContent,
@@ -32,6 +32,11 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     setOpen('toggle-status')
   }
 
+  const handleResetSubscriptions = () => {
+    setCurrentRow(row.original)
+    setOpen('reset-subscriptions')
+  }
+
   return (
     <div className='-ml-1.5 flex items-center gap-1'>
       <Tooltip>
@@ -49,6 +54,23 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <Pencil />
         </TooltipTrigger>
         <TooltipContent>{t('Edit')}</TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant='ghost'
+              size='icon-sm'
+              disabled={!complianceConfirmed}
+              onClick={handleResetSubscriptions}
+              aria-label={t('Reset subscription quota')}
+            />
+          }
+        >
+          <RotateCcw />
+        </TooltipTrigger>
+        <TooltipContent>{t('Reset subscription quota')}</TooltipContent>
       </Tooltip>
 
       <Tooltip>

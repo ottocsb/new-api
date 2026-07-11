@@ -32,6 +32,16 @@ import {
   DataTableView,
   useDataTable,
 } from '@/components/data-table'
+import { Button } from '@/components/design-system/button'
+import { Input } from '@/components/design-system/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/design-system/select'
 import { Dialog } from '@/components/dialog'
 import {
   sideDrawerContentClassName,
@@ -40,18 +50,8 @@ import {
   sideDrawerHeaderClassName,
 } from '@/components/drawer-layout'
 import { StatusBadge } from '@/components/status-badge'
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Sheet,
   SheetContent,
@@ -335,7 +335,7 @@ function ChannelTestDialogContent({
     useState<FailureDetailsState | null>(null)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 30,
+    pageSize: 20,
   })
   const endpointSelectItems = useMemo(
     () =>
@@ -394,7 +394,7 @@ function ChannelTestDialogContent({
     setIsDeleteFailedDialogOpen(false)
     setIsDeletingFailed(false)
     setFailureDetails(null)
-    setPagination({ pageIndex: 0, pageSize: 30 })
+    setPagination({ pageIndex: 0, pageSize: 20 })
   }, [])
 
   const streamDisabled = STREAM_INCOMPATIBLE_ENDPOINTS.has(endpointType)
@@ -858,12 +858,9 @@ function ChannelTestDialogContent({
                 {model}
               </span>
               {isDefault && (
-                <StatusBadge
-                  label={t('Default')}
-                  variant='info'
-                  size='sm'
-                  copyable={false}
-                />
+                <StatusBadge variant='info' size='sm'>
+                  {t('Default')}
+                </StatusBadge>
               )}
             </div>
           )
@@ -1044,7 +1041,6 @@ function ChannelTestDialogContent({
                   {isBatchTesting ? (
                     <Button
                       variant='outline'
-                      size='sm'
                       onClick={handleStopBatchTest}
                       disabled={isBatchStopRequested}
                     >
@@ -1055,7 +1051,6 @@ function ChannelTestDialogContent({
                   ) : (
                     <>
                       <Button
-                        size='sm'
                         onClick={() => handleBatchTest(filteredModels)}
                         disabled={isAnyTesting || filteredModels.length === 0}
                       >
@@ -1064,7 +1059,6 @@ function ChannelTestDialogContent({
                       {successModels.length > 0 && (
                         <Button
                           variant='outline'
-                          size='sm'
                           onClick={handleSelectSuccessfulModels}
                         >
                           <CheckCircle2 data-icon='inline-start' />
@@ -1076,7 +1070,6 @@ function ChannelTestDialogContent({
                       {failedModels.length > 0 && (
                         <Button
                           variant='outline'
-                          size='sm'
                           onClick={() => setIsDeleteFailedDialogOpen(true)}
                         >
                           <Trash2 data-icon='inline-start' />
@@ -1172,16 +1165,14 @@ function TestStatusCell({ result }: { result?: TestResult }) {
   const { t } = useTranslation()
 
   if (!result || result.status === 'idle') {
-    return (
-      <StatusBadge label={t('Not tested')} variant='neutral' copyable={false} />
-    )
+    return <StatusBadge variant='neutral'>{t('Not tested')}</StatusBadge>
   }
 
   if (result.status === 'testing') {
     return (
-      <StatusBadge variant='info' copyable={false}>
+      <StatusBadge variant='info'>
         <Loader2 className='size-3.5 shrink-0 animate-spin' />
-        <span className='min-w-0 truncate leading-normal'>
+        <span className='leading-normal whitespace-nowrap'>
           {t('Testing...')}
         </span>
       </StatusBadge>
@@ -1189,12 +1180,10 @@ function TestStatusCell({ result }: { result?: TestResult }) {
   }
 
   if (result.status === 'success') {
-    return (
-      <StatusBadge label={t('Success')} variant='success' copyable={false} />
-    )
+    return <StatusBadge variant='success'>{t('Success')}</StatusBadge>
   }
 
-  return <StatusBadge label={t('Failed')} variant='danger' copyable={false} />
+  return <StatusBadge variant='destructive'>{t('Failed')}</StatusBadge>
 }
 
 function TestResultCell({
@@ -1272,7 +1261,6 @@ function FailureResultContent({
           <Button
             variant='outline'
             size='sm'
-            className='h-7 w-fit px-2 text-xs'
             onClick={() =>
               window.open('/system-settings/billing/model-pricing', '_blank')
             }
@@ -1285,7 +1273,6 @@ function FailureResultContent({
           <Button
             variant='ghost'
             size='sm'
-            className='h-7 w-fit px-2 text-xs'
             aria-haspopup='dialog'
             onClick={() => onOpenDetails({ model, summary, details })}
           >
@@ -1358,7 +1345,7 @@ function FailureDetailsSheet({
                 onClick={() => copyToClipboard(details.details)}
               >
                 {copiedText === details.details ? (
-                  <Check className='mr-2 h-4 w-4 text-green-600' />
+                  <Check className='text-success mr-2 h-4 w-4' />
                 ) : (
                   <Copy className='mr-2 h-4 w-4' />
                 )}
@@ -1389,7 +1376,6 @@ function TestModelsBulkActions({ table }: { table: TanStackTable<ModelRow> }) {
         <TooltipTrigger
           render={
             <Button
-              size='sm'
               onClick={handleCopySelected}
               disabled={selectedModels.length === 0}
             />

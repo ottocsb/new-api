@@ -1,4 +1,4 @@
-import { type ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 
 import { MaskedValueDisplay } from '@/components/masked-value-display'
@@ -14,7 +14,7 @@ import { formatQuota, formatTimestampToDate } from '@/lib/format'
 
 import { REDEMPTION_FILTER_EXPIRED, REDEMPTION_STATUSES } from '../constants'
 import { isRedemptionExpired, isTimestampExpired } from '../lib'
-import { type Redemption } from '../types'
+import type { Redemption } from '../types'
 import { DataTableRowActions } from './data-table-row-actions'
 
 export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
@@ -46,7 +46,12 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'id',
       header: t('ID'),
-      meta: { mobileHidden: true },
+      meta: {
+        cardRole: 'secondary',
+        cardOrder: 10,
+        cardSpan: 2,
+        contentMode: 'full',
+      },
       cell: ({ row }) => {
         return (
           <TableId value={row.getValue('id') as number} className='w-[60px]' />
@@ -57,7 +62,11 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'name',
       header: t('Name'),
-      meta: { mobileTitle: true },
+      meta: {
+        cardRole: 'title',
+        cardSpan: 2,
+        contentMode: 'wrap',
+      },
       cell: ({ row }) => (
         <span className='font-medium'>{row.getValue('name')}</span>
       ),
@@ -66,21 +75,14 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'status',
       header: t('Status'),
-      meta: { mobileBadge: true },
+      meta: { cardRole: 'badge', contentMode: 'full' },
       cell: ({ row }) => {
         const redemption = row.original
         const statusValue = row.getValue('status') as number
 
         // Check if expired
         if (isRedemptionExpired(redemption.expired_time, statusValue)) {
-          return (
-            <StatusBadge
-              label={t('Expired')}
-              variant='warning'
-              copyable={false}
-              className='-ml-1.5'
-            />
-          )
+          return <StatusBadge variant='warning'>{t('Expired')}</StatusBadge>
         }
 
         const statusConfig = REDEMPTION_STATUSES[statusValue]
@@ -90,12 +92,9 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
         }
 
         return (
-          <StatusBadge
-            label={t(statusConfig.labelKey)}
-            variant={statusConfig.variant}
-            copyable={false}
-            className='-ml-1.5'
-          />
+          <StatusBadge variant={statusConfig.variant}>
+            {t(statusConfig.labelKey)}
+          </StatusBadge>
         )
       },
       filterFn: (row, id, value) => {
@@ -118,6 +117,12 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
       id: 'code',
       accessorKey: 'key',
       header: t('Code'),
+      meta: {
+        cardRole: 'primary',
+        cardOrder: 10,
+        cardSpan: 2,
+        contentMode: 'summary',
+      },
       cell: function CodeCell({ row }) {
         const redemption = row.original
         const key = redemption.key
@@ -139,26 +144,28 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'quota',
       header: t('Quota'),
+      meta: {
+        cardRole: 'primary',
+        cardOrder: 20,
+        contentMode: 'full',
+      },
       cell: ({ row }) => {
         const quota = row.getValue('quota') as number
-        return (
-          <StatusBadge
-            label={formatQuota(quota)}
-            variant='neutral'
-            copyable={false}
-            className='-ml-1.5'
-          />
-        )
+        return <StatusBadge variant='neutral'>{formatQuota(quota)}</StatusBadge>
       },
       size: 120,
     },
     {
       accessorKey: 'created_time',
       header: t('Created'),
-      meta: { mobileHidden: true },
+      meta: {
+        cardRole: 'secondary',
+        cardOrder: 20,
+        contentMode: 'full',
+      },
       cell: ({ row }) => {
         return (
-          <div className='min-w-[160px] font-mono text-sm'>
+          <div className='text-sm tabular-nums'>
             {formatTimestampToDate(row.getValue('created_time'))}
           </div>
         )
@@ -168,23 +175,20 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'expired_time',
       header: t('Expires'),
-      meta: { mobileHidden: true },
+      meta: {
+        cardRole: 'secondary',
+        cardOrder: 30,
+        contentMode: 'full',
+      },
       cell: ({ row }) => {
         const expiredTime = row.getValue('expired_time') as number
         if (expiredTime === 0) {
-          return (
-            <StatusBadge
-              label={t('Never')}
-              variant='neutral'
-              copyable={false}
-              className='-ml-1.5'
-            />
-          )
+          return <StatusBadge variant='neutral'>{t('Never')}</StatusBadge>
         }
         const isExpired = isTimestampExpired(expiredTime)
         return (
           <div
-            className={`min-w-[160px] font-mono text-sm ${isExpired ? 'text-destructive' : ''}`}
+            className={`text-sm tabular-nums ${isExpired ? 'text-destructive' : ''}`}
           >
             {formatTimestampToDate(expiredTime)}
           </div>
@@ -195,7 +199,12 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
     {
       accessorKey: 'used_user_id',
       header: t('Redeemed By'),
-      meta: { mobileHidden: true },
+      meta: {
+        cardRole: 'secondary',
+        cardOrder: 40,
+        cardSpan: 2,
+        contentMode: 'full',
+      },
       cell: ({ row }) => {
         const userId = row.getValue('used_user_id') as number
         const redemption = row.original
@@ -208,14 +217,11 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
           <Tooltip>
             <TooltipTrigger
               render={
-                <StatusBadge
-                  label={t('User {{id}}', { id: userId })}
-                  variant='neutral'
-                  copyable={false}
-                  className='cursor-help'
-                />
+                <StatusBadge variant='neutral' className='cursor-help'>
+                  {t('User {{id}}', { id: userId })}
+                </StatusBadge>
               }
-            ></TooltipTrigger>
+            />
             <TooltipContent>
               <div className='space-y-1 text-xs'>
                 <div>

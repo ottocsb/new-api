@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 
 import { StaticDataTable } from '@/components/data-table/static/static-data-table'
 import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { Button } from '@/components/design-system/button'
 import { StatusBadge } from '@/components/status-badge'
-import { Button } from '@/components/ui/button'
 
 import { safeJsonParseWithValidation } from '../utils/json-parser'
 import { isObjectRecord } from '../utils/json-validators'
@@ -108,7 +108,6 @@ export function AmountDiscountVisualEditor({
             e.stopPropagation()
             handleAdd()
           }}
-          size='sm'
           className='w-full sm:w-auto'
         >
           <Plus className='h-4 w-4 sm:mr-2' />
@@ -152,8 +151,6 @@ export function AmountDiscountVisualEditor({
                 cell: (discount) => (
                   <StatusBadge
                     variant={discount.discountRate < 1 ? 'info' : 'neutral'}
-                    className='font-mono'
-                    copyable={false}
                   >
                     {formatPercentage(discount.discountRate)} {t('off')}
                   </StatusBadge>
@@ -188,8 +185,6 @@ export function AmountDiscountVisualEditor({
                     </div>
                     <StatusBadge
                       variant={discount.discountRate < 1 ? 'info' : 'neutral'}
-                      className='font-mono'
-                      copyable={false}
                     >
                       {formatPercentage(discount.discountRate)} {t('off')}
                     </StatusBadge>
@@ -198,7 +193,6 @@ export function AmountDiscountVisualEditor({
                     <Button
                       type='button'
                       variant='ghost'
-                      size='sm'
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -210,7 +204,6 @@ export function AmountDiscountVisualEditor({
                     <Button
                       type='button'
                       variant='ghost'
-                      size='sm'
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()

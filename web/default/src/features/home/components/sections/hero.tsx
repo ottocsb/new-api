@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/design-system/button'
 import { useStatus } from '@/hooks/use-status'
 
 import { HeroTerminalDemo } from '../hero-terminal-demo'
@@ -39,7 +39,8 @@ export function Hero(props: HeroProps) {
       return (
         <Button
           variant='outline'
-          className='group border-border/50 hover:border-border hover:bg-muted/50 inline-flex h-11 items-center gap-1.5 rounded-lg px-5 text-sm font-medium'
+          size='xl'
+          className='group border-border/50 hover:border-border hover:bg-muted/50 gap-1.5 rounded-lg text-sm'
           render={
             <a href={docsUrl} target='_blank' rel='noopener noreferrer' />
           }
@@ -52,7 +53,8 @@ export function Hero(props: HeroProps) {
     return (
       <Button
         variant='outline'
-        className='group border-border/50 hover:border-border hover:bg-muted/50 inline-flex h-11 items-center gap-1.5 rounded-lg px-5 text-sm font-medium'
+        size='xl'
+        className='group border-border/50 hover:border-border hover:bg-muted/50 gap-1.5 rounded-lg text-sm'
         render={<Link to={docsUrl} />}
       >
         <BookOpen className='text-muted-foreground/80 group-hover:text-foreground size-4 transition-colors duration-200' />
@@ -122,7 +124,8 @@ export function Hero(props: HeroProps) {
             {props.isAuthenticated ? (
               <>
                 <Button
-                  className='group h-11 rounded-lg px-5 text-sm font-medium'
+                  size='xl'
+                  className='group rounded-lg text-sm'
                   render={<Link to='/dashboard' />}
                 >
                   {t('Go to Dashboard')}
@@ -133,7 +136,8 @@ export function Hero(props: HeroProps) {
             ) : (
               <>
                 <Button
-                  className='group h-11 rounded-lg px-5 text-sm font-medium'
+                  size='xl'
+                  className='group rounded-lg text-sm'
                   render={<Link to='/sign-up' />}
                 >
                   {t('Get Started')}
@@ -141,7 +145,8 @@ export function Hero(props: HeroProps) {
                 </Button>
                 <Button
                   variant='outline'
-                  className='border-border/50 hover:border-border hover:bg-muted/50 h-11 rounded-lg px-5 text-sm font-medium'
+                  size='xl'
+                  className='border-border/50 hover:border-border hover:bg-muted/50 rounded-lg text-sm'
                   render={<Link to='/pricing' />}
                 >
                   {t('View Pricing')}

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { DataTableRowActionMenu } from '@/components/data-table/core/row-action-menu'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/design-system/button'
 import {
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -25,6 +25,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { encodeChannelConnectionInfo } from '@/lib/channel-connection-info'
 import { copyToClipboard } from '@/lib/copy-to-clipboard'
 
 import { updateApiKeyStatus } from '../api'
@@ -43,14 +44,6 @@ function getServerAddress(): string {
     /* empty */
   }
   return window.location.origin
-}
-
-function encodeConnectionString(key: string, url: string): string {
-  return JSON.stringify({
-    _type: 'newapi_channel_conn',
-    key,
-    url,
-  })
 }
 
 type DataTableRowActionsProps<TData> = {
@@ -142,7 +135,7 @@ export function DataTableRowActions<TData>({
               className={
                 isEnabled
                   ? 'text-destructive hover:text-destructive'
-                  : 'text-emerald-600 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-400'
+                  : 'text-success hover:text-success'
               }
             />
           }
@@ -194,7 +187,10 @@ export function DataTableRowActions<TData>({
           onClick={async () => {
             const realKey = getCachedRealKey()
             if (!realKey) return
-            const connStr = encodeConnectionString(realKey, getServerAddress())
+            const connStr = encodeChannelConnectionInfo(
+              realKey,
+              getServerAddress()
+            )
             const ok = await copyToClipboard(connStr)
             if (ok) toast.success(t('Copied'))
           }}

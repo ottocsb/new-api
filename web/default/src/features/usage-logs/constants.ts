@@ -70,14 +70,14 @@ export const TIME_RANGE_PRESETS = [
  * Log types configuration for filtering and display
  */
 export const LOG_TYPES = [
-  { value: 0, label: 'Unknown', color: 'default' },
-  { value: 1, label: 'Top-up', color: 'cyan' },
-  { value: 2, label: 'Consume', color: 'green' },
-  { value: 3, label: 'Manage', color: 'orange' },
-  { value: 4, label: 'System', color: 'purple' },
-  { value: 5, label: 'Error', color: 'red' },
-  { value: 6, label: 'Refund', color: 'blue' },
-  { value: 7, label: 'Login', color: 'teal' },
+  { value: 0, label: 'Unknown', variant: 'neutral' },
+  { value: 1, label: 'Top-up', variant: 'info' },
+  { value: 2, label: 'Consume', variant: 'success' },
+  { value: 3, label: 'Manage', variant: 'neutral' },
+  { value: 4, label: 'System', variant: 'neutral' },
+  { value: 5, label: 'Error', variant: 'destructive' },
+  { value: 6, label: 'Refund', variant: 'info' },
+  { value: 7, label: 'Login', variant: 'info' },
 ] as const
 
 /**

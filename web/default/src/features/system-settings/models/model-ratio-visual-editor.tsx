@@ -28,7 +28,7 @@ import {
   DataTableView,
   useDataTable,
 } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/design-system/button'
 import { combineBillingExpr } from '@/features/pricing/lib/billing-expr'
 import { useMediaQuery } from '@/hooks'
 
@@ -735,7 +735,7 @@ const ModelRatioVisualEditorComponent = forwardRef<
       </div>
 
       <DataTableBulkActions table={table} entityName={t('model')}>
-        <Button size='sm' disabled={!editData} onClick={handleBatchCopy}>
+        <Button disabled={!editData} onClick={handleBatchCopy}>
           <Copy data-icon='inline-start' />
           {editData
             ? t('Copy {{name}} pricing', { name: editData.name })

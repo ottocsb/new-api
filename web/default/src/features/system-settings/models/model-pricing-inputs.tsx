@@ -4,7 +4,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/components/ui/input-group'
+} from '@/components/design-system/input-group'
 import { cn } from '@/lib/utils'
 
 import {

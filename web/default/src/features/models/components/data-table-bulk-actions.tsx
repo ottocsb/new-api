@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-table'
+import { Button } from '@/components/design-system/button'
 import { Dialog } from '@/components/dialog'
-import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
@@ -85,7 +85,6 @@ export function DataTableBulkActions<TData>({
                 variant='outline'
                 size='icon'
                 onClick={handleEnableAll}
-                className='size-8'
                 aria-label={t('Enable selected models')}
                 title={t('Enable selected models')}
               />
@@ -106,7 +105,6 @@ export function DataTableBulkActions<TData>({
                 variant='outline'
                 size='icon'
                 onClick={handleDisableAll}
-                className='size-8'
                 aria-label={t('Disable selected models')}
                 title={t('Disable selected models')}
               />
@@ -127,7 +125,6 @@ export function DataTableBulkActions<TData>({
                 variant='outline'
                 size='icon'
                 onClick={handleCopyNames}
-                className='size-8'
                 aria-label={t('Copy model names')}
                 title={t('Copy model names')}
               />
@@ -148,7 +145,6 @@ export function DataTableBulkActions<TData>({
                 variant='destructive'
                 size='icon'
                 onClick={() => setShowDeleteConfirm(true)}
-                className='size-8'
                 aria-label={t('Delete selected models')}
                 title={t('Delete selected models')}
               />

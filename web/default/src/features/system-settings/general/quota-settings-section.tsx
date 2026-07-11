@@ -4,6 +4,7 @@ import type { Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as z from 'zod'
 
+import { Input } from '@/components/design-system/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   Form,
@@ -14,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
+import { formatQuota } from '@/lib/format'
 
 import { FormDirtyIndicator } from '../components/form-dirty-indicator'
 import { FormNavigationGuard } from '../components/form-navigation-guard'
@@ -46,6 +47,11 @@ const quotaSchema = z.object({
 })
 
 type QuotaFormValues = z.infer<typeof quotaSchema>
+type QuotaInputValue = number | ''
+
+function formatQuotaInputValue(value: QuotaInputValue): string {
+  return formatQuota(value === '' ? 0 : value)
+}
 
 type QuotaSettingsSectionProps = {
   defaultValues: QuotaFormValues
@@ -59,11 +65,10 @@ export function QuotaSettingsSection({
   const { t } = useTranslation()
   const updateOption = useUpdateOption()
   const handleNumberChange =
-    (onChange: (value: number | string) => void) =>
+    (onChange: (value: QuotaInputValue) => void) =>
     (event: ChangeEvent<HTMLInputElement>) => {
-      onChange(
-        event.target.value === '' ? '' : event.currentTarget.valueAsNumber
-      )
+      const value = event.currentTarget.valueAsNumber
+      onChange(Number.isNaN(value) ? '' : value)
     }
 
   const { form, handleSubmit, isDirty, isSubmitting } =
@@ -123,7 +128,12 @@ export function QuotaSettingsSection({
                     />
                   </FormControl>
                   <FormDescription>
-                    {t('Initial quota given to new users')}
+                    {t(
+                      'Initial quota given to new users ({{formattedQuota}})',
+                      {
+                        formattedQuota: formatQuotaInputValue(field.value),
+                      }
+                    )}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -171,7 +181,12 @@ export function QuotaSettingsSection({
                     />
                   </FormControl>
                   <FormDescription>
-                    {t('Quota given to users who invite others')}
+                    {t(
+                      'Quota given to users who invite others ({{formattedQuota}})',
+                      {
+                        formattedQuota: formatQuotaInputValue(field.value),
+                      }
+                    )}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -195,7 +210,9 @@ export function QuotaSettingsSection({
                     />
                   </FormControl>
                   <FormDescription>
-                    {t('Quota given to invited users')}
+                    {t('Quota given to invited users ({{formattedQuota}})', {
+                      formattedQuota: formatQuotaInputValue(field.value),
+                    })}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

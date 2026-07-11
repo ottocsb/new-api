@@ -47,6 +47,7 @@ export interface GetRedemptionsResponse {
 
 export interface SearchRedemptionsParams {
   keyword?: string
+  status?: string
   p?: number
   page_size?: number
 }

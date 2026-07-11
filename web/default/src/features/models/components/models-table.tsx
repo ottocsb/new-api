@@ -4,7 +4,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DataTablePage, useDataTable } from '@/components/data-table'
-import { useMediaQuery } from '@/hooks'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 
 import { getModels, searchModels, getVendors } from '../api'
@@ -23,7 +22,6 @@ const route = getRouteApi('/_authenticated/models/$section')
 export function ModelsTable() {
   const { t } = useTranslation()
   const { selectedVendor } = useModels()
-  const isMobile = useMediaQuery('(max-width: 640px)')
 
   // URL state management
   const {
@@ -39,7 +37,8 @@ export function ModelsTable() {
     navigate: route.useNavigate(),
     pagination: {
       defaultPage: 1,
-      defaultPageSize: isMobile ? 10 : DEFAULT_PAGE_SIZE,
+      defaultPageSize: DEFAULT_PAGE_SIZE,
+      pageSizeStorageKey: 'models:page-size:v1',
     },
     globalFilter: { enabled: true, key: 'filter' },
     columnFilters: [
@@ -183,6 +182,7 @@ export function ModelsTable() {
     <DataTablePage
       table={table}
       columns={columns}
+      tableLabel={t('Models')}
       isLoading={isLoading}
       isFetching={isFetching}
       emptyTitle={t('No Models Found')}

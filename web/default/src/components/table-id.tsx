@@ -9,7 +9,7 @@ export function TableId(props: TableIdProps) {
   return (
     <span
       className={cn(
-        'text-muted-foreground inline-block font-mono tabular-nums',
+        'text-muted-foreground inline-block tabular-nums',
         props.className
       )}
     >

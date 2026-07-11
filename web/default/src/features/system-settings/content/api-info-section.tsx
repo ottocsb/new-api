@@ -9,8 +9,6 @@ import { toast } from 'sonner'
 import { BadgeCell } from '@/components/data-table/core/badge-cell'
 import { StaticDataTable } from '@/components/data-table/static/static-data-table'
 import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
-import { Dialog } from '@/components/dialog'
-import { StatusBadge } from '@/components/status-badge'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,8 +18,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+} from '@/components/design-system/alert-dialog'
+import { Button } from '@/components/design-system/button'
+import { Input } from '@/components/design-system/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/design-system/select'
+import { Dialog } from '@/components/dialog'
+import { StatusBadge } from '@/components/status-badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
@@ -32,15 +41,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { getBgColorClass } from '@/lib/colors'
 
 import { SettingsSwitchField } from '../components/settings-form-layout'
@@ -249,13 +249,12 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
       <div className='space-y-4'>
         <div className='flex flex-wrap items-center justify-between gap-2'>
           <div className='flex flex-wrap items-center gap-2'>
-            <Button onClick={handleAdd} size='sm'>
+            <Button onClick={handleAdd}>
               <Plus className='mr-2 h-4 w-4' />
               {t('Add API')}
             </Button>
             <Button
               onClick={handleBatchDelete}
-              size='sm'
               variant='destructive'
               disabled={selectedIds.length === 0}
             >
@@ -265,7 +264,6 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
             </Button>
             <Button
               onClick={handleSaveAll}
-              size='sm'
               variant='secondary'
               disabled={!hasChanges || updateOption.isPending}
             >
@@ -313,11 +311,7 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
               cellClassName: 'max-w-xs truncate font-mono text-sm',
               cell: (apiInfo) => (
                 <BadgeCell>
-                  <StatusBadge
-                    label={apiInfo.url}
-                    variant='neutral'
-                    copyable={false}
-                  />
+                  <StatusBadge variant='neutral'>{apiInfo.url}</StatusBadge>
                 </BadgeCell>
               ),
             },
@@ -326,11 +320,7 @@ export function ApiInfoSection({ enabled, data }: ApiInfoSectionProps) {
               header: t('Route'),
               cell: (apiInfo) => (
                 <BadgeCell>
-                  <StatusBadge
-                    label={apiInfo.route}
-                    variant='neutral'
-                    copyable={false}
-                  />
+                  <StatusBadge variant='neutral'>{apiInfo.route}</StatusBadge>
                 </BadgeCell>
               ),
             },

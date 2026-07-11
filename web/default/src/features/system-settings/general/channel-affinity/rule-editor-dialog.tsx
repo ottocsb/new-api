@@ -4,15 +4,8 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { Dialog } from '@/components/dialog'
-import { Button } from '@/components/ui/button'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/design-system/button'
+import { Input } from '@/components/design-system/input'
 import {
   Select,
   SelectContent,
@@ -20,7 +13,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/design-system/select'
+import { Dialog } from '@/components/dialog'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -227,7 +227,7 @@ export function RuleEditorDialog(props: Props) {
       open={props.open}
       onOpenChange={props.onOpenChange}
       title={isEdit ? t('Edit Rule') : t('Add Rule')}
-      contentClassName='max-w-2xl'
+      contentClassName='sm:max-w-2xl'
       contentHeight='auto'
       bodyClassName='pr-2'
       footer={
@@ -292,7 +292,6 @@ export function RuleEditorDialog(props: Props) {
             <Button
               type='button'
               variant='outline'
-              size='sm'
               onClick={() =>
                 setKeySources((prev) => [...prev, createKeySourceRow()])
               }

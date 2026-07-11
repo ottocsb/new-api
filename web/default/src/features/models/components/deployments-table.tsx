@@ -14,8 +14,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { useMediaQuery } from '@/hooks'
+} from '@/components/design-system/alert-dialog'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 
 import { deleteDeployment, listDeployments, searchDeployments } from '../api'
@@ -34,7 +33,6 @@ const route = getRouteApi('/_authenticated/models/$section')
 export function DeploymentsTable() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const isMobile = useMediaQuery('(max-width: 640px)')
 
   // URL state (use dedicated keys so it won't collide with metadata table)
   const {
@@ -52,7 +50,8 @@ export function DeploymentsTable() {
       pageKey: 'dPage',
       pageSizeKey: 'dPageSize',
       defaultPage: 1,
-      defaultPageSize: isMobile ? 8 : 10,
+      defaultPageSize: 20,
+      pageSizeStorageKey: 'model-deployments:page-size:v1',
     },
     globalFilter: { enabled: true, key: 'dFilter' },
     columnFilters: [
@@ -202,6 +201,7 @@ export function DeploymentsTable() {
       <DataTablePage
         table={table}
         columns={columns}
+        tableLabel={t('Deployments')}
         isLoading={isLoading}
         isFetching={isFetching}
         emptyTitle={t('No Deployments Found')}

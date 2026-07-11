@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import { StaticDataTable } from '@/components/data-table/static/static-data-table'
 import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { Button } from '@/components/design-system/button'
+import { Input } from '@/components/design-system/input'
 import { ReactIconByName } from '@/components/react-icon-by-name'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -386,7 +386,6 @@ export function PaymentMethodsVisualEditor({
                       <Button
                         type='button'
                         variant='ghost'
-                        size='sm'
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -398,7 +397,6 @@ export function PaymentMethodsVisualEditor({
                       <Button
                         type='button'
                         variant='ghost'
-                        size='sm'
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()

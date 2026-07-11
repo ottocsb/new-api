@@ -1,9 +1,9 @@
 {
-  "Hide Upstream Error": "Hide Upstream Error",
-  "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.": "When enabled, the client only receives a generic message when this channel errors; the original error is still recorded in logs.",
-  "Channels excluded from tests": "Channels excluded from tests",
-  "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.": "Comma-separated channel IDs to skip during scheduled and bulk channel tests. Useful for auxiliary image channels where testing is costly and likely to fail.",
-  "Charged amount = top-up USD × this ratio. Currency stays USD.": "Charged amount = top-up USD × this ratio. Currency stays USD.",
-  "Minimum top-up (Waffo Pancake)": "Minimum top-up (Waffo Pancake)",
-  "Dedicated minimum for Waffo Pancake only.": "Dedicated minimum for Waffo Pancake only."
+  "Allow accountFilter parameter": "允許 accountFilter 參數",
+  "Allow upstream callbacks": "允許上游Callback",
+  "API Base URL (Important: Not Chat API) *": "API 基礎 URL (重要：非聊天 API) *",
+  "Automatically replaces upstream callback URLs with the server address.": "自動將上游Callback URL 替換為伺服器地址。",
+  "e.g., https://api.example.com (path before /suno)": "例如，https://api.example.com (在 /suno 之前的路徑)",
+  "Enter the path before /suno, usually just the domain": "輸入 /suno 之前的路徑，通常只是域名",
+  "Rewrite callback URLs to the local server": "將Callback URL 重寫到本地伺服器"
 }

@@ -2,11 +2,7 @@ import { flexRender, type Cell, type Table } from '@tanstack/react-table'
 import { Database } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  dotColorMap,
-  textColorMap,
-  type StatusVariant,
-} from '@/components/status-badge'
+import { type StatusVariant } from '@/components/status-badge'
 import {
   Empty,
   EmptyDescription,
@@ -20,6 +16,22 @@ import { cn } from '@/lib/utils'
 
 import { LOG_TYPE_ENUM } from '../constants'
 import { getLogTypeConfig } from '../lib/utils'
+
+const dotColorMap: Record<StatusVariant, string> = {
+  neutral: 'bg-neutral',
+  info: 'bg-info',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  destructive: 'bg-destructive',
+}
+
+const textColorMap: Record<StatusVariant, string> = {
+  neutral: 'text-muted-foreground',
+  info: 'text-info',
+  success: 'text-success',
+  warning: 'text-warning',
+  destructive: 'text-destructive',
+}
 
 const logTypeRowTint: Record<number, string> = {
   [LOG_TYPE_ENUM.ERROR]:
@@ -132,7 +144,7 @@ function MobileLogTimeStatus({
   const timestamp = typeof createdAt === 'number' ? createdAt : undefined
   const logType = typeof type === 'number' ? type : undefined
   const config = getLogTypeConfig(logType ?? LOG_TYPE_ENUM.UNKNOWN)
-  const variant = config.color as StatusVariant
+  const variant = config.variant as StatusVariant
 
   return (
     <div className='space-y-1'>
