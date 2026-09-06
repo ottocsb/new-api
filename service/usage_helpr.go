@@ -3,7 +3,8 @@ package service
 import (
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/gin-gonic/gin"
 )
 

@@ -5,10 +5,11 @@ import (
 	"strings"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/model"
 	"newapi/setting/operation_setting"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 )
 
 func formatNotifyType(channelId int, status int) string {

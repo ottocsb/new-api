@@ -4,14 +4,15 @@ import (
 	"io"
 	"net/http"
 
-	"newapi/logger"
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
+	"newapi/logger"
 	"newapi/relay/channel/xinference"
 	relaycommon "newapi/relay/common"
 	"newapi/service"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 )

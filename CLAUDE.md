@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 New API is an AI API gateway/proxy written in Go. It aggregates upstream AI providers (OpenAI-compatible, Claude, Gemini, Azure, AWS Bedrock, etc.) behind unified APIs, with user management, billing, rate limiting, setup/admin flows, and a React dashboard.
 
-本仓库为 QuantumNous/new-api 的本地 fork：**已彻底移除 classic 前端，只维护 `web/default/`**。所有 classic 主题相关的代码（`web/classic/` 下文件、`web/default/` 中的 `theme.frontend` 切换、`'classic'` 选项、Legacy Frontend 文案等）一律不引入；合并上游时遇到 classic 相关变更直接丢弃。
+本仓库为 QuantumNous/new-api 的本地 fork：前端只维护 `web/`（上游已于 2026-08 把 `web/default/` 重命名为 `web/` 并删除了 classic 前端，与本 fork 早先的取舍一致）。所有 classic 主题相关的代码（`theme.frontend` 切换、`'classic'` 选项、Legacy Frontend 文案等）一律不引入；合并上游时遇到 classic 相关变更直接丢弃。
+
+本 fork 另已移除以下上游功能，合并时相关变更一律丢弃：playground 在线调试、chat-presets（外部聊天链接）、每日签到（checkin）、全部媒体生成（Midjourney 绘图 / Suno 音乐 / 视频 / task 异步任务框架，含上游新的 JS 任务插件系统）。
 
 ## Common Commands
 
@@ -21,9 +23,9 @@ New API is an AI API gateway/proxy written in Go. It aggregates upstream AI prov
 - Start/stop Docker Compose stack: `make up` / `make down`
 - Reset local setup wizard state: `make reset-setup`
 
-`main.go` embeds `web/default/dist`; for a clean checkout, build the frontend before `go run`, `go build`, or tests that compile the main package.
+`main.go` embeds `web/dist`; for a clean checkout, build the frontend before `go run`, `go build`, or tests that compile the main package.
 
-### Frontend (`web/default/`)
+### Frontend (`web/`)
 
 Use Bun, not npm/yarn/pnpm, unless there is a specific reason.
 
@@ -37,7 +39,7 @@ Use Bun, not npm/yarn/pnpm, unless there is a specific reason.
 - Sync i18n keys: `bun run i18n:sync`
 - Unused code/dependency scan: `bun run knip`
 
-After changing TypeScript or TSX, run `bun run typecheck` from `web/default/` and fix all type errors.
+After changing TypeScript or TSX, run `bun run typecheck` from `web/` and fix all type errors.
 
 ## Architecture
 
@@ -70,9 +72,9 @@ When adding or changing a provider channel, keep request DTO conversion, respons
 
 ### Frontend structure
 
-The dashboard lives under `web/default/` and uses React 19, TypeScript, Rsbuild, TanStack Router/Query/Table/Virtual, Zustand, Base UI, Tailwind CSS, React Hook Form, Zod, and i18next.
+The dashboard lives under `web/` and uses React 19, TypeScript, Rsbuild, TanStack Router/Query/Table/Virtual, Zustand, Base UI, Tailwind CSS, React Hook Form, Zod, and i18next.
 
-Key frontend conventions are documented in `web/default/AGENTS.md`; follow it for component structure, i18n, route patterns, API usage, forms, state management, accessibility, and typechecking. High-level layout:
+Key frontend conventions are documented in `web/AGENTS.md`; follow it for component structure, i18n, route patterns, API usage, forms, state management, accessibility, and typechecking. High-level layout:
 
 - `src/routes/` contains TanStack Router file routes using `createFileRoute`.
 - `src/features/<feature>/` contains feature-scoped components, hooks, lib, API, constants, and types.
@@ -88,14 +90,14 @@ Key frontend conventions are documented in `web/default/AGENTS.md`; follow it fo
 - Library: `nicksnyder/go-i18n/v2`
 - Languages: `en`, `zh`
 
-### Frontend (`web/default/src/i18n/`)
+### Frontend (`web/src/i18n/`)
 
 - Library: `i18next` + `react-i18next` + `i18next-browser-languagedetector`
 - Languages: `en`, `zh`, `fr`, `ru`, `ja`, `vi`
-- Locale files: `web/default/src/i18n/locales/{lang}.json`; strings are keyed by English source text under the `translation` namespace.
+- Locale files: `web/src/i18n/locales/{lang}.json`; strings are keyed by English source text under the `translation` namespace.
 - React components must use `const { t } = useTranslation()` so language changes re-render correctly.
 - User-facing text must go through `t(...)`. Dynamic keys used from constants/config must be registered in `src/i18n/static-keys.ts` or otherwise be discoverable by the sync script.
-- Run `bun run i18n:sync` from `web/default/` after adding or changing frontend translation keys.
+- Run `bun run i18n:sync` from `web/` after adding or changing frontend translation keys.
 
 ## Project Rules
 

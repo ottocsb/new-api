@@ -1,6 +1,9 @@
 package cohere
 
-import "newapi/dto"
+import (
+	"github.com/QuantumNous/new-api/relaykit/dto"
+
+)
 
 type CohereRequest struct {
 	Model       string        `json:"model"`

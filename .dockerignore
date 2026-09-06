@@ -11,8 +11,8 @@ electron
 .eslintcache
 .gocache
 /web/node_modules
-/web/default/*
-!/web/default/dist
-!/web/default/dist/**
-/web/default/node_modules
+/web/*
+!/web/dist
+!/web/dist/**
+/web/node_modules
 !THIRD-PARTY-LICENSES.md

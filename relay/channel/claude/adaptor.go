@@ -7,12 +7,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"newapi/dto"
 	"newapi/relay/channel"
 	relaycommon "newapi/relay/common"
-	"newapi/service/relayconvert"
 	"newapi/setting/model_setting"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/relayconvert"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 )

@@ -6,6 +6,7 @@ import (
 	"newapi/controller"
 	"newapi/middleware"
 	"newapi/service/authz"
+
 	"github.com/gin-gonic/gin"
 )
 

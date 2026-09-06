@@ -13,7 +13,8 @@ import (
 
 	"newapi/common"
 	"newapi/logger"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 )

@@ -16,7 +16,8 @@ import (
 	"newapi/common"
 	"newapi/constant"
 	"newapi/logger"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/image/webp"

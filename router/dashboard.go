@@ -3,6 +3,7 @@ package router
 import (
 	"newapi/controller"
 	"newapi/middleware"
+
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )

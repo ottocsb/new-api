@@ -10,8 +10,9 @@ import (
 	"testing"
 
 	"newapi/common"
+
+	"github.com/QuantumNous/new-api/relaykit/types"
 	"github.com/gin-gonic/gin"
-	"newapi/types"
 	"github.com/stretchr/testify/require"
 )
 

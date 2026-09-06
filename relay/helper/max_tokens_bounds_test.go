@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	relayconstant "newapi/relay/constant"
+
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )

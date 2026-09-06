@@ -48,6 +48,20 @@ func TestMain(m *testing.M) {
 		&TwoFA{},
 		&TwoFABackupCode{},
 		&PasskeyCredential{},
+		&AuthFlow{},
+		&ExternalIdentityClaim{},
+		&LoginEncryptionKey{},
+		&UserSession{},
+		&CustomOAuthProvider{},
+		&SubscriptionPreConsumeRecord{},
+		&Redemption{},
+		&Option{},
+		&Model{},
+		&Vendor{},
+		&PrefillGroup{},
+		&Setup{},
+		&SystemInstance{},
+		&CasbinRule{},
 	); err != nil {
 		panic("failed to migrate: " + err.Error())
 	}

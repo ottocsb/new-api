@@ -8,9 +8,10 @@ import (
 	"strings"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/model"
 	"newapi/setting/system_setting"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 func NotifyRootUser(t string, subject string, content string) {

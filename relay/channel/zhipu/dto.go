@@ -3,7 +3,7 @@ package zhipu
 import (
 	"time"
 
-	"newapi/dto"
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 type ZhipuMessage struct {

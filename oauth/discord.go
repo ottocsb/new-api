@@ -13,6 +13,7 @@ import (
 	"newapi/logger"
 	"newapi/model"
 	"newapi/setting/system_setting"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -169,4 +170,9 @@ func (p *DiscordProvider) SetProviderUserID(user *model.User, providerUserID str
 
 func (p *DiscordProvider) GetProviderPrefix() string {
 	return "discord_"
+}
+
+// ProviderUserIDColumn returns the users-table column storing this provider's user ID.
+func (p *DiscordProvider) ProviderUserIDColumn() string {
+	return "discord_id"
 }

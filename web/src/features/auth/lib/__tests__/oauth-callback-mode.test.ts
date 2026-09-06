@@ -1,0 +1,155 @@
+import { describe, expect, test } from 'vitest'
+
+import {
+  getOAuthSessionStorage,
+  markOAuthBindPopup,
+  resolveOAuthCallbackMode,
+  type OAuthModeStorage,
+} from '../oauth-callback-mode'
+
+function fakeStorage(initial: Record<string, string> = {}): OAuthModeStorage {
+  const data = new Map(Object.entries(initial))
+  return {
+    getItem: (key: string) => data.get(key) ?? null,
+    setItem: (key: string, value: string) => void data.set(key, value),
+  }
+}
+
+const openOpener = { closed: false }
+const bindState = 'bind-state'
+
+describe('resolveOAuthCallbackMode', () => {
+  test('matching provider and state mark is treated as a bind flow', () => {
+    const storage = fakeStorage()
+    expect(markOAuthBindPopup(storage, 'oidc', bindState)).toBe(true)
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('bind')
+  })
+
+  // Regression: a tab opened from an external link (Slack, e-mail, another
+  // site) keeps a live window.opener across the cross-origin round trip to the
+  // identity provider. Treating that opener as proof of a bind flow made every
+  // such login hang on the binding screen until the 30s handshake deadline.
+  test('login redirect in a tab with a foreign opener stays a login flow', () => {
+    const storage = fakeStorage()
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('login')
+  })
+
+  test('bind marker for another provider does not hijack this callback', () => {
+    const storage = fakeStorage()
+    markOAuthBindPopup(storage, 'github', bindState)
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('login')
+  })
+
+  test('stale bind marker does not hijack a later callback', () => {
+    const storage = fakeStorage()
+    markOAuthBindPopup(storage, 'oidc', 'previous-state')
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('login')
+  })
+
+  test('bind marker without an opener falls back to login', () => {
+    const storage = fakeStorage()
+    markOAuthBindPopup(storage, 'oidc', bindState)
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: null,
+        storage,
+      })
+    ).toBe('login')
+  })
+
+  test('closed opener falls back to login', () => {
+    const storage = fakeStorage()
+    markOAuthBindPopup(storage, 'oidc', bindState)
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: { closed: true },
+        storage,
+      })
+    ).toBe('login')
+  })
+
+  test('missing storage degrades to login instead of throwing', () => {
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage: null,
+      })
+    ).toBe('login')
+  })
+
+  test('storage read failure degrades to login instead of throwing', () => {
+    const storage: OAuthModeStorage = {
+      getItem: () => {
+        throw new Error('blocked')
+      },
+      setItem: () => undefined,
+    }
+
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('login')
+  })
+})
+
+describe('OAuth bind popup storage', () => {
+  test('blocked sessionStorage getter is contained', () => {
+    const owner = {
+      get sessionStorage(): OAuthModeStorage {
+        throw new Error('blocked')
+      },
+    }
+
+    expect(getOAuthSessionStorage(owner)).toBe(null)
+  })
+
+  test('marking reports unavailable or unwritable storage', () => {
+    const storage: OAuthModeStorage = {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error('blocked')
+      },
+    }
+
+    expect(markOAuthBindPopup(null, 'oidc', bindState)).toBe(false)
+    expect(markOAuthBindPopup(storage, 'oidc', bindState)).toBe(false)
+    expect(
+      markOAuthBindPopup(
+        {
+          getItem: () => null,
+          setItem: () => undefined,
+        },
+        'oidc',
+        bindState
+      )
+    ).toBe(false)
+  })
+})

@@ -19,10 +19,11 @@ import (
 	"newapi/common"
 	"newapi/logger"
 
-	"newapi/dto"
 	"newapi/model"
 	"newapi/setting/billing_setting"
 	"newapi/setting/ratio_setting"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/samber/lo"
 
 	"github.com/gin-gonic/gin"

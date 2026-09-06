@@ -12,6 +12,7 @@ import (
 	"newapi/constant"
 	relaycommon "newapi/relay/common"
 	relayconstant "newapi/relay/constant"
+
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )

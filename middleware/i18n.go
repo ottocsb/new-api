@@ -5,8 +5,9 @@ import (
 
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
 	"newapi/i18n"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 // I18n middleware detects and sets the language preference for the request

@@ -10,8 +10,9 @@ import (
 	"time"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/setting/system_setting"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 // WebhookPayload webhook 通知的负载数据

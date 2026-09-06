@@ -4,8 +4,9 @@ import (
 	"errors"
 	"strings"
 
-	"newapi/dto"
 	"newapi/setting"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 func CheckSensitiveMessages(messages []dto.Message) ([]string, error) {

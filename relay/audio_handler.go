@@ -6,11 +6,12 @@ import (
 	"net/http"
 
 	"newapi/common"
-	"newapi/dto"
 	relaycommon "newapi/relay/common"
 	"newapi/relay/helper"
 	"newapi/service"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 )

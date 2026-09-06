@@ -3,8 +3,9 @@ package openai
 import (
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
 	relaycommon "newapi/relay/common"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 func applyUsagePostProcessing(info *relaycommon.RelayInfo, usage *dto.Usage, responseBody []byte) {

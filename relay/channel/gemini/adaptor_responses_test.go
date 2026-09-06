@@ -4,8 +4,9 @@ import (
 	"testing"
 
 	"newapi/common"
-	"newapi/dto"
 	relaycommon "newapi/relay/common"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tidwall/gjson"

@@ -3,9 +3,10 @@ package ali
 import (
 	"strings"
 
-	"newapi/dto"
 	"newapi/logger"
 	"newapi/service"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/gin-gonic/gin"
 )
 

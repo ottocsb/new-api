@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"strings"
 
-	"newapi/dto"
 	"newapi/relay/channel"
 	"newapi/relay/channel/openai"
 	relaycommon "newapi/relay/common"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"newapi/relay/constant"
 
@@ -85,7 +86,7 @@ func (a *Adaptor) ConvertOpenAIRequest(c *gin.Context, info *relaycommon.RelayIn
 			request.ReasoningEffort = "low"
 			request.Model = strings.TrimSuffix(request.Model, "-low")
 		}
-		info.ReasoningEffort = request.ReasoningEffort
+		info.SetReasoningEffort(request.ReasoningEffort)
 		info.UpstreamModelName = request.Model
 	}
 	return request, nil

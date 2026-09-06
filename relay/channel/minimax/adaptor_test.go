@@ -8,9 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"newapi/dto"
 	relaycommon "newapi/relay/common"
 	relayconstant "newapi/relay/constant"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 
 	"github.com/gin-gonic/gin"
 )

@@ -19,6 +19,7 @@ import (
 	"newapi/logger"
 	"newapi/model"
 	"newapi/setting/system_setting"
+
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"github.com/tidwall/gjson"
@@ -310,6 +311,11 @@ func (p *GenericOAuthProvider) SetProviderUserID(user *model.User, providerUserI
 
 func (p *GenericOAuthProvider) GetProviderPrefix() string {
 	return p.config.Slug + "_"
+}
+
+// ProviderUserIDColumn returns the users-table column storing this provider's user ID.
+func (p *GenericOAuthProvider) ProviderUserIDColumn() string {
+	return ""
 }
 
 // GetProviderId returns the provider ID for binding purposes

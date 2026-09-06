@@ -10,13 +10,13 @@ import (
 
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
 	relaycommon "newapi/relay/common"
 	relayconstant "newapi/relay/constant"
-	"newapi/service/relayconvert"
 	"newapi/setting/model_setting"
-	"newapi/types"
 
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/relayconvert"
+	"github.com/QuantumNous/new-api/relaykit/types"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -421,6 +421,49 @@ func TestAdaptorBuildModelListRequestRequiresConfiguredRoute(t *testing.T) {
 	_, _, err := (&Adaptor{}).BuildModelListRequest(info)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "does not configure a /v1/models route")
+}
+
+func TestAdaptorBuildBalanceRequestUsesConfiguredRoute(t *testing.T) {
+	info := advancedCustomRelayInfo(&dto.AdvancedCustomConfig{
+		Routes: []dto.AdvancedCustomRoute{
+			{
+				IncomingPath: dto.AdvancedCustomModelListPath,
+				UpstreamPath: "/provider/models",
+			},
+			{
+				IncomingPath: dto.AdvancedCustomBalancePath,
+				UpstreamPath: "/provider/balance?existing=1",
+				Auth: &dto.AdvancedCustomRouteAuth{
+					Type:  dto.AdvancedCustomAuthTypeQuery,
+					Name:  "token",
+					Value: "prefix-{api_key}",
+				},
+			},
+		},
+	})
+
+	requestURL, header, err := (&Adaptor{}).BuildBalanceRequest(info)
+	require.NoError(t, err)
+
+	parsedURL, err := url.Parse(requestURL)
+	require.NoError(t, err)
+	assert.Equal(t, "/provider/balance", parsedURL.Path)
+	assert.Equal(t, "1", parsedURL.Query().Get("existing"))
+	assert.Equal(t, "prefix-sk-test", parsedURL.Query().Get("token"))
+	assert.Empty(t, header.Get("Authorization"))
+}
+
+func TestAdaptorBuildBalanceRequestRequiresConfiguredRoute(t *testing.T) {
+	info := advancedCustomRelayInfo(&dto.AdvancedCustomConfig{
+		Routes: []dto.AdvancedCustomRoute{{
+			IncomingPath: dto.AdvancedCustomModelListPath,
+			UpstreamPath: "/provider/models",
+		}},
+	})
+
+	_, _, err := (&Adaptor{}).BuildBalanceRequest(info)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "does not configure a /v1/dashboard/billing/credit_grants route")
 }
 
 func TestAdaptorConvertsResponsesRequestToOpenAIChatUpstream(t *testing.T) {

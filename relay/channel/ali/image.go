@@ -11,11 +11,12 @@ import (
 	"time"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/logger"
 	relaycommon "newapi/relay/common"
 	"newapi/service"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -284,7 +285,10 @@ func responseAli2OpenAIImage(c *gin.Context, response *AliResponse, originBody [
 }
 
 func aliImageHandler(a *Adaptor, c *gin.Context, resp *http.Response, info *relaycommon.RelayInfo) (*types.NewAPIError, *dto.Usage) {
-	responseFormat := c.GetString("response_format")
+	responseFormat := ""
+	if imageReq, ok := info.Request.(*dto.ImageRequest); ok {
+		responseFormat = imageReq.ResponseFormat
+	}
 
 	var aliTaskResponse AliResponse
 	responseBody, err := io.ReadAll(resp.Body)

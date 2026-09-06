@@ -3,7 +3,7 @@ package zhipu_4v
 import (
 	"strings"
 
-	"newapi/dto"
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 func requestOpenAI2Zhipu(request dto.GeneralOpenAIRequest) *dto.GeneralOpenAIRequest {

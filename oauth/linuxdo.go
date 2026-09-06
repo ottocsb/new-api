@@ -15,6 +15,7 @@ import (
 	"newapi/i18n"
 	"newapi/logger"
 	"newapi/model"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -182,6 +183,11 @@ func (p *LinuxDOProvider) SetProviderUserID(user *model.User, providerUserID str
 
 func (p *LinuxDOProvider) GetProviderPrefix() string {
 	return "linuxdo_"
+}
+
+// ProviderUserIDColumn returns the users-table column storing this provider's user ID.
+func (p *LinuxDOProvider) ProviderUserIDColumn() string {
+	return "linux_do_id"
 }
 
 // TrustLevelError indicates the user's trust level is too low

@@ -1,6 +1,9 @@
 package cloudflare
 
-import "newapi/dto"
+import (
+	"github.com/QuantumNous/new-api/relaykit/dto"
+
+)
 
 type CfRequest struct {
 	Messages    []dto.Message `json:"messages,omitempty"`

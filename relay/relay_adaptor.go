@@ -21,12 +21,14 @@ import (
 	"newapi/relay/channel/mistral"
 	"newapi/relay/channel/mokaai"
 	"newapi/relay/channel/moonshot"
+	"newapi/relay/channel/newapi"
 	"newapi/relay/channel/ollama"
 	"newapi/relay/channel/openai"
 	"newapi/relay/channel/palm"
 	"newapi/relay/channel/perplexity"
 	"newapi/relay/channel/replicate"
 	"newapi/relay/channel/siliconflow"
+	"newapi/relay/channel/sub2api"
 	"newapi/relay/channel/submodel"
 	"newapi/relay/channel/tencent"
 	"newapi/relay/channel/vertex"
@@ -52,7 +54,7 @@ func GetAdaptor(apiType int) channel.Adaptor {
 	case constant.APITypePaLM:
 		return &palm.Adaptor{}
 	case constant.APITypeTencent:
-		return &tencent.Adaptor{}
+		return &tencent.DispatchAdaptor{}
 	case constant.APITypeXunfei:
 		return &xunfei.Adaptor{}
 	case constant.APITypeZhipu:
@@ -107,6 +109,10 @@ func GetAdaptor(apiType int) channel.Adaptor {
 		return &codex.Adaptor{}
 	case constant.APITypeAdvancedCustom:
 		return &advancedcustom.Adaptor{}
+	case constant.APITypeSub2API:
+		return &sub2api.Adaptor{}
+	case constant.APITypeNewAPI:
+		return &newapi.Adaptor{}
 	}
 	return nil
 }

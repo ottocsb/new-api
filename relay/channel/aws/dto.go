@@ -8,8 +8,9 @@ import (
 	"strings"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/logger"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 type AwsClaudeRequest struct {

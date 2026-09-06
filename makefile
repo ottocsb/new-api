@@ -1,4 +1,4 @@
-FRONTEND_DIR = ./web/default
+FRONTEND_DIR = ./web
 BACKEND_DIR = .
 COMPOSE_FILE = docker-compose.yml
 POSTGRES_SERVICE = postgres
@@ -91,6 +91,15 @@ down:
 dev-web:
 	@echo "Starting frontend dev server..."
 	@cd $(FRONTEND_DIR) && bun install && bun run dev
+
+# The main package embeds the ignored web/dist output and is covered after build-web.
+test:
+	@echo "Testing root Go module..."
+	@root_module=$$(GOWORK=off go list -m); \
+		root_packages=$$(GOWORK=off go list -e ./... | grep -vxF "$$root_module"); \
+		GOWORK=off go test $$root_packages
+	@echo "Testing relaykit Go module..."
+	@cd relaykit && GOWORK=off go test ./...
 
 reset-setup:
 	@echo "Resetting local setup wizard state..."

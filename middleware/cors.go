@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"newapi/common"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

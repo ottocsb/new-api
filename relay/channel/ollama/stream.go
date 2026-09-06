@@ -10,12 +10,13 @@ import (
 
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
 	"newapi/logger"
 	relaycommon "newapi/relay/common"
 	"newapi/relay/helper"
 	"newapi/service"
-	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
+	"github.com/QuantumNous/new-api/relaykit/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -58,8 +59,12 @@ func ollamaToolCallsToOpenAI(toolCalls []OllamaToolCall, startIndex int, include
 				argBytes = []byte("{}")
 			}
 		}
+		toolCallID := tc.ID
+		if toolCallID == "" {
+			toolCallID = fmt.Sprintf("call_%d", startIndex)
+		}
 		tr := dto.ToolCallResponse{
-			ID:   fmt.Sprintf("call_%d", startIndex),
+			ID:   toolCallID,
 			Type: "function",
 			Function: dto.FunctionResponse{
 				Name:      tc.Function.Name,

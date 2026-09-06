@@ -12,7 +12,8 @@ import (
 
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 const (
@@ -39,7 +40,7 @@ func Init() error {
 		bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
 
 		// Load embedded translation files
-		files := []string{"locales/zh-CN.yaml",  "locales/en.yaml"}
+		files := []string{"locales/zh-CN.yaml", "locales/en.yaml"}
 		for _, file := range files {
 			_, err := bundle.LoadMessageFileFS(localeFS, file)
 			if err != nil {

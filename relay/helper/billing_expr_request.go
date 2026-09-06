@@ -4,9 +4,10 @@ import (
 	"strings"
 
 	"newapi/common"
-	"newapi/dto"
 	"newapi/pkg/billingexpr"
 	relaycommon "newapi/relay/common"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/gin-gonic/gin"
 )
 

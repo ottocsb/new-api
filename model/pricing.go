@@ -9,10 +9,11 @@ import (
 
 	"newapi/common"
 	"newapi/constant"
-	"newapi/dto"
 	"newapi/setting/billing_setting"
 	"newapi/setting/ratio_setting"
 	"newapi/types"
+
+	"github.com/QuantumNous/new-api/relaykit/dto"
 )
 
 type Pricing struct {
