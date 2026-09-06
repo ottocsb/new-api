@@ -3,7 +3,7 @@
 import { ChevronDownIcon, PaperclipIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
-import { Button } from '@/components/design-system/button'
+import { Button } from '@/components/ui/button'
 import {
   Collapsible,
   CollapsibleContent,
@@ -218,7 +218,7 @@ export const QueueSectionTrigger = ({
       <Button
         variant='ghost'
         className={cn(
-          'group bg-muted/40 text-muted-foreground hover:bg-muted h-auto sm:h-auto w-full justify-between px-3 py-2 text-left',
+          'group bg-muted/40 text-muted-foreground hover:bg-muted h-auto w-full justify-between px-3 py-2 text-left',
           className
         )}
         type='button'

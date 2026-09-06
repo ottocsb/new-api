@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as z from 'zod'
 
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -16,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -232,6 +232,7 @@ export function RateLimitSection({ defaultValues }: RateLimitSectionProps) {
                   <Button
                     type='button'
                     variant='outline'
+                    size='sm'
                     onClick={() => setUseVisualEditor(!useVisualEditor)}
                   >
                     {useVisualEditor ? (

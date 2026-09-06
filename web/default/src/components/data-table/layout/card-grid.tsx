@@ -1,23 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { Database } from 'lucide-react'
-/*
-Copyright (C) 2023-2026 QuantumNous
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-For commercial licensing, please contact support@quantumnous.com
-*/
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -37,7 +19,7 @@ import { CardRowContent } from './card-row-content'
 /** Helpers passed to a custom {@link DataTableCardGridProps.renderCard}. */
 export type DataTableCardHelpers = {
   /**
-   * Whether the table declares title/status `cardRole` metadata.
+   * Whether the table declares compact card meta (`mobileTitle`/`mobileBadge`).
    * Provided so custom renderers can match the default layout decision.
    */
   compact: boolean
@@ -53,7 +35,6 @@ export interface DataTableCardGridProps<TData> {
   emptyTitle?: string
   emptyDescription?: string
   emptyIcon?: React.ReactNode
-  emptyAction?: React.ReactNode
   getRowKey?: (row: Row<TData>) => string | number
   getRowClassName?: (row: Row<TData>) => string | undefined
   /**
@@ -152,7 +133,6 @@ export function DataTableCardGrid<TData>(props: DataTableCardGridProps<TData>) {
             <EmptyTitle>{resolvedEmptyTitle}</EmptyTitle>
             <EmptyDescription>{resolvedEmptyDescription}</EmptyDescription>
           </EmptyHeader>
-          {props.emptyAction}
         </Empty>
       </div>
     )
@@ -169,7 +149,7 @@ export function DataTableCardGrid<TData>(props: DataTableCardGridProps<TData>) {
             data-slot='data-table-card'
             data-state={isSelected ? 'selected' : undefined}
             className={cn(
-              'rounded-lg border bg-(--data-table-card-bg,var(--table-row)) px-3.5 py-3 transition-[background-color,border-color] duration-150 data-[state=selected]:[--data-table-card-bg:color-mix(in_oklch,var(--primary)_7%,var(--table-row))] data-[state=selected]:border-primary/40',
+              'rounded-lg border bg-(--data-table-card-bg,var(--table-row)) px-3 py-2.5 transition-[background-color,border-color] duration-150 data-[state=selected]:[--data-table-card-bg:color-mix(in_oklch,var(--primary)_7%,var(--table-row))] data-[state=selected]:border-primary/40',
               props.getRowClassName?.(row)
             )}
           >

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { Dialog } from '@/components/dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,11 +14,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/design-system/alert-dialog'
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
-import { Dialog } from '@/components/dialog'
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
@@ -466,13 +466,14 @@ export function OllamaModelsDialog({
             </div>
 
             <div className='flex flex-wrap gap-2'>
-              <Button variant='outline' onClick={selectAllFiltered}>
+              <Button variant='outline' size='sm' onClick={selectAllFiltered}>
                 {t('Select all (filtered)')}
               </Button>
-              <Button variant='outline' onClick={clearSelection}>
+              <Button variant='outline' size='sm' onClick={clearSelection}>
                 {t('Clear selection')}
               </Button>
               <Button
+                size='sm'
                 onClick={() => void applySelection('append')}
                 disabled={!selected.length}
               >
@@ -480,6 +481,7 @@ export function OllamaModelsDialog({
               </Button>
               <Button
                 variant='secondary'
+                size='sm'
                 onClick={() => void applySelection('replace')}
                 disabled={!selected.length}
               >
@@ -527,8 +529,7 @@ export function OllamaModelsDialog({
 
                           <Button
                             variant='ghost'
-                            size='icon-sm'
-                            aria-label={t('Delete')}
+                            size='sm'
                             className='text-destructive hover:text-destructive'
                             onClick={() => {
                               setDeleteTarget(m.id)

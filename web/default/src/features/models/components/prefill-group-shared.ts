@@ -1,6 +1,6 @@
 import type { StatusBadgeProps } from '@/components/status-badge'
 
-import type { PrefillGroup, PrefillGroupFormValues } from '../types'
+import { type PrefillGroup, type PrefillGroupFormValues } from '../types'
 
 export type PrefillGroupType = PrefillGroup['type']
 
@@ -9,19 +9,19 @@ export const PREFILL_GROUP_TYPES = [
     value: 'model' as PrefillGroupType,
     label: 'Model Group',
     description: 'Reusable sets of models you can attach to channels.',
-    badge: 'neutral' as StatusBadgeProps['variant'],
+    badge: 'blue' as StatusBadgeProps['variant'],
   },
   {
     value: 'tag' as PrefillGroupType,
     label: 'Tag Group',
     description: 'Collections of metadata tags for bulk operations.',
-    badge: 'neutral' as StatusBadgeProps['variant'],
+    badge: 'purple' as StatusBadgeProps['variant'],
   },
   {
     value: 'endpoint' as PrefillGroupType,
     label: 'Endpoint Group',
     description: 'HTTP endpoint mappings shared across providers.',
-    badge: 'neutral' as StatusBadgeProps['variant'],
+    badge: 'cyan' as StatusBadgeProps['variant'],
   },
 ] as const
 
@@ -80,11 +80,13 @@ export function parseEndpointKeys(items: PrefillGroup['items']): string[] {
       typeof items === 'string' ? JSON.parse(items || '{}') : (items as unknown)
     if (Array.isArray(parsed)) {
       return parsed
-        .map((item) => {
-          if (typeof item === 'string') return item
-          if (typeof item?.name === 'string') return item.name
-          return ''
-        })
+        .map((item) =>
+          typeof item === 'string'
+            ? item
+            : typeof item?.name === 'string'
+              ? item.name
+              : ''
+        )
         .filter(Boolean)
     }
     if (parsed && typeof parsed === 'object') {

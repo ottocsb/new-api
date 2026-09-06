@@ -1,9 +1,10 @@
 import { Eye, EyeOff } from 'lucide-react'
 import * as React from 'react'
 
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
 import { cn } from '@/lib/utils'
+
+import { Button } from './ui/button'
+import { Input } from './ui/input'
 
 type PasswordInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -30,10 +31,10 @@ export function PasswordInput({
       />
       <Button
         type='button'
-        size='icon-xs'
+        size='icon'
         variant='ghost'
         disabled={disabled}
-        className='text-muted-foreground absolute end-1 top-1/2 -translate-y-1/2'
+        className='text-muted-foreground absolute end-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-md'
         onClick={() => setShowPassword((prev) => !prev)}
         aria-label='Toggle password visibility'
       >

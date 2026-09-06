@@ -2,7 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useLayoutEffect,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -70,8 +70,7 @@ export function ThemeProvider({
     resolveTheme(getStoredTheme(storageKey, defaultTheme))
   )
 
-  // Apply before paint to avoid a light→dark (or reverse) flash on load.
-  useLayoutEffect(() => {
+  useEffect(() => {
     const root = window.document.documentElement
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 

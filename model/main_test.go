@@ -45,6 +45,9 @@ func TestMain(m *testing.M) {
 		&PerfMetric{},
 		&SystemTask{},
 		&SystemTaskLock{},
+		&TwoFA{},
+		&TwoFABackupCode{},
+		&PasskeyCredential{},
 	); err != nil {
 		panic("failed to migrate: " + err.Error())
 	}

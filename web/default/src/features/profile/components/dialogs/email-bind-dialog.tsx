@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
 import { Dialog } from '@/components/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useCountdown } from '@/hooks/use-countdown'
 
@@ -58,7 +58,7 @@ export function EmailBindDialog({
       } else {
         toast.error(response.message || t('Failed to send verification code'))
       }
-    } catch {
+    } catch (_error) {
       toast.error(t('Failed to send verification code'))
     } finally {
       setSendingCode(false)
@@ -86,7 +86,7 @@ export function EmailBindDialog({
       } else {
         toast.error(response.message || t('Failed to bind email'))
       }
-    } catch {
+    } catch (_error) {
       toast.error(t('Failed to bind email'))
     } finally {
       setLoading(false)
@@ -103,11 +103,6 @@ export function EmailBindDialog({
         resetCountdown()
       }
     }
-  }
-
-  let sendCodeLabel = sendingCode ? t('Sending...') : t('Send')
-  if (isActive) {
-    sendCodeLabel = `${secondsLeft}s`
   }
 
   return (
@@ -176,7 +171,11 @@ export function EmailBindDialog({
               onClick={handleSendCode}
               disabled={sendingCode || isActive || !email}
             >
-              {sendCodeLabel}
+              {isActive
+                ? `${secondsLeft}s`
+                : sendingCode
+                  ? t('Sending...')
+                  : t('Send')}
             </Button>
           </div>
         </div>

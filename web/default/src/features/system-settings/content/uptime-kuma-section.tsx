@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 
 import { StaticDataTable } from '@/components/data-table/static/static-data-table'
 import { StaticRowActions } from '@/components/data-table/static/static-row-actions'
+import { Dialog } from '@/components/dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,10 +18,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/design-system/alert-dialog'
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
-import { Dialog } from '@/components/dialog'
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
@@ -31,6 +30,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 import { SettingsSwitchField } from '../components/settings-form-layout'
 import { SettingsSection } from '../components/settings-section'
@@ -224,12 +224,13 @@ export function UptimeKumaSection({ enabled, data }: UptimeKumaSectionProps) {
       <div className='space-y-4'>
         <div className='flex flex-wrap items-center justify-between gap-2'>
           <div className='flex flex-wrap items-center gap-2'>
-            <Button onClick={handleAdd}>
+            <Button onClick={handleAdd} size='sm'>
               <Plus className='mr-2 h-4 w-4' />
               {t('Add Group')}
             </Button>
             <Button
               onClick={handleBatchDelete}
+              size='sm'
               variant='destructive'
               disabled={selectedIds.length === 0}
             >
@@ -239,6 +240,7 @@ export function UptimeKumaSection({ enabled, data }: UptimeKumaSectionProps) {
             </Button>
             <Button
               onClick={handleSaveAll}
+              size='sm'
               variant='secondary'
               disabled={!hasChanges || updateOption.isPending}
             >

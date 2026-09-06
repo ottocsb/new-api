@@ -1,4 +1,4 @@
-import type { StatusVariant } from '@/components/status-badge'
+import type { StatusBadgeProps } from '@/components/status-badge'
 import {
   BILLING_PRICING_VARS,
   normalizeTierLabel,
@@ -93,10 +93,10 @@ export function parseLogOther(other: string): LogOtherData | null {
  */
 export function getTimeColor(
   seconds: number
-): 'success' | 'warning' | 'destructive' {
+): 'success' | 'warning' | 'danger' {
   if (seconds < 10) return 'success'
   if (seconds < 30) return 'warning'
-  return 'destructive'
+  return 'danger'
 }
 
 /**
@@ -104,10 +104,10 @@ export function getTimeColor(
  */
 export function getFirstResponseTimeColor(
   seconds: number
-): 'success' | 'warning' | 'destructive' {
+): 'success' | 'warning' | 'danger' {
   if (seconds < 5) return 'success'
   if (seconds < 10) return 'warning'
-  return 'destructive'
+  return 'danger'
 }
 
 /**
@@ -115,10 +115,10 @@ export function getFirstResponseTimeColor(
  */
 export function getThroughputColor(
   tokensPerSecond: number
-): 'success' | 'warning' | 'destructive' {
+): 'success' | 'warning' | 'danger' {
   if (tokensPerSecond >= 30) return 'success'
   if (tokensPerSecond >= 15) return 'warning'
-  return 'destructive'
+  return 'danger'
 }
 
 /**
@@ -127,7 +127,7 @@ export function getThroughputColor(
 export function getResponseTimeColor(
   seconds: number,
   completionTokens: number
-): 'success' | 'warning' | 'destructive' {
+): 'success' | 'warning' | 'danger' {
   if (completionTokens < 100 || seconds <= 0) return getTimeColor(seconds)
   return getThroughputColor(completionTokens / seconds)
 }
@@ -177,7 +177,7 @@ export function decodeBillingExprB64(exprB64: string | undefined): string {
 
     return decodeURIComponent(
       Array.prototype.map
-        .call(bytes, (byte: number) => `%${byte.toString(16).padStart(2, '0')}`)
+        .call(bytes, (byte: number) => '%' + byte.toString(16).padStart(2, '0'))
         .join('')
     )
   } catch {
@@ -271,7 +271,7 @@ export function formatDuration(
   submitTime?: number,
   finishTime?: number,
   unit: 'seconds' | 'milliseconds' = 'milliseconds'
-): { durationSec: number; variant: StatusVariant } | null {
+): { durationSec: number; variant: StatusBadgeProps['variant'] } | null {
   if (!submitTime || !finishTime) return null
 
   const durationSec =
@@ -279,10 +279,7 @@ export function formatDuration(
       ? (finishTime - submitTime) / 1000
       : finishTime - submitTime
 
-  return {
-    durationSec,
-    variant: durationSec > 60 ? 'destructive' : 'success',
-  }
+  return { durationSec, variant: durationSec > 60 ? 'red' : 'green' }
 }
 
 /**

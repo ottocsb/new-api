@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
+import type { OnChangeFn, SortingState } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -9,6 +11,7 @@ import {
   DataTablePage,
   useDataTable,
 } from '@/components/data-table'
+import { useMediaQuery } from '@/hooks'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 
 import { getUsers, searchUsers } from '../api'
@@ -18,12 +21,21 @@ import {
   getUserRoleOptions,
   isUserDeleted,
 } from '../constants'
-import type { User } from '../types'
+import type { User, UserSortBy } from '../types'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { useUsersColumns } from './users-columns'
 import { useUsers } from './users-provider'
 
 const route = getRouteApi('/_authenticated/users/')
+
+const USER_SORTABLE_COLUMNS = new Set<UserSortBy>([
+  'id',
+  'username',
+  'quota',
+  'group',
+  'created_at',
+  'last_login_at',
+])
 
 function isDisabledUserRow(user: User) {
   return isUserDeleted(user) || user.status === USER_STATUS.DISABLED
@@ -33,6 +45,8 @@ export function UsersTable() {
   const { t } = useTranslation()
   const columns = useUsersColumns()
   const { refreshTrigger } = useUsers()
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const [sorting, setSorting] = useState<SortingState>([])
 
   const {
     globalFilter,
@@ -45,11 +59,7 @@ export function UsersTable() {
   } = useTableUrlState({
     search: route.useSearch(),
     navigate: route.useNavigate(),
-    pagination: {
-      defaultPage: 1,
-      defaultPageSize: 20,
-      pageSizeStorageKey: 'users:page-size:v1',
-    },
+    pagination: { defaultPage: 1, defaultPageSize: isMobile ? 10 : 20 },
     globalFilter: { enabled: true, key: 'filter' },
     columnFilters: [
       { columnId: 'status', searchKey: 'status', type: 'array' },
@@ -69,6 +79,28 @@ export function UsersTable() {
     (columnFilters.find((filter) => filter.id === 'group')?.value as string) ??
     ''
 
+  const sortParams = useMemo(() => {
+    const activeSort = sorting[0]
+    if (
+      !activeSort ||
+      !USER_SORTABLE_COLUMNS.has(activeSort.id as UserSortBy)
+    ) {
+      return {}
+    }
+
+    return {
+      sort_by: activeSort.id as UserSortBy,
+      sort_order: activeSort.desc ? 'desc' : 'asc',
+    } as const
+  }, [sorting])
+
+  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
+    setSorting(updater)
+    if (pagination.pageIndex > 0) {
+      onPaginationChange({ ...pagination, pageIndex: 0 })
+    }
+  }
+
   // Fetch data with React Query
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [
@@ -79,6 +111,7 @@ export function UsersTable() {
       statusFilter,
       roleFilter,
       groupFilter,
+      sortParams,
       refreshTrigger,
     ],
     queryFn: async () => {
@@ -88,6 +121,7 @@ export function UsersTable() {
       const params = {
         p: pagination.pageIndex + 1,
         page_size: pagination.pageSize,
+        ...sortParams,
       }
 
       const result =
@@ -125,6 +159,7 @@ export function UsersTable() {
     columnFilters,
     globalFilter,
     pagination,
+    sorting,
     globalFilterFn: (row, _columnId, filterValue) => {
       const searchValue = String(filterValue).toLowerCase()
       const fields = [
@@ -141,8 +176,10 @@ export function UsersTable() {
     onPaginationChange,
     onGlobalFilterChange,
     onColumnFiltersChange,
+    onSortingChange: handleSortingChange,
     manualPagination: true,
     manualFiltering: true,
+    manualSorting: true,
     totalCount: data?.total || 0,
     ensurePageInRange,
   })
@@ -151,7 +188,6 @@ export function UsersTable() {
     <DataTablePage
       table={table}
       columns={columns}
-      tableLabel={t('Users')}
       isLoading={isLoading}
       isFetching={isFetching}
       emptyTitle={t('No Users Found')}
@@ -177,10 +213,13 @@ export function UsersTable() {
           },
         ],
       }}
-      getRowClassName={(row, { isMobile }) => {
-        if (!isDisabledUserRow(row.original)) return undefined
-        return isMobile ? DISABLED_ROW_MOBILE : DISABLED_ROW_DESKTOP
-      }}
+      getRowClassName={(row, { isMobile }) =>
+        isDisabledUserRow(row.original)
+          ? isMobile
+            ? DISABLED_ROW_MOBILE
+            : DISABLED_ROW_DESKTOP
+          : undefined
+      }
       bulkActions={<DataTableBulkActions table={table} />}
     />
   )

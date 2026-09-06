@@ -13,24 +13,6 @@ import {
   Route,
   WalletCards,
 } from 'lucide-react'
-/*
-Copyright (C) 2023-2026 QuantumNous
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-For commercial licensing, please contact support@quantumnous.com
-*/
 import {
   Fragment,
   useCallback,
@@ -41,8 +23,6 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/design-system/tabs'
-import { Toggle } from '@/components/design-system/toggle'
 import { MultiSelect } from '@/components/multi-select'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
@@ -52,7 +32,10 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
+import { IconBadge } from '@/components/ui/icon-badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Toggle } from '@/components/ui/toggle'
 import {
   Tooltip,
   TooltipContent,
@@ -666,7 +649,9 @@ export function FlowCharts(props: FlowChartsProps) {
       <div className='overflow-hidden rounded-lg border'>
         <div className='flex w-full flex-col gap-2 border-b px-3 py-2 sm:px-5 sm:py-3 lg:flex-row lg:items-center lg:justify-between'>
           <div className='flex min-w-0 items-center gap-2'>
-            <GitBranch className='text-muted-foreground/60 size-4 shrink-0' />
+            <IconBadge tone='info' size='sm'>
+              <GitBranch />
+            </IconBadge>
             <div className='text-sm font-semibold'>{chartTitle}</div>
           </div>
           <TooltipProvider>

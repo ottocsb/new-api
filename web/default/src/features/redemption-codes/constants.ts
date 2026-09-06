@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next'
 
-import type { StatusVariant } from '@/components/status-badge'
+import type { StatusBadgeProps } from '@/components/status-badge'
 
 // ============================================================================
 // Redemption Status Configuration
@@ -19,9 +19,8 @@ export const REDEMPTION_STATUS_VALUES = Object.values(REDEMPTION_STATUS).map(
 // labelKey values are i18n keys; use t(config.labelKey) in components
 export const REDEMPTION_STATUSES: Record<
   number,
-  {
+  Pick<StatusBadgeProps, 'variant'> & {
     labelKey: string
-    variant: StatusVariant
     value: number
   }
 > = {

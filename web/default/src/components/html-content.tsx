@@ -79,7 +79,10 @@ function hardenIsolatedHtml(html: string): string {
 
   template.content.querySelectorAll('a[target="_blank"]').forEach((link) => {
     const rel = new Set(
-      link.getAttribute('rel')?.split(/\s+/).filter(Boolean) ?? []
+      link
+        .getAttribute('rel')
+        ?.split(/\s+/)
+        .filter(Boolean) ?? []
     )
 
     rel.add('noopener')
@@ -161,7 +164,10 @@ function IsolatedHtmlContent(props: {
   }, [props.html])
 
   return (
-    <div ref={containerRef} className={cn('block w-full', props.className)} />
+    <div
+      ref={containerRef}
+      className={cn('block w-full', props.className)}
+    />
   )
 }
 

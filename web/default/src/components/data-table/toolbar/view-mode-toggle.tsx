@@ -1,30 +1,12 @@
-/*
-Copyright (C) 2023-2026 QuantumNous
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-For commercial licensing, please contact support@quantumnous.com
-*/
 import { Grid2X2, Table2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/design-system/tabs'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 
 import {
   DATA_TABLE_VIEW_MODES,
@@ -37,6 +19,12 @@ export type DataTableViewModeToggleProps = {
   className?: string
 }
 
+type Segment = {
+  value: DataTableViewMode
+  icon: React.ComponentType<{ className?: string }>
+  tooltip: string
+}
+
 /**
  * Reusable icon segmented control for switching a data table between table and
  * card views. Shared, accessible version of the local control used by the
@@ -45,42 +33,56 @@ export type DataTableViewModeToggleProps = {
 export function DataTableViewModeToggle(props: DataTableViewModeToggleProps) {
   const { t } = useTranslation()
 
+  const segments: Segment[] = [
+    {
+      value: DATA_TABLE_VIEW_MODES.CARD,
+      icon: Grid2X2,
+      tooltip: t('Card view'),
+    },
+    {
+      value: DATA_TABLE_VIEW_MODES.TABLE,
+      icon: Table2,
+      tooltip: t('Table view'),
+    },
+  ]
+
   return (
-    <Tabs
-      value={props.value}
-      onValueChange={(value) => props.onChange(value as DataTableViewMode)}
-      className={props.className}
+    <div
+      role='group'
+      aria-label={t('View mode')}
+      className={cn(
+        'bg-muted/60 inline-flex h-8 items-center rounded-lg border p-0.5',
+        props.className
+      )}
     >
-      <TabsList aria-label={t('View mode')}>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <TabsTrigger
-                value={DATA_TABLE_VIEW_MODES.TABLE}
-                className='px-2'
-              />
-            }
-          >
-            <Table2 aria-hidden='true' className='size-3.5' />
-            <span className='sr-only'>{t('Table view')}</span>
-          </TooltipTrigger>
-          <TooltipContent side='bottom'>{t('Table view')}</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <TabsTrigger
-                value={DATA_TABLE_VIEW_MODES.CARD}
-                className='px-2'
-              />
-            }
-          >
-            <Grid2X2 aria-hidden='true' className='size-3.5' />
-            <span className='sr-only'>{t('Card view')}</span>
-          </TooltipTrigger>
-          <TooltipContent side='bottom'>{t('Card view')}</TooltipContent>
-        </Tooltip>
-      </TabsList>
-    </Tabs>
+      {segments.map((segment) => {
+        const Icon = segment.icon
+        const isActive = segment.value === props.value
+        return (
+          <Tooltip key={segment.value}>
+            <TooltipTrigger
+              render={
+                <button
+                  type='button'
+                  onClick={() => props.onChange(segment.value)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    'inline-flex h-full w-7 items-center justify-center rounded-md text-xs font-medium transition-all',
+                    isActive
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  <Icon className='size-3.5' />
+                </button>
+              }
+            />
+            <TooltipContent side='bottom' className='text-xs'>
+              {segment.tooltip}
+            </TooltipContent>
+          </Tooltip>
+        )
+      })}
+    </div>
   )
 }

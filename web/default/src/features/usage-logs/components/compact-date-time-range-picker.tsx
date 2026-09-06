@@ -2,8 +2,8 @@ import { CalendarDays } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/design-system/button'
-import { Input } from '@/components/design-system/input'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -130,7 +130,7 @@ export function CompactDateTimeRangePicker({
                 type='datetime-local'
                 value={draftStart}
                 onChange={(e) => setDraftStart(e.target.value)}
-                className='text-sm leading-5 tabular-nums'
+                className='h-8 text-sm leading-5 tabular-nums'
               />
             </div>
             <span className='text-muted-foreground hidden pb-2 text-xs sm:block'>
@@ -144,7 +144,7 @@ export function CompactDateTimeRangePicker({
                 type='datetime-local'
                 value={draftEnd}
                 onChange={(e) => setDraftEnd(e.target.value)}
-                className='text-sm leading-5 tabular-nums'
+                className='h-8 text-sm leading-5 tabular-nums'
               />
             </div>
           </div>
@@ -153,7 +153,8 @@ export function CompactDateTimeRangePicker({
             <Button
               type='button'
               variant='secondary'
-              className='flex-1'
+              size='sm'
+              className='h-7 flex-1 px-2 text-xs'
               onClick={() => applyPreset('today')}
             >
               {t('Today')}
@@ -161,7 +162,8 @@ export function CompactDateTimeRangePicker({
             <Button
               type='button'
               variant='secondary'
-              className='flex-1'
+              size='sm'
+              className='h-7 flex-1 px-2 text-xs'
               onClick={() => applyPreset('7d')}
             >
               {t('7 Days')}
@@ -169,7 +171,8 @@ export function CompactDateTimeRangePicker({
             <Button
               type='button'
               variant='secondary'
-              className='flex-1'
+              size='sm'
+              className='h-7 flex-1 px-2 text-xs'
               onClick={() => applyPreset('week')}
             >
               {t('This week')}
@@ -177,7 +180,8 @@ export function CompactDateTimeRangePicker({
             <Button
               type='button'
               variant='secondary'
-              className='flex-1'
+              size='sm'
+              className='h-7 flex-1 px-2 text-xs'
               onClick={() => applyPreset('30d')}
             >
               {t('30 Days')}
@@ -185,7 +189,8 @@ export function CompactDateTimeRangePicker({
             <Button
               type='button'
               variant='secondary'
-              className='flex-1'
+              size='sm'
+              className='h-7 flex-1 px-2 text-xs'
               onClick={() => applyPreset('month')}
             >
               {t('This month')}
@@ -193,7 +198,9 @@ export function CompactDateTimeRangePicker({
           </div>
 
           <div className='flex justify-end'>
-            <Button onClick={applyDraft}>{t('Confirm')}</Button>
+            <Button size='sm' className='h-8' onClick={applyDraft}>
+              {t('Confirm')}
+            </Button>
           </div>
         </div>
       </PopoverContent>

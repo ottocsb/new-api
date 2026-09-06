@@ -26,6 +26,9 @@ func truncateTables(t *testing.T) {
 		DB.Exec("DELETE FROM perf_metrics")
 		DB.Exec("DELETE FROM system_tasks")
 		DB.Exec("DELETE FROM system_task_locks")
+		DB.Exec("DELETE FROM two_fas")
+		DB.Exec("DELETE FROM two_fa_backup_codes")
+		DB.Exec("DELETE FROM passkey_credentials")
 	})
 }
 

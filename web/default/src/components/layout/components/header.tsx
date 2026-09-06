@@ -1,4 +1,4 @@
-import { SidebarTrigger } from '@/components/design-system/sidebar'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 
 type HeaderProps = React.HTMLAttributes<HTMLElement>
@@ -13,7 +13,7 @@ export function Header({ className, children, ...props }: HeaderProps) {
       {...props}
     >
       <div className='flex h-full items-center gap-1.5 px-2 sm:gap-2 sm:px-3'>
-        <SidebarTrigger variant='ghost' size='icon' />
+        <SidebarTrigger variant='ghost' className='size-8' />
         {children}
       </div>
     </header>

@@ -10,10 +10,10 @@ import (
 	"newapi/constant"
 	"newapi/dto"
 	"newapi/logger"
-	"newapi/relay/channel/gemini"
 	relaycommon "newapi/relay/common"
 	"newapi/relay/helper"
 	"newapi/service"
+	"newapi/service/relayconvert"
 	"newapi/setting/model_setting"
 	"newapi/types"
 
@@ -84,7 +84,7 @@ func GeminiHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 			}
 		}
 		if request.GenerationConfig.ThinkingConfig == nil {
-			gemini.ThinkingAdaptor(request, info)
+			relayconvert.ApplyGeminiThinkingConfig(request, info)
 		}
 	}
 

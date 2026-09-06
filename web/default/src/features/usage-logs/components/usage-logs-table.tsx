@@ -9,7 +9,7 @@ import {
   DataTableRow,
   useDataTable,
 } from '@/components/data-table'
-import { useIsAdmin } from '@/hooks/use-admin'
+import { useMediaQuery } from '@/hooks'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 import { cn } from '@/lib/utils'
 
@@ -22,6 +22,7 @@ import { fetchLogs } from '../lib/utils'
 import { useCommonLogsColumns } from './columns/common-logs-columns'
 import { CommonLogsFilterBar } from './common-logs-filter-bar'
 import { UsageLogsMobileList } from './usage-logs-mobile-card'
+import { useLogsViewScope } from './usage-logs-provider'
 
 const route = getRouteApi('/_authenticated/usage-logs/$section')
 
@@ -46,7 +47,8 @@ function deserializeLogTypeFilter(value: unknown): unknown[] {
 
 export function UsageLogsTable() {
   const { t } = useTranslation()
-  const isAdmin = useIsAdmin()
+  const { isAdminView: isAdmin } = useLogsViewScope()
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const searchParams = route.useSearch()
 
   const {
@@ -58,11 +60,7 @@ export function UsageLogsTable() {
   } = useTableUrlState({
     search: route.useSearch(),
     navigate: route.useNavigate(),
-    pagination: {
-      defaultPage: 1,
-      defaultPageSize: 20,
-      pageSizeStorageKey: `usage-logs:common:${isAdmin ? 'admin' : 'user'}:page-size:v1`,
-    },
+    pagination: { defaultPage: 1, defaultPageSize: isMobile ? 20 : 100 },
     globalFilter: { enabled: false },
     columnFilters: [
       {
@@ -143,7 +141,6 @@ export function UsageLogsTable() {
     <DataTablePage
       table={table}
       columns={columns as ColumnDef<Record<string, unknown>>[]}
-      tableLabel={t('Usage Logs')}
       isLoading={isLoadingData}
       isFetching={isFetching}
       emptyTitle={t('No Logs Found')}

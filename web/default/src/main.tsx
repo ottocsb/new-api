@@ -11,7 +11,6 @@ import ReactDOM from 'react-dom/client'
 import { toast } from 'sonner'
 
 import { installBuildMetadata } from '@/lib/build-metadata'
-import { TooltipProvider } from '@/components/ui/tooltip'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
 import { initializeFrontendCache } from '@/lib/frontend-cache'
@@ -19,6 +18,7 @@ import { handleServerError } from '@/lib/handle-server-error'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { DirectionProvider } from './context/direction-provider'
+import { FontProvider } from './context/font-provider'
 import { ThemeProvider } from './context/theme-provider'
 import './i18n/config'
 // Generated Routes
@@ -125,11 +125,11 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <DirectionProvider>
-            <TooltipProvider>
+          <FontProvider>
+            <DirectionProvider>
               <RouterProvider router={router} />
-            </TooltipProvider>
-          </DirectionProvider>
+            </DirectionProvider>
+          </FontProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>

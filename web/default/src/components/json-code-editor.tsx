@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/design-system/button'
+import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
@@ -211,7 +211,7 @@ export function JsonCodeEditor({
           <span
             className={cn(
               'flex items-center gap-1 text-xs',
-              jsonStatus.valid ? 'text-success' : 'text-destructive'
+              jsonStatus.valid ? 'text-emerald-600' : 'text-destructive'
             )}
           >
             {jsonStatus.valid ? (
@@ -224,7 +224,8 @@ export function JsonCodeEditor({
           <Button
             type='button'
             variant='ghost'
-            size='xs'
+            size='sm'
+            className='h-6 px-2 text-xs'
             onClick={formatJson}
             disabled={disabled || !jsonStatus.valid || !value.trim()}
           >

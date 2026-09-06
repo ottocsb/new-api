@@ -1,4 +1,4 @@
-import type { StatusBadgeProps } from '@/components/status-badge'
+import { type StatusBadgeProps } from '@/components/status-badge'
 
 // ============================================================================
 // API Key Status Configuration
@@ -36,7 +36,7 @@ export const API_KEY_STATUSES: Record<
   },
   [API_KEY_STATUS.EXHAUSTED]: {
     label: 'Exhausted',
-    variant: 'destructive',
+    variant: 'danger',
     value: API_KEY_STATUS.EXHAUSTED,
   },
 } as const

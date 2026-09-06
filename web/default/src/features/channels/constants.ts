@@ -111,7 +111,7 @@ export const CHANNEL_STATUS_CONFIG = {
     label: 'Enabled',
   },
   [CHANNEL_STATUS.MANUAL_DISABLED]: {
-    variant: 'destructive' as const,
+    variant: 'danger' as const,
     label: 'Disabled',
   },
   [CHANNEL_STATUS.AUTO_DISABLED]: {
@@ -146,7 +146,7 @@ export const MULTI_KEY_STATUS_CONFIG = {
     label: 'Manual Disabled',
   },
   [MULTI_KEY_STATUS.AUTO_DISABLED]: {
-    variant: 'destructive' as const,
+    variant: 'danger' as const,
     label: 'Auto Disabled',
   },
 }
@@ -298,7 +298,7 @@ export const RESPONSE_TIME_CONFIG = {
   EXCELLENT: { variant: 'success' as const, label: 'Excellent' },
   GOOD: { variant: 'success' as const, label: 'Good' },
   FAIR: { variant: 'warning' as const, label: 'Fair' },
-  POOR: { variant: 'destructive' as const, label: 'Poor' },
+  POOR: { variant: 'danger' as const, label: 'Poor' },
   UNKNOWN: { variant: 'neutral' as const, label: 'Not tested' },
 } as const
 
@@ -351,7 +351,7 @@ export const FIELD_DESCRIPTIONS = {
 // ============================================================================
 
 export const MODEL_FETCHABLE_TYPES = new Set([
-  1, 4, 14, 17, 20, 23, 24, 25, 26, 27, 31, 34, 35, 40, 42, 43, 47, 48,
+  1, 4, 14, 17, 20, 23, 24, 25, 26, 27, 31, 34, 35, 40, 42, 43, 47, 48, 57, 58,
 ])
 
 export const TYPE_TO_KEY_PROMPT: Record<number, string> = {

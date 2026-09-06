@@ -75,7 +75,7 @@ export const LOG_TYPES = [
   { value: 2, label: 'Consume', variant: 'success' },
   { value: 3, label: 'Manage', variant: 'neutral' },
   { value: 4, label: 'System', variant: 'neutral' },
-  { value: 5, label: 'Error', variant: 'destructive' },
+  { value: 5, label: 'Error', variant: 'danger' },
   { value: 6, label: 'Refund', variant: 'info' },
   { value: 7, label: 'Login', variant: 'info' },
 ] as const
