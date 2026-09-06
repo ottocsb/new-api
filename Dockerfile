@@ -16,6 +16,9 @@ ENV GOEXPERIMENT=greenteagc
 WORKDIR /build
 
 ADD go.mod go.sum ./
+# relaykit 是独立 go module（go.mod 里用 replace 指向 ./relaykit），
+# go mod download 解析 replace 时需要它的 go.mod/go.sum 先就位。
+ADD relaykit/go.mod relaykit/go.sum ./relaykit/
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
@@ -31,6 +34,7 @@ COPY model ./model
 COPY oauth ./oauth
 COPY pkg ./pkg
 COPY relay ./relay
+COPY relaykit ./relaykit
 COPY router ./router
 COPY service ./service
 COPY setting ./setting
