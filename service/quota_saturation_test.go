@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"newapi/common"
+	"newapi/model"
 	relaycommon "newapi/relay/common"
 	hosttypes "newapi/types"
 
@@ -34,12 +35,13 @@ func TestAttachQuotaSaturationNestsUnderAdminInfo(t *testing.T) {
 		},
 	}
 
-	other := map[string]interface{}{"model_price": 0.004}
+	other := model.NewLogOther()
+	other.SetPublic("model_price", 0.004)
 	attachQuotaSaturation(ctx, relayInfo, other)
 
-	adminInfo, ok := other["admin_info"].(map[string]interface{})
+	adminInfo, ok := other.Snapshot()["admin_info"].(map[string]any)
 	require.True(t, ok, "admin_info should be created")
-	sat, ok := adminInfo["quota_saturation"].(map[string]interface{})
+	sat, ok := adminInfo["quota_saturation"].(map[string]any)
 	require.True(t, ok, "quota_saturation should be nested under admin_info")
 	require.Equal(t, "QuotaFromDecimal", sat["op"])
 	require.Equal(t, common.QuotaClampOverflow, sat["kind"])
@@ -77,12 +79,11 @@ func TestAttachQuotaSaturationPreservesExistingAdminInfo(t *testing.T) {
 	relayInfo := &relaycommon.RelayInfo{
 		QuotaClamp: &common.QuotaClamp{Op: "QuotaFromFloat", Kind: common.QuotaClampUnderflow, Clamped: common.MinQuota},
 	}
-	other := map[string]interface{}{
-		"admin_info": map[string]interface{}{"admin_username": "root"},
-	}
+	other := model.NewLogOther()
+	other.SetAdmin("admin_username", "root")
 	attachQuotaSaturation(ctx, relayInfo, other)
 
-	adminInfo := other["admin_info"].(map[string]interface{})
+	adminInfo := other.Snapshot()["admin_info"].(map[string]any)
 	require.Equal(t, "root", adminInfo["admin_username"], "existing admin_info fields preserved")
 	require.NotNil(t, adminInfo["quota_saturation"])
 }
@@ -94,10 +95,11 @@ func TestAttachQuotaSaturationNoClampNoMarker(t *testing.T) {
 	ctx, _ := gin.CreateTestContext(nil)
 
 	relayInfo := &relaycommon.RelayInfo{QuotaClamp: nil}
-	other := map[string]interface{}{"model_price": 0.004}
+	other := model.NewLogOther()
+	other.SetPublic("model_price", 0.004)
 	attachQuotaSaturation(ctx, relayInfo, other)
 
-	_, hasAdmin := other["admin_info"]
+	_, hasAdmin := other.Snapshot()["admin_info"]
 	require.False(t, hasAdmin, "no admin_info should be added when there is no clamp")
 }
 

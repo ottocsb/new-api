@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"newapi/common"
+	"newapi/i18n"
 	"newapi/model"
 	"newapi/setting/operation_setting"
 
@@ -16,30 +17,44 @@ func formatNotifyType(channelId int, status int) string {
 	return fmt.Sprintf("%s_%d_%d", dto.NotifyTypeChannelUpdate, channelId, status)
 }
 
+func shouldCloseActiveWebSocketsAfterDisable(channelId int) bool {
+	channel, err := model.GetChannelById(channelId, true)
+	if err != nil {
+		common.SysLog(common.LogText("failed to check channel status before closing active websockets: channel_id=%d, error=%v", channelId, err))
+		return true
+	}
+	return channel.Status != common.ChannelStatusEnabled
+}
+
 // disable & notify
 func DisableChannel(channelError types.ChannelError, reason string) {
-	common.SysLog(fmt.Sprintf("通道「%s」（#%d）发生错误，准备禁用，原因：%s", channelError.ChannelName, channelError.ChannelId, common.LocalLogPreview(reason)))
+	common.SysLog(common.LogText("channel %q (#%d) failed, disabling it, reason: %s", channelError.ChannelName, channelError.ChannelId, common.LocalLogPreview(reason)))
 
 	// 检查是否启用自动禁用功能
 	if !channelError.AutoBan {
-		common.SysLog(fmt.Sprintf("通道「%s」（#%d）未启用自动禁用功能，跳过禁用操作", channelError.ChannelName, channelError.ChannelId))
+		common.SysLog(common.LogText("channel %q (#%d) has automatic disabling turned off, skipping", channelError.ChannelName, channelError.ChannelId))
 		return
 	}
 
 	success := model.UpdateChannelStatus(channelError.ChannelId, channelError.UsingKey, common.ChannelStatusAutoDisabled, reason)
 	if success {
-		subject := fmt.Sprintf("通道「%s」（#%d）已被禁用 / Channel \"%s\" (#%d) disabled", channelError.ChannelName, channelError.ChannelId, channelError.ChannelName, channelError.ChannelId)
-		content := fmt.Sprintf("通道「%s」（#%d）已被禁用，原因：%s / Channel \"%s\" (#%d) has been disabled. Reason: %s", channelError.ChannelName, channelError.ChannelId, reason, channelError.ChannelName, channelError.ChannelId, reason)
-		NotifyRootUser(formatNotifyType(channelError.ChannelId, common.ChannelStatusAutoDisabled), subject, content)
+		if shouldCloseActiveWebSocketsAfterDisable(channelError.ChannelId) {
+			CloseActiveWebSocketsForChannel(channelError.ChannelId, ChannelDisabledCloseReason)
+		}
+		params := map[string]any{"Name": channelError.ChannelName, "Id": channelError.ChannelId, "Reason": reason}
+		NotifyChannelWatchers(formatNotifyType(channelError.ChannelId, common.ChannelStatusAutoDisabled), func(lang string) (string, string) {
+			return i18n.Translate(lang, i18n.MsgChannelNotifyDisabledSubject, params), i18n.Translate(lang, i18n.MsgChannelNotifyDisabledContent, params)
+		})
 	}
 }
 
 func EnableChannel(channelId int, usingKey string, channelName string) {
 	success := model.UpdateChannelStatus(channelId, usingKey, common.ChannelStatusEnabled, "")
 	if success {
-		subject := fmt.Sprintf("通道「%s」（#%d）已被启用 / Channel \"%s\" (#%d) enabled", channelName, channelId, channelName, channelId)
-		content := fmt.Sprintf("通道「%s」（#%d）已被启用 / Channel \"%s\" (#%d) has been enabled", channelName, channelId, channelName, channelId)
-		NotifyRootUser(formatNotifyType(channelId, common.ChannelStatusEnabled), subject, content)
+		params := map[string]any{"Name": channelName, "Id": channelId}
+		NotifyChannelWatchers(formatNotifyType(channelId, common.ChannelStatusEnabled), func(lang string) (string, string) {
+			return i18n.Translate(lang, i18n.MsgChannelNotifyEnabledSubject, params), i18n.Translate(lang, i18n.MsgChannelNotifyEnabledContent, params)
+		})
 	}
 }
 

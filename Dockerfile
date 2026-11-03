@@ -4,7 +4,7 @@
 # 单独执行 docker build 时，需要确保 web/dist 已存在
 # 需要启用 BuildKit（现代 docker 默认开启），cache mounts 会让 go build 走增量编译
 
-FROM golang:1.26.1-alpine@sha256:2389ebfa5b7f43eeafbd6be0c3700cc46690ef842ad962f6c5bd6be49ed82039 AS builder
+FROM golang:1.26.10-alpine@sha256:9ce231b28998b32e116927c61aa5c406183061d4f3f2d61b292c88e7f6bdf7ca AS builder
 ENV GO111MODULE=on CGO_ENABLED=0
 
 ARG TARGETOS
@@ -16,9 +16,10 @@ ENV GOEXPERIMENT=greenteagc
 WORKDIR /build
 
 ADD go.mod go.sum ./
-# relaykit 是独立 go module（go.mod 里用 replace 指向 ./relaykit），
+# relaykit/tokenkit 是独立 go module（go.mod 里用 replace 指向本地目录），
 # go mod download 解析 replace 时需要它的 go.mod/go.sum 先就位。
 ADD relaykit/go.mod relaykit/go.sum ./relaykit/
+ADD tokenkit/go.mod tokenkit/go.sum ./tokenkit/
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
@@ -38,6 +39,7 @@ COPY relaykit ./relaykit
 COPY router ./router
 COPY service ./service
 COPY setting ./setting
+COPY tokenkit ./tokenkit
 COPY types ./types
 COPY web/dist ./web/dist
 RUN --mount=type=cache,target=/go/pkg/mod \

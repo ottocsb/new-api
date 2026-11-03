@@ -1,38 +1,50 @@
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 
 import {
   DataTablePage,
   DataTableRow,
   useDataTable,
 } from '@/components/data-table'
+import {
+  getAdminPlans,
+  getSelfSubscriptionFull,
+} from '@/features/subscriptions/api'
 import { useMediaQuery } from '@/hooks'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
+import { createServerError } from '@/lib/server-error-message'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/auth-store'
 
 import {
   DEFAULT_LOGS_DATA,
   LOG_TYPE_ALL_VALUE,
   LOG_TYPE_ENUM,
 } from '../constants'
+import { shouldShowBillingSource } from '../lib/billing-source'
+import { parseLogOther } from '../lib/format'
 import { fetchLogs } from '../lib/utils'
 import { useCommonLogsColumns } from './columns/common-logs-columns'
 import { CommonLogsFilterBar } from './common-logs-filter-bar'
 import { UsageLogsMobileList } from './usage-logs-mobile-card'
-import { useLogsViewScope } from './usage-logs-provider'
+import { useLogsViewScope, type LogsViewAccess } from './usage-logs-provider'
 
 const route = getRouteApi('/_authenticated/usage-logs/$section')
 
 const logTypeRowTint: Record<number, string> = {
-  [LOG_TYPE_ENUM.ERROR]: 'bg-destructive/5',
-  [LOG_TYPE_ENUM.REFUND]: 'bg-info/5',
+  [LOG_TYPE_ENUM.ERROR]: 'bg-rose-50/40 dark:bg-rose-950/20',
+  [LOG_TYPE_ENUM.REFUND]: 'bg-blue-50/30 dark:bg-blue-950/15',
 }
 
-function getColumnVisibilityStorageKey(isAdmin: boolean): string {
-  return `usage-logs:common:${isAdmin ? 'admin' : 'user'}:column-visibility`
+// Warning tint for logs where a quota conversion saturated (admin-only marker).
+// Takes precedence over the per-type tint since it flags a billing anomaly.
+const quotaSaturationRowTint = 'bg-amber-50/60 dark:bg-amber-950/25'
+
+function getColumnVisibilityStorageKey(viewAccess: LogsViewAccess): string {
+  return `usage-logs:common:${viewAccess}:column-visibility`
 }
 
 function deserializeLogTypeFilter(value: unknown): unknown[] {
@@ -47,9 +59,38 @@ function deserializeLogTypeFilter(value: unknown): unknown[] {
 
 export function UsageLogsTable() {
   const { t } = useTranslation()
-  const { isAdminView: isAdmin } = useLogsViewScope()
+  const getColumnClassName = useCallback(() => 'py-2', [])
+  const {
+    isAdminView: isAdmin,
+    isRootView: isRoot,
+    viewAccess,
+  } = useLogsViewScope()
   const isMobile = useMediaQuery('(max-width: 640px)')
   const searchParams = route.useSearch()
+  const userId = useAuthStore((state) => state.auth.user?.id)
+  const { data: showBillingSource = false } = useQuery({
+    queryKey: ['usage-log-billing-source', isAdmin, userId],
+    enabled: userId != null,
+    queryFn: async () => {
+      if (isAdmin) {
+        const plansResult = await getAdminPlans()
+        return shouldShowBillingSource({
+          isAdmin,
+          plans: plansResult.success ? plansResult.data : undefined,
+          subscriptions: undefined,
+        })
+      }
+
+      const selfResult = await getSelfSubscriptionFull()
+      return shouldShowBillingSource({
+        isAdmin,
+        plans: undefined,
+        subscriptions: selfResult.success
+          ? selfResult.data?.subscriptions
+          : undefined,
+      })
+    },
+  })
 
   const {
     columnFilters,
@@ -92,7 +133,7 @@ export function UsageLogsTable() {
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [
       'logs',
-      isAdmin,
+      viewAccess,
       pagination.pageIndex + 1,
       pagination.pageSize,
       columnFilters,
@@ -109,24 +150,28 @@ export function UsageLogsTable() {
       })
 
       if (!result?.success) {
-        toast.error(result?.message || t('Failed to load logs'))
-        return DEFAULT_LOGS_DATA
+        throw createServerError(result, t('Failed to load logs'))
       }
 
       return result.data || DEFAULT_LOGS_DATA
     },
-    placeholderData: (previousData) => previousData,
+    placeholderData: (previousData, previousQuery) => {
+      if (previousQuery?.queryKey[1] === viewAccess) {
+        return previousData
+      }
+      return undefined
+    },
   })
 
   const logs = data?.items || []
-  const columns = useCommonLogsColumns(isAdmin)
+  const columns = useCommonLogsColumns(isAdmin, isRoot, showBillingSource)
   const isLoadingData = isLoading || (isFetching && !data)
 
   const { table } = useDataTable({
     data: logs as Record<string, unknown>[],
     columns: columns as ColumnDef<Record<string, unknown>>[],
     columnFilters,
-    columnVisibilityStorageKey: getColumnVisibilityStorageKey(isAdmin),
+    columnVisibilityStorageKey: getColumnVisibilityStorageKey(viewAccess),
     pagination,
     enableRowSelection: false,
     onPaginationChange,
@@ -140,6 +185,7 @@ export function UsageLogsTable() {
   return (
     <DataTablePage
       table={table}
+      compactPagination={isMobile}
       columns={columns as ColumnDef<Record<string, unknown>>[]}
       isLoading={isLoadingData}
       isFetching={isFetching}
@@ -152,20 +198,32 @@ export function UsageLogsTable() {
       tableClassName={cn(
         '[&_[data-slot=table]]:text-[13px] [&_[data-slot=table]_td]:text-[13px] [&_[data-slot=table]_td_*]:text-[13px] [&_[data-slot=table]_th]:text-[13px] [&_[data-slot=table]_th_*]:text-[13px]'
       )}
-      mobile={<UsageLogsMobileList table={table} isLoading={isLoadingData} />}
+      mobile={
+        <UsageLogsMobileList table={table} isLoading={isLoadingData} />
+      }
       toolbar={<CommonLogsFilterBar table={table} />}
       renderRow={(row) => {
         const logType = (row.original as Record<string, unknown>).type as
           | number
           | undefined
-        const tintClass = logType != null ? (logTypeRowTint[logType] ?? '') : ''
+        let tintClass =
+          logType != null ? (logTypeRowTint[logType] ?? '') : ''
+        if (isAdmin) {
+          const other = parseLogOther(
+            ((row.original as Record<string, unknown>).other as string) ?? ''
+          )
+          if (other?.admin_info?.quota_saturation) {
+            tintClass = quotaSaturationRowTint
+          }
+        }
 
         return (
           <DataTableRow
             key={row.id}
             row={row}
             className={cn('transition-colors', tintClass)}
-            getColumnClassName={() => 'py-2'}
+            getColumnClassName={getColumnClassName}
+            cellRenderColumns={table.options.columns}
           />
         )
       }}

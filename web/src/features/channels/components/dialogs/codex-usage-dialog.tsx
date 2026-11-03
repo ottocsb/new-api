@@ -40,6 +40,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import dayjs from '@/lib/dayjs'
 import { formatDateTimeStr, formatTimestampToDate } from '@/lib/format'
+import { createServerError, getServerMessage } from '@/lib/server-error-message'
 import { cn } from '@/lib/utils'
 
 import {
@@ -929,7 +930,7 @@ export function CodexUsageDialog({
 
   const errorMessage =
     response?.success === false
-      ? response?.message?.trim() || t('Failed to fetch usage')
+      ? getServerMessage(response)?.trim() || t('Failed to fetch usage')
       : ''
 
   const loadResetCredits = useCallback(
@@ -947,8 +948,9 @@ export function CodexUsageDialog({
       try {
         const res = await getCodexResetCredits(channelId)
         if (!res.success) {
-          throw new Error(
-            res.message || t('Failed to fetch reset credit details')
+          throw createServerError(
+            res,
+            t('Failed to fetch reset credit details')
           )
         }
         setResetCreditsResponse(res)
@@ -998,7 +1000,7 @@ export function CodexUsageDialog({
     try {
       const res = await resetCodexUsage(channelId)
       if (!res.success) {
-        throw new Error(res.message || t('Failed to reset usage'))
+        throw createServerError(res, t('Failed to reset usage'))
       }
 
       const resetPayload = res.data as

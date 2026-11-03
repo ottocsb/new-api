@@ -1,12 +1,7 @@
-import { flexRender, type Cell, type Table } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import { Database } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  dotColorMap,
-  type StatusVariant,
-  textColorMap,
-} from '@/components/status-badge'
 import {
   Empty,
   EmptyDescription,
@@ -15,11 +10,11 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
-import { formatTimestampToDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 import { LOG_TYPE_ENUM } from '../constants'
-import { getLogTypeConfig } from '../lib/utils'
+import type { UsageLog } from '../data/schema'
+import { CommonLogMobileCard } from './common-log-mobile-card'
 
 const logTypeRowTint: Record<number, string> = {
   [LOG_TYPE_ENUM.ERROR]:
@@ -35,13 +30,27 @@ interface UsageLogsMobileListProps<TData> {
   emptyDescription?: string
 }
 
-function UsageLogsMobileSkeleton() {
+function UsageLogsMobileSkeleton(props: { separate: boolean }) {
+  const { t } = useTranslation()
   return (
-    <div className='border-border/50 bg-card overflow-hidden rounded-lg border'>
+    <div
+      role='status'
+      aria-label={t('Loading')}
+      aria-busy='true'
+      className={
+        props.separate
+          ? 'min-w-0 space-y-3'
+          : 'border-border/50 bg-card overflow-hidden rounded-lg border'
+      }
+    >
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className='border-border/40 space-y-2.5 border-b p-3 last:border-b-0'
+          className={
+            props.separate
+              ? 'border-border/60 bg-card space-y-3 rounded-xl border p-3.5'
+              : 'border-border/40 space-y-2.5 border-b p-3 last:border-b-0'
+          }
         >
           <div className='flex items-center justify-between gap-3'>
             <Skeleton className='h-5 w-40 rounded-md' />
@@ -61,164 +70,6 @@ function UsageLogsMobileSkeleton() {
   )
 }
 
-function CompactCell<TData>({
-  cell,
-  fallback = '-',
-  className,
-  primaryOnly = false,
-}: {
-  cell?: Cell<TData, unknown>
-  fallback?: string
-  className?: string
-  primaryOnly?: boolean
-}) {
-  return (
-    <div
-      className={cn(
-        'min-w-0 overflow-hidden leading-tight [&_button]:max-w-full [&_span]:max-w-full',
-        primaryOnly &&
-          '[&_.flex-col]:min-w-0 [&_.flex-col>*:not(:first-child)]:hidden',
-        className
-      )}
-    >
-      {cell ? (
-        flexRender(cell.column.columnDef.cell, cell.getContext())
-      ) : (
-        <span className='text-muted-foreground/50'>{fallback}</span>
-      )}
-    </div>
-  )
-}
-
-function SummaryField<TData>({
-  label,
-  cell,
-  className,
-  valueClassName,
-  primaryOnly = false,
-}: {
-  label: string
-  cell?: Cell<TData, unknown>
-  className?: string
-  valueClassName?: string
-  primaryOnly?: boolean
-}) {
-  if (!cell) return null
-
-  return (
-    <div
-      className={cn('bg-muted/20 min-w-0 rounded-md px-2 py-1.5', className)}
-    >
-      <div className='text-muted-foreground mb-1 text-[11px] leading-none font-medium select-none'>
-        {label}
-      </div>
-      <CompactCell
-        cell={cell}
-        primaryOnly={primaryOnly}
-        className={valueClassName}
-      />
-    </div>
-  )
-}
-
-function MobileLogTimeStatus({
-  createdAt,
-  type,
-}: {
-  createdAt: unknown
-  type: unknown
-}) {
-  const { t } = useTranslation()
-  const timestamp = typeof createdAt === 'number' ? createdAt : undefined
-  const logType = typeof type === 'number' ? type : undefined
-  const config = getLogTypeConfig(logType ?? LOG_TYPE_ENUM.UNKNOWN)
-  const variant = config.variant as StatusVariant
-
-  return (
-    <div className='space-y-1'>
-      <div className='font-mono text-xs leading-tight tabular-nums'>
-        {formatTimestampToDate(timestamp)}
-      </div>
-      <div
-        className={cn(
-          'inline-flex items-center gap-1 text-xs leading-none font-medium',
-          textColorMap[variant]
-        )}
-      >
-        <span
-          className={cn('size-1.5 shrink-0 rounded-full', dotColorMap[variant])}
-          aria-hidden='true'
-        />
-        <span>{t(config.label)}</span>
-      </div>
-    </div>
-  )
-}
-
-function CommonLogsCard<TData>({
-  cells,
-}: {
-  cells: Map<string, Cell<TData, unknown>>
-}) {
-  const { t } = useTranslation()
-
-  const modelCell = cells.get('model_name')
-  const quotaCell = cells.get('quota')
-  const rowData = cells.get('created_at')?.row.original as
-    | Record<string, unknown>
-    | undefined
-
-  return (
-    <div className='space-y-2.5'>
-      <div className='flex min-w-0 items-center justify-between gap-3'>
-        <CompactCell cell={modelCell} className='flex-1' />
-        <CompactCell
-          cell={quotaCell}
-          className='shrink-0 text-right [&_.flex-col]:items-end'
-        />
-      </div>
-
-      <div className='grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-1.5'>
-        <div className='bg-muted/20 min-w-0 rounded-md px-2 py-1.5'>
-          <div className='text-muted-foreground mb-1 text-[11px] leading-none font-medium select-none'>
-            {t('Time')}
-          </div>
-          <MobileLogTimeStatus
-            createdAt={rowData?.created_at}
-            type={rowData?.type}
-          />
-        </div>
-        <SummaryField
-          label={t('Channel')}
-          cell={cells.get('channel')}
-          valueClassName='[&_.flex-col]:max-w-none'
-        />
-        <SummaryField label={t('User')} cell={cells.get('user')} primaryOnly />
-        <SummaryField
-          label={t('Token')}
-          cell={cells.get('token_name')}
-          valueClassName='[&_.flex-col]:max-w-none [&_.flex-col>*:not(:first-child)]:text-[11px] [&_.flex-col>*:not(:first-child)]:leading-none'
-        />
-        <SummaryField
-          label={t('Timing')}
-          cell={cells.get('use_time')}
-          primaryOnly
-        />
-        <SummaryField
-          label={t('Tokens')}
-          cell={cells.get('prompt_tokens')}
-          primaryOnly
-        />
-        <SummaryField
-          label={t('Details')}
-          cell={cells.get('content')}
-          className='col-span-2 bg-transparent px-0 py-0'
-        />
-      </div>
-    </div>
-  )
-}
-
 export function UsageLogsMobileList<TData>({
   table,
   isLoading = false,
@@ -233,7 +84,7 @@ export function UsageLogsMobileList<TData>({
     t('No usage logs available. Logs will appear here once API calls are made.')
 
   if (isLoading) {
-    return <UsageLogsMobileSkeleton />
+    return <UsageLogsMobileSkeleton separate />
   }
 
   const rows = table.getRowModel().rows
@@ -255,7 +106,9 @@ export function UsageLogsMobileList<TData>({
   }
 
   return (
-    <div className='border-border/50 bg-card overflow-hidden rounded-lg border'>
+    <div
+      className='min-w-0 space-y-3'
+    >
       {rows.map((row) => {
         const cells = new Map(
           row.getVisibleCells().map((cell) => [cell.column.id, cell])
@@ -270,11 +123,14 @@ export function UsageLogsMobileList<TData>({
           <div
             key={row.id}
             className={cn(
-              'border-border/40 border-b border-l-2 border-l-transparent p-3 transition-colors last:border-b-0',
+              'border-border/60 bg-card min-w-0 rounded-xl border p-3.5',
               tintClass
             )}
           >
-            <CommonLogsCard cells={cells} />
+            <CommonLogMobileCard
+              log={row.original as UsageLog}
+              cells={cells}
+            />
           </div>
         )
       })}

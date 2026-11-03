@@ -12,6 +12,9 @@ export {
   isViolationFeeLog,
 } from './format'
 
+// Response model diagnostics
+export { isResponseModelMismatch } from './response-model'
+
 // Filter utilities
 export { buildSearchParams } from './filter'
 

@@ -1,13 +1,11 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
 	"newapi/common"
-	"newapi/i18n"
 	"newapi/logger"
 	"newapi/model"
 	"newapi/setting/operation_setting"
@@ -21,7 +19,7 @@ type PaymentComplianceRequest struct {
 
 func requirePaymentCompliance(c *gin.Context) bool {
 	if !operation_setting.IsPaymentComplianceConfirmed() {
-		common.ApiErrorI18n(c, i18n.MsgPaymentComplianceRequired)
+		common.ApiErrorT(c, "Payment, redemption, subscription, and invitation reward features are disabled. The administrator must confirm compliance terms before enabling them.")
 		return false
 	}
 	return true
@@ -38,11 +36,11 @@ func ConfirmPaymentCompliance(c *gin.Context) {
 
 	var req PaymentComplianceRequest
 	if err := common.DecodeJson(c.Request.Body, &req); err != nil {
-		common.ApiErrorMsg(c, "参数错误")
+		common.ApiErrorT(c, "Invalid parameters")
 		return
 	}
 	if !req.Confirmed {
-		common.ApiErrorMsg(c, "请确认合规声明")
+		common.ApiErrorT(c, "Please confirm the compliance statement")
 		return
 	}
 
@@ -65,7 +63,7 @@ func ConfirmPaymentCompliance(c *gin.Context) {
 		}
 	}
 
-	logger.LogInfo(c.Request.Context(), fmt.Sprintf(
+	logger.LogInfo(c.Request.Context(), common.LogText(
 		"payment compliance confirmed user_id=%d ip=%s terms_version=%s confirmed_at=%d",
 		userId,
 		clientIP,

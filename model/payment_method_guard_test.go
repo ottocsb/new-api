@@ -33,6 +33,7 @@ func truncateTables(t *testing.T) {
 		DB.Exec("DELETE FROM external_identity_claims")
 		DB.Exec("DELETE FROM auth_flows")
 		DB.Exec("DELETE FROM user_sessions")
+		DB.Exec("DELETE FROM user_access_tokens")
 		DB.Exec("DELETE FROM login_encryption_keys")
 		DB.Exec("DELETE FROM custom_oauth_providers")
 	})

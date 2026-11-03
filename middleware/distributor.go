@@ -13,7 +13,6 @@ import (
 	"newapi/constant"
 	taskdto "newapi/dto"
 	"newapi/i18n"
-	"newapi/logger"
 	"newapi/model"
 	relayconstant "newapi/relay/constant"
 	"newapi/service"
@@ -21,8 +20,8 @@ import (
 
 	"github.com/QuantumNous/new-api/relaykit/types"
 
+	"github.com/MoeForge/moego/ojson"
 	"github.com/gin-gonic/gin"
-	"github.com/tidwall/gjson"
 )
 
 type ModelRequest struct {
@@ -33,6 +32,11 @@ type ModelRequest struct {
 func Distribute() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var channel *model.Channel
+		defer func() {
+			if c.Writer.Status() >= 400 {
+				service.RecordRequestPolicyTermination(c, types.NewErrorWithStatusCode(errors.New("request rejected"), types.ErrorCodeInvalidRequest, c.Writer.Status(), types.ErrOptionWithSkipRetry()))
+			}
+		}()
 		constraints := service.GetChannelConstraints(c)
 		constraints.AddFilter(taskdto.ChannelFilter{
 			Kind:        taskdto.FilterRequestPath,
@@ -40,38 +44,11 @@ func Distribute() func(c *gin.Context) {
 		})
 		modelRequest, shouldSelectChannel, err := getModelRequest(c)
 		if err != nil {
-			abortWithOpenAiMessage(c, http.StatusBadRequest, i18n.T(c, i18n.MsgDistributorInvalidRequest, map[string]any{"Error": err.Error()}))
+			abortWithOpenAiMessage(c, invalidRequestStatus(err), i18n.T(c, i18n.MsgDistributorInvalidRequest, map[string]any{"Error": err.Error()}))
 			return
 		}
-		if pin, found, overridden := constraints.ResolvedPin(); found {
-			for _, lost := range overridden {
-				logger.LogWarn(c, fmt.Sprintf(
-					"channel pin overridden: winning_source=%s winning_channel_id=%d overridden_source=%s overridden_channel_id=%d",
-					pin.Source, pin.ChannelId, lost.Source, lost.ChannelId,
-				))
-			}
-			channel, err = model.CacheGetChannel(pin.ChannelId)
-			if err != nil {
-				if pin.Source == taskdto.PinSourceOriginTask {
-					abortWithOpenAiMessage(c, http.StatusBadRequest, "origin_task_channel_disabled", types.ErrorCode("origin_task_channel_disabled"))
-				} else {
-					abortWithOpenAiMessage(c, http.StatusBadRequest, i18n.T(c, i18n.MsgDistributorInvalidChannelId))
-				}
-				return
-			}
-			if channel.Status != common.ChannelStatusEnabled {
-				if pin.Source == taskdto.PinSourceOriginTask {
-					abortWithOpenAiMessage(c, http.StatusBadRequest, "origin_task_channel_disabled", types.ErrorCode("origin_task_channel_disabled"))
-				} else {
-					abortWithOpenAiMessage(c, http.StatusForbidden, i18n.T(c, i18n.MsgDistributorChannelDisabled))
-				}
-				return
-			}
-			if ok, kind := model.ChannelSatisfiesFilters(channel, modelRequest.Model, constraints.Filters); !ok {
-				abortWithOpenAiMessage(c, http.StatusBadRequest, i18n.T(c, i18n.MsgDistributorNoAvailableChannel, map[string]any{"Group": common.GetContextKeyString(c, constant.ContextKeyUsingGroup), "Model": modelRequest.Model}), types.ErrorCode(kind))
-				return
-			}
-		} else {
+		_, pinned, _ := constraints.ResolvedPin()
+		if !pinned {
 			// Select a channel for the user
 			// check token model mapping
 			modelLimitEnable := common.GetContextKeyBool(c, constant.ContextKeyTokenModelLimitEnabled)
@@ -87,8 +64,7 @@ func Distribute() func(c *gin.Context) {
 				if !ok {
 					tokenModelLimit = map[string]bool{}
 				}
-				matchName := ratio_setting.FormatMatchingModelName(modelRequest.Model) // match gpts & thinking-*
-				if _, ok := tokenModelLimit[matchName]; !ok {
+				if !TokenModelLimitAllows(tokenModelLimit, modelRequest.Model) {
 					abortWithOpenAiMessage(c, http.StatusForbidden, i18n.T(c, i18n.MsgDistributorTokenModelForbidden, map[string]any{"Model": modelRequest.Model}))
 					return
 				}
@@ -99,74 +75,26 @@ func Distribute() func(c *gin.Context) {
 					abortWithOpenAiMessage(c, http.StatusBadRequest, i18n.T(c, i18n.MsgDistributorModelNameRequired))
 					return
 				}
-				var selectGroup string
-				usingGroup := common.GetContextKeyString(c, constant.ContextKeyUsingGroup)
-
-				if preferredChannelID, found := service.GetPreferredChannelByAffinity(c, modelRequest.Model, usingGroup); found {
-					affinityUsable := false
-					preferred, err := model.CacheGetChannel(preferredChannelID)
-					affinitySatisfied := false
-					if err == nil && preferred != nil && preferred.Status == common.ChannelStatusEnabled {
-						affinitySatisfied, _ = model.ChannelSatisfiesFilters(preferred, modelRequest.Model, constraints.Filters)
-					}
-					if affinitySatisfied {
-						if usingGroup == "auto" {
-							userGroup := common.GetContextKeyString(c, constant.ContextKeyUserGroup)
-							autoGroups := service.GetRequestAutoGroups(c, userGroup)
-							for _, g := range autoGroups {
-								if model.IsChannelEnabledForGroupModel(g, modelRequest.Model, preferred.Id) {
-									selectGroup = g
-									common.SetContextKey(c, constant.ContextKeyAutoGroup, g)
-									channel = preferred
-									affinityUsable = true
-									service.MarkChannelAffinityUsed(c, g, preferred.Id)
-									break
-								}
-							}
-						} else if model.IsChannelEnabledForGroupModel(usingGroup, modelRequest.Model, preferred.Id) {
-							channel = preferred
-							selectGroup = usingGroup
-							affinityUsable = true
-							service.MarkChannelAffinityUsed(c, usingGroup, preferred.Id)
-						}
-					}
-					if !affinityUsable && !service.ShouldKeepChannelAffinityOnChannelDisabled() {
-						service.ClearCurrentChannelAffinityCache(c)
-					}
-				}
-
-				if channel == nil {
-					channel, selectGroup, err = service.CacheGetRandomSatisfiedChannel(&service.RetryParam{
-						Ctx:         c,
-						ModelName:   modelRequest.Model,
-						TokenGroup:  usingGroup,
-						RequestPath: c.Request.URL.Path,
-						Retry:       common.GetPointer(0),
-					})
-					if err != nil {
-						showGroup := usingGroup
-						if usingGroup == "auto" {
-							showGroup = fmt.Sprintf("auto(%s)", selectGroup)
-						}
-						message := i18n.T(c, i18n.MsgDistributorGetChannelFailed, map[string]any{"Group": showGroup, "Model": modelRequest.Model, "Error": err.Error()})
-						// 如果错误，但是渠道不为空，说明是数据库一致性问题
-						//if channel != nil {
-						//	common.SysError(fmt.Sprintf("渠道不存在：%d", channel.Id))
-						//	message = "数据库一致性已被破坏，请联系管理员"
-						//}
-						abortWithOpenAiMessage(c, http.StatusServiceUnavailable, message, types.ErrorCodeModelNotFound)
-						return
-					}
-					if channel == nil {
-						abortWithOpenAiMessage(c, http.StatusServiceUnavailable, i18n.T(c, i18n.MsgDistributorNoAvailableChannel, map[string]any{"Group": usingGroup, "Model": modelRequest.Model}), types.ErrorCodeModelNotFound)
-						return
-					}
-				}
 			}
 		}
-		if channel != nil {
-			if ok, _ := model.ChannelSatisfiesFilters(channel, modelRequest.Model, constraints.Filters); !ok {
-				abortWithOpenAiMessage(c, http.StatusServiceUnavailable, i18n.T(c, i18n.MsgDistributorNoAvailableChannel, map[string]any{"Group": common.GetContextKeyString(c, constant.ContextKeyUsingGroup), "Model": modelRequest.Model}), types.ErrorCodeModelNotFound)
+		if pinned || shouldSelectChannel {
+			usingGroup := common.GetContextKeyString(c, constant.ContextKeyUsingGroup)
+			var selectErr *service.ChannelSelectError
+			channel, _, selectErr = service.SelectChannelForRequest(c, modelRequest.Model, &service.RetryParam{
+				Ctx:         c,
+				ModelName:   modelRequest.Model,
+				TokenGroup:  usingGroup,
+				RequestPath: c.Request.URL.Path,
+				Retry:       common.GetPointer(0),
+			})
+			if selectErr != nil {
+				message := selectErr.Message
+				if selectErr.NoAvailableChannel {
+					message = i18n.T(c, i18n.MsgDistributorNoAvailableChannel, map[string]any{"Group": usingGroup, "Model": modelRequest.Model})
+				} else if selectErr.MessageID != "" {
+					message = i18n.T(c, selectErr.MessageID, selectErr.Params)
+				}
+				abortWithOpenAiMessage(c, selectErr.StatusCode, message, selectErr.Code)
 				return
 			}
 		}
@@ -181,17 +109,13 @@ func Distribute() func(c *gin.Context) {
 
 func getModelFromRequest(c *gin.Context) (*ModelRequest, error) {
 	if strings.HasPrefix(c.Request.Header.Get("Content-Type"), "application/json") {
-		modelRequest, err := getModelFromJSONBody(c)
-		if err != nil {
-			return nil, errors.New(i18n.T(c, i18n.MsgDistributorInvalidRequest, map[string]any{"Error": err.Error()}))
-		}
-		return modelRequest, nil
+		return getModelFromJSONBody(c)
 	}
 
 	var modelRequest ModelRequest
 	err := common.UnmarshalBodyReusable(c, &modelRequest)
 	if err != nil {
-		return nil, errors.New(i18n.T(c, i18n.MsgDistributorInvalidRequest, map[string]any{"Error": err.Error()}))
+		return nil, err
 	}
 	return &modelRequest, nil
 }
@@ -205,14 +129,14 @@ func getModelFromJSONBody(c *gin.Context) (*ModelRequest, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !gjson.ValidBytes(requestBody) {
+	if !ojson.ValidBytes(requestBody) {
 		return nil, errors.New("invalid JSON request body")
 	}
 	if countTopLevelJSONKey(requestBody, "model") > 1 {
 		return nil, errors.New("model must be provided once")
 	}
 
-	values := gjson.GetManyBytes(requestBody, "model", "group")
+	values := ojson.GetManyBytes(requestBody, "model", "group")
 	model, err := getJSONStringValue(values[0], "model")
 	if err != nil {
 		return nil, err
@@ -291,11 +215,11 @@ func countTopLevelJSONKey(data []byte, target string) int {
 	return count
 }
 
-func getJSONStringValue(result gjson.Result, field string) (string, error) {
-	if !result.Exists() || result.Type == gjson.Null {
+func getJSONStringValue(result ojson.Result, field string) (string, error) {
+	if !result.Exists() || result.Type == ojson.Null {
 		return "", nil
 	}
-	if result.Type != gjson.String {
+	if result.Type != ojson.String {
 		return "", fmt.Errorf("field %s must be a string", field)
 	}
 	return result.String(), nil
@@ -333,6 +257,13 @@ func getModelRequest(c *gin.Context) (*ModelRequest, bool, error) {
 			modelRequest.Model = c.Param("model")
 		}
 	}
+	// The routing name is also the billing name, so a model named in the body
+	// must not replace it: DeepSeek ignores that field.
+	if strings.HasPrefix(c.Request.URL.Path, "/v1/tools/search") {
+		modelRequest.Model = constant.DeepSeekSearchModel
+	} else if strings.HasPrefix(c.Request.URL.Path, "/v1/tools/fetch") {
+		modelRequest.Model = constant.DeepSeekFetchModel
+	}
 	if strings.HasPrefix(c.Request.URL.Path, "/v1/images/generations") {
 		modelRequest.Model = common.GetStringIfEmpty(modelRequest.Model, "dall-e")
 	} else if strings.HasPrefix(c.Request.URL.Path, "/v1/images/edits") {
@@ -367,7 +298,22 @@ func getModelRequest(c *gin.Context) (*ModelRequest, bool, error) {
 		}
 		c.Set("relay_mode", relayMode)
 	}
+
 	return &modelRequest, shouldSelectChannel, nil
+}
+
+// TokenModelLimitAllows reports whether a token model-limit map authorizes
+// model. Exact name, wildcard-normalized name, and routing-normalized name
+// (modifiers and legacy aliases stripped) are all accepted. The Responses
+// WebSocket relay shares this rule so both transports admit the same names.
+func TokenModelLimitAllows(limit map[string]bool, model string) bool {
+	if limit[model] {
+		return true
+	}
+	if formatted := ratio_setting.FormatMatchingModelName(model); limit[formatted] {
+		return true
+	}
+	return limit[ratio_setting.RoutingMatchModelName(model)]
 }
 
 func SetupContextForSelectedChannel(c *gin.Context, channel *model.Channel, modelName string) *types.NewAPIError {
@@ -392,9 +338,9 @@ func SetupContextForSelectedChannel(c *gin.Context, channel *model.Channel, mode
 		common.SetContextKey(c, constant.ContextKeyChannelOrganization, *channel.OpenAIOrganization)
 	}
 	common.SetContextKey(c, constant.ContextKeyChannelAutoBan, channel.GetAutoBan())
+	common.SetContextKey(c, constant.ContextKeyChannelHideUpstreamError, channel.GetHideUpstreamError())
 	common.SetContextKey(c, constant.ContextKeyChannelModelMapping, channel.GetModelMapping())
 	common.SetContextKey(c, constant.ContextKeyChannelStatusCodeMapping, channel.GetStatusCodeMapping())
-	common.SetContextKey(c, constant.ContextKeyChannelHideUpstreamError, channel.GetHideUpstreamError())
 
 	key, index, newAPIError := channel.GetNextEnabledKey()
 	if newAPIError != nil {

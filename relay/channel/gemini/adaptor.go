@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"strings"
 
 	"newapi/relay/channel"
 	relaycommon "newapi/relay/common"
 	"newapi/relay/constant"
 	"newapi/setting/model_setting"
-	"newapi/setting/reasoning"
+
+	"newapi/service"
 
 	"github.com/QuantumNous/new-api/relaykit/dto"
 	"github.com/QuantumNous/new-api/relaykit/relayconvert"
@@ -25,6 +27,9 @@ type Adaptor struct {
 }
 
 func (a *Adaptor) ConvertGeminiRequest(c *gin.Context, info *relaycommon.RelayInfo, request *dto.GeminiChatRequest) (any, error) {
+	if err := relayconvert.ApplyGeminiThinkingConfigChecked(request, info); err != nil {
+		return nil, err
+	}
 	if len(request.Contents) > 0 {
 		for i, content := range request.Contents {
 			if i == 0 {
@@ -45,7 +50,7 @@ func (a *Adaptor) ConvertGeminiRequest(c *gin.Context, info *relaycommon.RelayIn
 }
 
 func (a *Adaptor) ConvertClaudeRequest(c *gin.Context, info *relaycommon.RelayInfo, req *dto.ClaudeRequest) (any, error) {
-	result, err := relayconvert.ConvertRequest(c, info, types.RelayFormatGemini, req)
+	result, err := service.ConvertRequest(c, info, types.RelayFormatGemini, req)
 	if err != nil {
 		return nil, err
 	}
@@ -133,21 +138,6 @@ func (a *Adaptor) Init(info *relaycommon.RelayInfo) {
 
 func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 
-	if model_setting.GetGeminiSettings().ThinkingAdapterEnabled &&
-		!model_setting.ShouldPreserveThinkingSuffix(info.OriginModelName) {
-		// 新增逻辑：处理 -thinking-<budget> 格式
-		if strings.Contains(info.UpstreamModelName, "-thinking-") {
-			parts := strings.Split(info.UpstreamModelName, "-thinking-")
-			info.UpstreamModelName = parts[0]
-		} else if strings.HasSuffix(info.UpstreamModelName, "-thinking") { // 旧的适配
-			info.UpstreamModelName = strings.TrimSuffix(info.UpstreamModelName, "-thinking")
-		} else if strings.HasSuffix(info.UpstreamModelName, "-nothinking") {
-			info.UpstreamModelName = strings.TrimSuffix(info.UpstreamModelName, "-nothinking")
-		} else if baseModel, level, ok := reasoning.TrimEffortSuffix(info.UpstreamModelName); ok && level != "" {
-			info.UpstreamModelName = baseModel
-		}
-	}
-
 	version := model_setting.GetGeminiVersionSetting(info.UpstreamModelName)
 
 	if strings.HasPrefix(info.UpstreamModelName, "imagen") {
@@ -184,7 +174,7 @@ func (a *Adaptor) ConvertOpenAIRequest(c *gin.Context, info *relaycommon.RelayIn
 	if request == nil {
 		return nil, errors.New("request is nil")
 	}
-	result, err := relayconvert.ConvertRequest(c, info, types.RelayFormatGemini, request)
+	result, err := service.ConvertRequest(c, info, types.RelayFormatGemini, request)
 	if err != nil {
 		return nil, err
 	}
@@ -199,6 +189,20 @@ func (a *Adaptor) ConvertEmbeddingRequest(c *gin.Context, info *relaycommon.Rela
 	if request.Input == nil {
 		return nil, errors.New("input is required")
 	}
+	// Gemini embeds text only. The request estimate billed for this channel
+	// counts image, video and text parts, so a part must fail the request
+	// instead of being dropped and charged without reaching Gemini.
+	if items, ok := request.Input.([]any); ok && slices.ContainsFunc(items, func(item any) bool {
+		_, isPart := item.(map[string]any)
+		return isPart
+	}) {
+		return nil, types.NewErrorWithStatusCode(
+			errors.New("gemini embedding models accept only plain text input; images, videos and other content parts are not supported"),
+			types.ErrorCodeInvalidRequest,
+			http.StatusBadRequest,
+			types.ErrOptionWithSkipRetry(),
+		)
+	}
 
 	inputs := request.ParseInput()
 	if len(inputs) == 0 {
@@ -208,9 +212,9 @@ func (a *Adaptor) ConvertEmbeddingRequest(c *gin.Context, info *relaycommon.Rela
 	// batch endpoint upstream to avoid payload/endpoint mismatches.
 	info.IsGeminiBatchEmbedding = true
 	// process all inputs
-	geminiRequests := make([]map[string]interface{}, 0, len(inputs))
+	geminiRequests := make([]map[string]any, 0, len(inputs))
 	for _, input := range inputs {
-		geminiRequest := map[string]interface{}{
+		geminiRequest := map[string]any{
 			"model": fmt.Sprintf("models/%s", info.UpstreamModelName),
 			"content": dto.GeminiChatContent{
 				Parts: []dto.GeminiPart{
@@ -234,13 +238,13 @@ func (a *Adaptor) ConvertEmbeddingRequest(c *gin.Context, info *relaycommon.Rela
 		geminiRequests = append(geminiRequests, geminiRequest)
 	}
 
-	return map[string]interface{}{
+	return map[string]any{
 		"requests": geminiRequests,
 	}, nil
 }
 
 func (a *Adaptor) ConvertOpenAIResponsesRequest(c *gin.Context, info *relaycommon.RelayInfo, request dto.OpenAIResponsesRequest) (any, error) {
-	result, err := relayconvert.ConvertRequest(c, info, types.RelayFormatGemini, &request)
+	result, err := service.ConvertRequest(c, info, types.RelayFormatGemini, &request)
 	if err != nil {
 		return nil, err
 	}

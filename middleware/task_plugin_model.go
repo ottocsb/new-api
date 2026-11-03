@@ -7,8 +7,8 @@ import (
 
 	"newapi/common"
 
+	"github.com/MoeForge/moego/ojson"
 	"github.com/gin-gonic/gin"
-	"github.com/tidwall/sjson"
 )
 
 // rewriteTaskPluginJSONModel patches the top-level JSON "model" field and
@@ -29,7 +29,7 @@ func rewriteTaskPluginJSONModel(c *gin.Context, spelling string) error {
 	if err != nil {
 		return err
 	}
-	patched, err := sjson.SetBytes(raw, "model", spelling)
+	patched, err := ojson.SetBytes(raw, "model", spelling)
 	if err != nil {
 		return err
 	}

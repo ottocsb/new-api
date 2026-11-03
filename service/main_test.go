@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"newapi/common"
+	"newapi/i18n"
 	"newapi/model"
 
 	"github.com/glebarez/sqlite"
@@ -34,12 +35,17 @@ func TestMain(m *testing.M) {
 	common.RedisEnabled = false
 	common.BatchUpdateEnabled = false
 	common.LogConsumeEnabled = true
+	if err := i18n.Init(); err != nil {
+		panic("failed to load locales: " + err.Error())
+	}
 
 	if err := db.AutoMigrate(
 		&model.User{},
 		&model.Token{},
 		&model.Log{},
 		&model.Channel{},
+		&model.TopUp{},
+		&model.UserSubscription{},
 		&model.SystemTask{},
 		&model.SystemTaskLock{},
 	); err != nil {
@@ -57,6 +63,8 @@ func truncate(t *testing.T) {
 		model.DB.Exec("DELETE FROM tokens")
 		model.DB.Exec("DELETE FROM logs")
 		model.DB.Exec("DELETE FROM channels")
+		model.DB.Exec("DELETE FROM top_ups")
+		model.DB.Exec("DELETE FROM user_subscriptions")
 		model.DB.Exec("DELETE FROM system_task_locks")
 		model.DB.Exec("DELETE FROM system_tasks")
 	})

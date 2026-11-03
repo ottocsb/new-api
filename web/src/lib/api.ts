@@ -1,4 +1,6 @@
 import { api } from '@/lib/http-client'
+import { authRequestOptions, authResult } from '@/lib/secure-verification'
+import { requireServerSuccess } from '@/lib/server-error-message'
 
 export {
   applyAuthBundle,
@@ -10,6 +12,7 @@ export {
   getFreshAuthHeaders,
   isAuthBundle,
   refreshAuthentication,
+  resolveAuthentication,
   AuthRotationError,
 } from '@/lib/auth-session'
 export type { AuthTokenRotation, RefreshOutcome } from '@/lib/auth-session'
@@ -49,18 +52,9 @@ export async function getUserGroups(): Promise<{
 // System APIs
 // ============================================================================
 
-// 多个入口（useStatus 查询、useSystemConfig 初始化等）会在首屏同时请求 /api/status，
-// 这里对“进行中”的请求做去重，让并发调用共享同一个网络请求，避免重复加载。
-let statusInFlight: Promise<Record<string, unknown>> | null = null
 export async function getStatus() {
-  if (statusInFlight) return statusInFlight
-  statusInFlight = api
-    .get('/api/status')
-    .then((res) => res.data?.data as Record<string, unknown>)
-    .finally(() => {
-      statusInFlight = null
-    })
-  return statusInFlight
+  const res = await api.get('/api/status')
+  return requireServerSuccess(res.data)?.data as Record<string, unknown>
 }
 
 export async function getNotice(): Promise<{
@@ -68,7 +62,14 @@ export async function getNotice(): Promise<{
   message?: string
   data?: string
 }> {
-  const res = await api.get('/api/notice')
+  // Drop the client's global `Cache-Control: no-store` for this public,
+  // non-user-specific payload. `no-store` forbids the browser from keeping a
+  // copy at all, so it would never hold an ETag to revalidate with and the
+  // server could never answer 304. The server sends `no-cache`, so the browser
+  // still revalidates on every request and an admin edit shows up immediately.
+  const res = await api.get('/api/notice', {
+    headers: { 'Cache-Control': null },
+  })
   return res.data
 }
 
@@ -76,39 +77,40 @@ export async function getNotice(): Promise<{
 // 2FA Management APIs
 // ============================================================================
 
-export async function get2FAStatus() {
-  const res = await api.get('/api/user/2fa/status')
-  return res.data
-}
-
-export async function setup2FA() {
-  const res = await api.post('/api/user/2fa/setup')
-  return res.data
-}
-
-export async function enable2FA(code: string) {
-  const res = await api.post(
-    '/api/user/2fa/enable',
-    { code },
-    { acceptAuthRotation: true }
+export function disable2FA(
+  proofToken: string,
+  signal?: AbortSignal
+): Promise<{ notification_warning?: boolean }> {
+  return authResult(
+    api.post(
+      '/api/user/2fa/disable',
+      {},
+      {
+        ...authRequestOptions,
+        headers: { 'X-Security-Proof': proofToken },
+        acceptAuthRotation: true,
+        singleUseAuthorization: true,
+        signal,
+      }
+    )
   )
-  return res.data
 }
 
-export async function disable2FA(code: string) {
-  const res = await api.post(
-    '/api/user/2fa/disable',
-    { code },
-    { acceptAuthRotation: true }
+export function regenerate2FABackupCodes(
+  proofToken: string,
+  signal?: AbortSignal
+): Promise<{ backup_codes: string[]; notification_warning?: boolean }> {
+  return authResult(
+    api.post(
+      '/api/user/2fa/backup_codes',
+      {},
+      {
+        ...authRequestOptions,
+        headers: { 'X-Security-Proof': proofToken },
+        acceptAuthRotation: true,
+        singleUseAuthorization: true,
+        signal,
+      }
+    )
   )
-  return res.data
-}
-
-export async function regenerate2FABackupCodes(code: string) {
-  const res = await api.post(
-    '/api/user/2fa/backup_codes',
-    { code },
-    { acceptAuthRotation: true }
-  )
-  return res.data
 }

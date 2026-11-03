@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 
 import {
   getOAuthSessionStorage,
-  markOAuthBindPopup,
+  markOAuthPopup,
   resolveOAuthCallbackMode,
   type OAuthModeStorage,
 } from '../oauth-callback-mode'
@@ -21,7 +21,7 @@ const bindState = 'bind-state'
 describe('resolveOAuthCallbackMode', () => {
   test('matching provider and state mark is treated as a bind flow', () => {
     const storage = fakeStorage()
-    expect(markOAuthBindPopup(storage, 'oidc', bindState)).toBe(true)
+    expect(markOAuthPopup(storage, 'oidc', bindState, 'bind')).toBe(true)
 
     expect(
       resolveOAuthCallbackMode('oidc', bindState, {
@@ -29,6 +29,25 @@ describe('resolveOAuthCallbackMode', () => {
         storage,
       })
     ).toBe('bind')
+  })
+
+  test('verification markers cannot be confused with account binding', () => {
+    const storage = fakeStorage()
+    expect(
+      markOAuthPopup(storage, 'oidc', 'verification-state', 'verify')
+    ).toBe(true)
+    expect(
+      resolveOAuthCallbackMode('oidc', 'verification-state', {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('verify')
+    expect(
+      resolveOAuthCallbackMode('oidc', bindState, {
+        opener: openOpener,
+        storage,
+      })
+    ).toBe('login')
   })
 
   // Regression: a tab opened from an external link (Slack, e-mail, another
@@ -48,7 +67,7 @@ describe('resolveOAuthCallbackMode', () => {
 
   test('bind marker for another provider does not hijack this callback', () => {
     const storage = fakeStorage()
-    markOAuthBindPopup(storage, 'github', bindState)
+    markOAuthPopup(storage, 'github', bindState, 'bind')
 
     expect(
       resolveOAuthCallbackMode('oidc', bindState, {
@@ -60,7 +79,7 @@ describe('resolveOAuthCallbackMode', () => {
 
   test('stale bind marker does not hijack a later callback', () => {
     const storage = fakeStorage()
-    markOAuthBindPopup(storage, 'oidc', 'previous-state')
+    markOAuthPopup(storage, 'oidc', 'previous-state', 'bind')
 
     expect(
       resolveOAuthCallbackMode('oidc', bindState, {
@@ -72,7 +91,7 @@ describe('resolveOAuthCallbackMode', () => {
 
   test('bind marker without an opener falls back to login', () => {
     const storage = fakeStorage()
-    markOAuthBindPopup(storage, 'oidc', bindState)
+    markOAuthPopup(storage, 'oidc', bindState, 'bind')
 
     expect(
       resolveOAuthCallbackMode('oidc', bindState, {
@@ -84,7 +103,7 @@ describe('resolveOAuthCallbackMode', () => {
 
   test('closed opener falls back to login', () => {
     const storage = fakeStorage()
-    markOAuthBindPopup(storage, 'oidc', bindState)
+    markOAuthPopup(storage, 'oidc', bindState, 'bind')
 
     expect(
       resolveOAuthCallbackMode('oidc', bindState, {
@@ -139,16 +158,17 @@ describe('OAuth bind popup storage', () => {
       },
     }
 
-    expect(markOAuthBindPopup(null, 'oidc', bindState)).toBe(false)
-    expect(markOAuthBindPopup(storage, 'oidc', bindState)).toBe(false)
+    expect(markOAuthPopup(null, 'oidc', bindState, 'bind')).toBe(false)
+    expect(markOAuthPopup(storage, 'oidc', bindState, 'bind')).toBe(false)
     expect(
-      markOAuthBindPopup(
+      markOAuthPopup(
         {
           getItem: () => null,
           setItem: () => undefined,
         },
         'oidc',
-        bindState
+        bindState,
+        'bind'
       )
     ).toBe(false)
   })

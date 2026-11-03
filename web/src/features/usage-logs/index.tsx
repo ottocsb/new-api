@@ -39,16 +39,16 @@ function UsageLogsContent() {
     <>
       <SectionPageLayout>
         <SectionPageLayout.Title>{t('Common Logs')}</SectionPageLayout.Title>
-        {canManageScope && (
-          <SectionPageLayout.Actions>
+        <SectionPageLayout.Actions>
+          {canManageScope && (
             <Tabs value={viewScope} onValueChange={handleViewScopeChange}>
               <TabsList>
                 <TabsTrigger value='all'>{t('All')}</TabsTrigger>
                 <TabsTrigger value='self'>{t('Only Mine')}</TabsTrigger>
               </TabsList>
             </Tabs>
-          </SectionPageLayout.Actions>
-        )}
+          )}
+        </SectionPageLayout.Actions>
         <SectionPageLayout.Content>
           <UsageLogsTable />
         </SectionPageLayout.Content>

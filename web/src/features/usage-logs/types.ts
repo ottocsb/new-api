@@ -1,6 +1,9 @@
 /**
  * Type definitions for usage logs
  */
+import type { RequestRuleTrace } from '@/features/pricing/lib/billing-expr'
+import type { PolicyEvent } from '@/features/system-settings/request-policies/api'
+
 import type { UsageLog } from './data/schema'
 
 // ============================================================================
@@ -73,6 +76,7 @@ export interface ToolSurchargeItem {
 
 export interface LogOtherData {
   admin_info?: {
+    request_policy?: PolicyEvent[]
     is_multi_key?: boolean
     multi_key_index?: number
     use_channel?: number[]
@@ -100,7 +104,15 @@ export interface LogOtherData {
       original: number
       clamped: number
     }
+    // Reject / intercept reason (admin only)
+    reject_reason?: string
   }
+  // Structured log content: English source keys plus params, rendered in the
+  // viewer's language. `content` keeps the English text for older clients.
+  content_parts?: {
+    key: string
+    params?: Record<string, string | number | boolean>
+  }[]
   // Language-independent operation descriptor (audit/login logs).
   // Frontend renders localized content from action + params via i18n templates.
   op?: {
@@ -128,9 +140,12 @@ export interface LogOtherData {
   text_input?: number
   text_output?: number
   cache_tokens?: number
+  image_cache_tokens?: number
+  billing_tokens?: Record<string, number>
   cache_creation_tokens?: number
   cache_creation_tokens_5m?: number
   cache_creation_tokens_1h?: number
+  cache_creation_tokens_12h?: number
   claude?: boolean
   model_ratio?: number
   completion_ratio?: number
@@ -141,8 +156,16 @@ export interface LogOtherData {
   cache_creation_ratio?: number
   cache_creation_ratio_5m?: number
   cache_creation_ratio_1h?: number
+  cache_creation_ratio_12h?: number
   is_model_mapped?: boolean
   upstream_model_name?: string
+  // Diagnostic only. Whether the names disagree is derived in the UI via
+  // isResponseModelMismatch so old rows follow the current comparison rule.
+  response_model?: {
+    requested_model: string
+    upstream_model: string
+    returned_model: string
+  }
   audio_ratio?: number
   audio_completion_ratio?: number
   frt?: number
@@ -150,8 +173,12 @@ export interface LogOtherData {
   // billing_mode === 'tiered_expr'. expr_b64 is the base64-encoded billing
   // expression and matched_tier is the label of the tier that fired.
   billing_mode?: string
+  billing_unit?: 'token' | 'request'
+  fixed_price?: number
+  image_count?: number
   expr_b64?: string
   matched_tier?: string
+  request_rules?: RequestRuleTrace[]
   reasoning_effort?: string
   image?: boolean
   image_ratio?: number
@@ -184,10 +211,13 @@ export interface LogOtherData {
   violation_fee_code?: string
   violation_fee_marker?: string
   fee_quota?: number
-  // Reject / intercept reason (admin)
-  reject_reason?: string
   // Task-related fields (for refund logs, type=6)
   is_task?: boolean
+  // The submitting request returned the task result itself (an immediate
+  // result, or an OpenAI Images request the gateway waited on).
+  task_sync?: boolean
+  // The inline result was not persisted, so no artifact can be retrieved.
+  result_discarded?: boolean
   task_id?: string
   reason?: string
   // Subscription billing fields

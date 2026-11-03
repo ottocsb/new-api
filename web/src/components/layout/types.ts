@@ -1,5 +1,5 @@
-import { type LinkProps } from '@tanstack/react-router'
-import { type TFunction } from 'i18next'
+import type { LinkProps } from '@tanstack/react-router'
+import type { TFunction } from 'i18next'
 
 /**
  * Base navigation item type
@@ -83,6 +83,14 @@ export type SidebarViewParent = {
 }
 
 /**
+ * Counts shown next to sidebar entries, already formatted for display
+ */
+export type SidebarBadges = {
+  /** Task models whose price needs attention, on the entries leading to model pricing */
+  modelPricing?: string
+}
+
+/**
  * Nested sidebar view configuration
  *
  * A nested view replaces the root navigation when the user enters a
@@ -97,8 +105,8 @@ export type SidebarView = {
   pathPattern: RegExp
   /** Back-navigation descriptor; required for nested views */
   parent: SidebarViewParent
-  /** Nav group builder, called per render with the active translator */
-  getNavGroups: (t: TFunction) => NavGroup[]
+  /** Nav group builder, called per render with the active translator and badges */
+  getNavGroups: (t: TFunction, badges: SidebarBadges) => NavGroup[]
 }
 
 /**
